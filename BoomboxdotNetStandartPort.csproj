@@ -74,7 +74,7 @@
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
       </Reference>
       <Reference Include="ShopUtils">
-        <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\ContentWarning\profiles\Default-Dev\BepInEx\plugins\hyydsz-ShopUtils\ShopUtils.dll</HintPath>
+        <HintPath>.\Libs\ShopUtils.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.LocalizationModule">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
