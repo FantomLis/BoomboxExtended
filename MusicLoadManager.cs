@@ -65,7 +65,7 @@ namespace FantomLis.BoomboxExtended
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
                             clip.name = Path.GetFileName(file);
-                            BoomboxBehaviour.clips.Add(file + clip.GetHashCode(),clip);
+                            BoomboxBehaviour.clips.Add(file,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                         }

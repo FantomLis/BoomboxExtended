@@ -206,7 +206,7 @@ namespace FantomLis.BoomboxExtended
 
         public VolumeEntry()
         {
-            Languages.TryGetLanguage("BoomboxVolume", out VolumeLanguage);
+            VolumeLanguage = "{0}% Volume";
         }
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
