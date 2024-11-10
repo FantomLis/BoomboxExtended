@@ -1,13 +1,15 @@
 ﻿using Photon.Pun;
 using ShopUtils;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using Zorro.Core.Serizalization;
 namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
-        public static List<AudioClip> clips = new List<AudioClip>();
+        public static Dictionary<string, AudioClip> clips = new ();
 
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;
@@ -19,6 +21,7 @@ namespace FantomLis.BoomboxExtended
         private AudioSource Music;
 
         private int currentIndex = 0;
+        private string currentId;
 
         void Awake()
         {
@@ -75,7 +78,7 @@ namespace FantomLis.BoomboxExtended
             {
                 musicEntry = new MusicEntry()
                 {
-                    selectMusicIndex = 0
+                    selectMusicId = clips.Keys.FirstOrDefault() ?? string.Empty,
                 };
 
                 data.AddDataEntry(musicEntry);
@@ -117,8 +120,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (clips.Count > 0)
                     {
-                        musicEntry.selectMusicIndex += 1;
-                        musicEntry.selectMusicIndex %= clips.Count;
+                        musicEntry.selectMusicId = clips.Keys.ToArray()[((++currentIndex) % clips.Count)];
                         musicEntry.UpdateMusicName();
                         musicEntry.SetDirty();
 
@@ -157,21 +159,18 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            if (volumeEntry.GetVolume() != Music.volume)
-            {
-                Music.volume = volumeEntry.GetVolume();
-            }
+            Music.volume = volumeEntry.GetVolume();
 
             bool flag = onOffEntry.on;
-            if (flag != Music.isPlaying || currentIndex != musicEntry.selectMusicIndex)
+            if (flag != Music.isPlaying || currentId != musicEntry.selectMusicId)
             {
-                currentIndex = musicEntry.selectMusicIndex;
+                currentId = musicEntry.selectMusicId;
 
                 if (flag)
                 {
-                    if (checkMusic(musicEntry.selectMusicIndex))
+                    if (checkMusic(musicEntry.selectMusicId))
                     {
-                        Music.clip = clips[musicEntry.selectMusicIndex];
+                        Music.clip = clips[musicEntry.selectMusicId];
                         Music.time = timeEntry.currentTime;
                         Music.Play();
                     }
@@ -192,9 +191,9 @@ namespace FantomLis.BoomboxExtended
             }
         }
 
-        public static bool checkMusic(int index)
+        public static bool checkMusic(string id)    
         {
-            return index <= clips.Count - 1;
+            return clips.ContainsKey(id);
         }
     }
 
@@ -235,25 +234,25 @@ namespace FantomLis.BoomboxExtended
     {
         private string MusicName;
 
-        public int selectMusicIndex;
+        public string selectMusicId;
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
-            selectMusicIndex = binaryDeserializer.ReadInt();
+            selectMusicId = binaryDeserializer.ReadString(Encoding.UTF8);
         }
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
-            binarySerializer.WriteInt(selectMusicIndex);
+            binarySerializer.WriteString(selectMusicId, Encoding.UTF8);
         }
 
         public void UpdateMusicName()
         {
             MusicName = string.Empty;
 
-            if (BoomboxBehaviour.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicIndex))
+            if (BoomboxBehaviour.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
             {
-                MusicName = getMusicName(BoomboxBehaviour.clips[selectMusicIndex].name);
+                MusicName = getMusicName(BoomboxBehaviour.clips[selectMusicId].name);
             }
         }
 

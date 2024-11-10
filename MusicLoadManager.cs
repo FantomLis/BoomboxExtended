@@ -25,8 +25,18 @@ namespace FantomLis.BoomboxExtended
         {
             StartCoroutine(LoadMusic());
         }
-
-        private static IEnumerator LoadMusic()
+        
+        /*
+        /// <summary>
+        /// Loads music from folder
+        /// </summary>
+        /// <param name="pathToFolder">Path to folder to load music (default: "Custom Song", if player is host)</param>
+        */
+        /*public static IEnumerator LoadMusic(string pathToFolder = "Custom Song")
+        {
+            string path = Path.Combine(Paths.PluginPath, pathToFolder);*/
+        /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
+        public static IEnumerator LoadMusic()
         {
             string path = Path.Combine(Paths.PluginPath, "Custom Songs");
             if (!Directory.Exists(path))
@@ -36,6 +46,7 @@ namespace FantomLis.BoomboxExtended
 
             foreach (string file in Directory.GetFiles(path))
             {
+                
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
@@ -54,7 +65,7 @@ namespace FantomLis.BoomboxExtended
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
                             clip.name = Path.GetFileName(file);
-                            BoomboxBehaviour.clips.Add(clip);
+                            BoomboxBehaviour.clips.Add(file + clip.GetHashCode(),clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                         }
