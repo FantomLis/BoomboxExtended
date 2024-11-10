@@ -73,7 +73,7 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadBoombox()
         {
-            asset = QuickLoadAssetBundle("boombox");
+            asset = QuickLoadAssetBundle("boombox.assetBundle"); // Why boombox not using .assetBundle filetype?
 
             Item item = asset.LoadAsset<Item>("Boombox");
             item.itemObject.AddComponent<BoomboxBehaviour>();

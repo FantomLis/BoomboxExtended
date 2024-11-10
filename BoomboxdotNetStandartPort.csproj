@@ -55,6 +55,11 @@
     <ItemGroup Condition="$(CI) != 'true'">
         <Reference Include="$(ManagedDirectory)Assembly-CSharp.dll" Private="false"/>
     </ItemGroup>
+    
+    <!-- Add boombox.assetBundle to build -->
+    <ItemGroup>
+        <None Include="boombox.assetBundle" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
 
     <!-- Package References - Game Assemblies -->
     <ItemGroup Condition="$(CI) == 'true'">
