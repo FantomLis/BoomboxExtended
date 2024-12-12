@@ -3,10 +3,6 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-//using ShopUtils;
-/*using ShopUtils.Language;*/
-//using ShopUtils.Network;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using MyceliumNetworking;
@@ -124,7 +120,7 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadLangauge()
         {
-            Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
+            /*Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
             Chinese.AddLanguage("Boombox_ToolTips", "[LMB] 播放;[RMB] 切换音乐");
             Chinese.AddLanguage("Boombox", "音响");
             Chinese.AddLanguage("BoomboxVolume", "{0}% 音量");
@@ -187,7 +183,7 @@ namespace FantomLis.BoomboxExtended
             Locale Swedish = Languages.GetLanguage(LanguageEnum.Swedish);
             Swedish.AddLanguage("Boombox_ToolTips", "[LMB] Spela musik;[RMB] Byt musik");
             Swedish.AddLanguage("Boombox", "Bärbart ljudsystem");
-            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");
+            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");*/
         }
 
         public static AssetBundle QuickLoadAssetBundle(string name)
