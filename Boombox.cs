@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
 
+// TODO: Port this mod to SteamWorkshop (multiplayer on old version is not working)
 namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
