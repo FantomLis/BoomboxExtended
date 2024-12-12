@@ -8,6 +8,7 @@ using ShopUtils.Network;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Localization;
 
@@ -15,17 +16,13 @@ namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    [BepInDependency("hyydsz-ShopUtils")]
+    [BepInDependency("hyydsz-ShopUtils")] // Not compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
         public static ManualLogSource log;
 
-        public const string ModGUID = "hyydsz-Boombox";
-        public const string ModName = "Boombox";
-        public const string ModVersion = "1.1.5";
-
-        private readonly Harmony harmony = new Harmony(ModGUID);
+        private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
         public static AssetBundle asset;
 
@@ -37,11 +34,25 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
+            EventRegister();
             LoadConfig();
             LoadBoombox();
             LoadLangauge();
 
             harmony.PatchAll();
+        }
+
+        private void EventRegister()
+        {
+            MyceliumNetwork.LobbyCreated += () =>
+            {
+                MyceliumNetwork.SetLobbyData("Boombox.BatterySize",
+                    Config.Bind("Config", "BatteryCapacity", 250f).Value);
+            };
+            MyceliumNetwork.LobbyEntered += () =>
+            {
+                Logger.LogInfo(MyceliumNetwork.GetLobbyData<float>("Boombox.BatterySize"));
+            };
         }
 
         void Start()
@@ -56,6 +67,10 @@ namespace FantomLis.BoomboxExtended
 
             log = Logger;
 
+            
+            //TODO: rework this
+            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatterySize");
+            
             Networks.SetNetworkSync(new Dictionary<string, object>
             {
                 {"BoomboxInfiniteBattery", Config.Bind("Config", "InfiniteBattery", false).Value},
@@ -153,7 +168,7 @@ namespace FantomLis.BoomboxExtended
 
         public static AssetBundle QuickLoadAssetBundle(string name)
         {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), name);
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);
         }
     }
