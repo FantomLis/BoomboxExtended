@@ -1,4 +1,6 @@
-﻿using BepInEx;
+﻿using System;
+using System.Collections;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -7,6 +9,7 @@ using ShopUtils.Language;
 using ShopUtils.Network;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using MyceliumNetworking;
 using UnityEngine;
@@ -32,19 +35,68 @@ namespace FantomLis.BoomboxExtended
 
         public static bool InfiniteBattery = false;
         public static float BatteryCapacity = 250f;
+        public static float AudioSendChunkTime = 0.05f;
 
         public static ConfigEntry<KeyCode> VolumeUpKey;
         public static ConfigEntry<KeyCode> VolumeDownKey;
+        public static readonly uint modId = 614702256 + uint.Parse(MyPluginInfo.PLUGIN_VERSION.Split('.')[0]);
 
+
+        private static Dictionary<string, byte[]> _loadingFiles = new();
+        [CustomRPC]
+        public static void ReceiveAudioClip(string name, byte[] data, bool isFinalChunk)
+        {
+            Boombox.log.LogInfo($"Loading music file {name}...");
+            _loadingFiles[name] = _loadingFiles[name].Concat(data).ToArray();
+
+            if (isFinalChunk)
+            {
+                string path = Path.Combine(Paths.PluginPath, MyceliumNetwork.LobbyHost.m_SteamID.ToString(), name);
+                File.WriteAllBytes(path, _loadingFiles[name]);
+            }
+        }
+
+        [CustomRPC]
+        public static void RequestAudioClips(RPCInfo info)
+        {
+            foreach (var clip in MusicManager.AudioClips.Values)
+            {
+                MusicManager.StartCoroutine(RequestAudioClip(clip, info));
+            }
+            MyceliumNetwork.RPCTarget(modId, nameof(AudioClipsLoaded), info.SenderSteamID, ReliableType.Reliable);
+        }
+        
+        public static IEnumerator RequestAudioClip(AudioClip c, RPCInfo info)
+        {
+            for (int x = 0; x <= MusicManager.ClipsToByte(c).Length; x += 256)
+            {
+                MyceliumNetwork.RPCTarget(modId, nameof(ReceiveAudioClip), info.SenderSteamID, ReliableType.Reliable, MusicManager.GetChunk(c,x/256));
+                yield return new WaitForSeconds(AudioSendChunkTime);
+            }
+        }
+
+        [CustomRPC]
+        public static void AudioClipsLoaded( RPCInfo info)
+        {
+            if (info.SenderSteamID == MyceliumNetwork.LobbyHost)
+                MusicManager.StartLoadMusic(MyceliumNetwork.LobbyHost.m_SteamID.ToString(), true);
+            else
+            {
+                log.LogWarning($"Player {info.SenderSteamID} is not a host, but sent AudioClipsLoaded RPC event!");
+            }
+        }
+        
         void Awake()
         {
+            MyceliumNetwork.RegisterNetworkObject(this, modId);
+            MyceliumNetwork.LobbyLeft += () => _loadingFiles.Clear();
             MyceliumNetwork.LobbyEntered += () =>
             {
-                MusicManager.LoadMusic(MyceliumNetwork.LobbyHost.m_SteamID.ToString(), true);
+                MyceliumNetwork.RPCTarget(modId, nameof(RequestAudioClips), MyceliumNetwork.LobbyHost, ReliableType.Reliable);
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MusicManager.LoadMusic("Custom Song", true);
+                MusicManager.StartLoadMusic("Custom Song", true);
             };
             LoadConfig();
             LoadBoombox();
