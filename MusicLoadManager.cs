@@ -54,9 +54,6 @@ namespace FantomLis.BoomboxExtended
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
-                    byte[] fileData = File.ReadAllBytes(file);
-                    Boombox.log.LogInfo(SHA256FromBytes(fileData));
-                    
                     UnityWebRequest loader = UnityWebRequestMultimedia.GetAudioClip(file, type);
 
                     DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)loader.downloadHandler;
@@ -71,8 +68,13 @@ namespace FantomLis.BoomboxExtended
                         AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
+                            float[] _a = new float[clip.samples];
+                            clip.GetData(_a, 0);
+                            byte[] fileData = new byte[_a.Length*4];
+                            Buffer.BlockCopy(_a, 0, fileData, 0, fileData.Length);
+                            Boombox.log.LogInfo(SHA256FromBytes(fileData));
                             clip.name = Path.GetFileName(file) + SHA256FromBytes(fileData).Substring(0, 16);
-                            AudioClips.Add(file,clip);
+                            AudioClips.Add(file + SHA256FromBytes(fileData).Substring(0, 16),clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                         }
