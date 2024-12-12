@@ -38,9 +38,9 @@ namespace FantomLis.BoomboxExtended
         /// <summary>
         /// Loads music from folder
         /// </summary>
-        /// <param name="pathToFolder">Path to folder to load music (default: "Custom Song", if player is host)</param>
+        /// <param name="pathToFolder">Path to folder to load music (default: "Custom Songs", if player is host)</param>
         /// <param name="resetLoadedClips">Clears loaded clips</param>
-        public static IEnumerator LoadMusic(string pathToFolder = "Custom Song", bool resetLoadedClips = true)
+        public static IEnumerator LoadMusic(string pathToFolder = "Custom Songs", bool resetLoadedClips = true)
         {
             if (resetLoadedClips) AudioClips.Clear();
             string path = Path.Combine(Paths.PluginPath, pathToFolder);
