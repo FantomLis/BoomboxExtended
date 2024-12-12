@@ -53,9 +53,6 @@
     </ItemGroup>
 
     <!-- References - Game Assemblies -->
-    <ItemGroup Condition="$(CI) != 'true'">
-        <Reference Include="$(ManagedDirectory)Assembly-CSharp.dll" Private="false"/>
-    </ItemGroup>
     
     <!-- Add boombox.assetBundle to build -->
     <ItemGroup>
@@ -67,6 +64,9 @@
         <PackageReference Include="ContentWarning.GameLibs.Steam" Version="0.1.11-a-ngd.0" PrivateAssets="all" />
     </ItemGroup>
     <ItemGroup>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Assembly-CSharp.dll</HintPath>
+      </Reference>
       <Reference Include="Photon3Unity3D">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Photon3Unity3D.dll</HintPath>
       </Reference>

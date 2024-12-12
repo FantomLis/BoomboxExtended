@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -22,15 +23,19 @@ namespace FantomLis.BoomboxExtended
     {
         public static ManualLogSource log;
 
-        private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-
         public static AssetBundle asset;
 
+        [Obsolete("Use BatteryCapacity == -1 instead", true)]
         public static bool InfiniteBattery = false;
-        public static float BatteryCapacity = 250f;
+        
+        public static float BatteryCapacity;
 
         public static ConfigEntry<KeyCode> VolumeUpKey;
         public static ConfigEntry<KeyCode> VolumeDownKey;
+        
+        private const string _Section = "Config";
+        private const string _BatteryCapacityKey = "BatteryCapacity";
+        private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
         void Awake()
         {
@@ -44,14 +49,21 @@ namespace FantomLis.BoomboxExtended
 
         private void EventRegister()
         {
+            
             MyceliumNetwork.LobbyCreated += () =>
             {
                 MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
-                    Config.Bind("Config", "_BatteryCapacity", 250f, "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value);
+                    Config.Bind(_Section, _BatteryCapacityKey, 250f,
+                        "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value);
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                Logger.LogInfo(MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity"));
+                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>(_BatteryCapacityKey);
+            };
+            MyceliumNetwork.LobbyLeft += () =>
+            {
+                BatteryCapacity = Config.Bind(_Section, _BatteryCapacityKey, 250f,
+                    "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value;
             };
         }
 
@@ -62,28 +74,15 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadConfig()
         {
-            VolumeUpKey = Config.Bind("Config", "VolumeUp", KeyCode.Equals);
-            VolumeDownKey = Config.Bind("Config", "VolumeDown", KeyCode.Minus);
+            VolumeUpKey = Config.Bind(_Section, "VolumeUp", KeyCode.Equals);
+            VolumeDownKey = Config.Bind(_Section, "VolumeDown", KeyCode.Minus);
 
             log = Logger;
 
-            
-            //TODO: rework this
             MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
-            
-            Networks.SetNetworkSync(new Dictionary<string, object>
-            {
-                {"BoomboxInfiniteBattery", Config.Bind("Config", "InfiniteBattery", false).Value},
-                {"BoomboxBattery", Config.Bind("Config", "BatteryCapacity", 250f).Value }
-            },
-            (dic) =>
-            {
-                // throw error
-                InfiniteBattery = bool.Parse(dic["BoomboxInfiniteBattery"]);
-                BatteryCapacity = float.Parse(dic["BoomboxBattery"]);
-
-                Logger.LogInfo($"Boombox Load [InfiniteBattery: {InfiniteBattery}, BatteryCapacity: {BatteryCapacity}]");
-            });
+            BatteryCapacity = Config.Bind(_Section, _BatteryCapacityKey, 250f,
+                "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value;
+            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}");
         }
 
         private void LoadBoombox()
@@ -94,7 +93,7 @@ namespace FantomLis.BoomboxExtended
             item.itemObject.AddComponent<BoomboxBehaviour>();
 
             Entries.RegisterAll();
-            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind("Config", "BoomboxPrice", 100).Value);
+            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, "BoomboxPrice", 100).Value);
             Networks.RegisterItemPrice(item);
         }
 
