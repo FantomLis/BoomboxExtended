@@ -11,9 +11,11 @@ using System.IO;
 using System.Reflection;
 using MyceliumNetworking;
 using ShopUtils;
+using ShopUtils.Language;
 using ShopUtils.Network;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Serialization;
 
 namespace FantomLis.BoomboxExtended
 {
@@ -23,20 +25,42 @@ namespace FantomLis.BoomboxExtended
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
+        public enum BoomboxMusicSelectionMethod : byte
+        {
+            SelectionUI = 0,
+            ScrollWheel = 1,
+            Original = 2,
+            Default = 0
+        }
+        
         public static ManualLogSource log;
 
         public static AssetBundle asset;
 
+        /// <summary>
+        /// Global setting, sets should Boombox use battery or not.
+        /// Deprecated, do not use.
+        /// </summary>
         [Obsolete("Use BatteryCapacity == -1 instead", true)]
         public static bool InfiniteBattery = false;
         
+        /// <summary>
+        /// Global setting, sets battery capacity for Boombox in the shop
+        /// </summary>
         public static float BatteryCapacity;
+        /// <summary>
+        /// Client-only setting, selects how music selection works
+        /// </summary>
+        public BoomboxMusicSelectionMethod BoomboxMethod = BoomboxMusicSelectionMethod.Default;
 
         public static ConfigEntry<KeyCode> VolumeUpKey;
         public static ConfigEntry<KeyCode> VolumeDownKey;
         
         private const string _Section = "Config";
-        private const string _BatteryCapacityKey = "BatteryCapacity";
+        private ConfigEntry<float> _BatteryCapacityKey;
+        private const string _BoomboxPrice = "BoomboxPrice";
+        
+        
         private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
         void Awake()
@@ -53,18 +77,16 @@ namespace FantomLis.BoomboxExtended
         {
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MyceliumNetwork.SetLobbyData("Boombox."+_BatteryCapacityKey,
-                    Config.Bind(_Section, _BatteryCapacityKey, 250f,
-                        "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value);
+                MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                    _BatteryCapacityKey.Value);
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox."+_BatteryCapacityKey);
+                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
             };
             MyceliumNetwork.LobbyLeft += () =>
             {
-                BatteryCapacity = Config.Bind(_Section, _BatteryCapacityKey, 250f,
-                    "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value;
+                BatteryCapacity = _BatteryCapacityKey.Value;
             };
         }
 
@@ -77,13 +99,15 @@ namespace FantomLis.BoomboxExtended
         {
             VolumeUpKey = Config.Bind(_Section, "VolumeUp", KeyCode.Equals);
             VolumeDownKey = Config.Bind(_Section, "VolumeDown", KeyCode.Minus);
-
+            _BatteryCapacityKey = Config.Bind(_Section, "BatteryCapacity", 250f,
+                "Sets maximum battery capacity in seconds for boombox (-1 - infinite)");
+            BoomboxMethod = Config.Bind(_Section, "BoomboxMusicSelectionType", BoomboxMusicSelectionMethod.Default, 
+                "Sets how music selection works.").Value;
             log = Logger;
 
-            MyceliumNetwork.RegisterLobbyDataKey("Boombox."+"Boombox.BatteryCapacity");
-            BatteryCapacity = Config.Bind(_Section, _BatteryCapacityKey, 250f,
-                "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value;
-            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}");
+            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
+            BatteryCapacity = _BatteryCapacityKey.Value;
+            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}, Music Selection method: {BoomboxMethod}");
         }
 
         private void LoadBoombox()
@@ -94,13 +118,13 @@ namespace FantomLis.BoomboxExtended
             item.itemObject.AddComponent<BoomboxBehaviour>();
 
             Entries.RegisterAll();
-            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, "BoomboxPrice", 100).Value);
+            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, _BoomboxPrice, 100, "Price for boombox.").Value);
             Networks.RegisterItemPrice(item);
         }
 
         private void LoadLangauge()
         {
-            /*Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
+            Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
             Chinese.AddLanguage("Boombox_ToolTips", "[LMB] 播放;[RMB] 切换音乐");
             Chinese.AddLanguage("Boombox", "音响");
             Chinese.AddLanguage("BoomboxVolume", "{0}% 音量");
@@ -163,7 +187,7 @@ namespace FantomLis.BoomboxExtended
             Locale Swedish = Languages.GetLanguage(LanguageEnum.Swedish);
             Swedish.AddLanguage("Boombox_ToolTips", "[LMB] Spela musik;[RMB] Byt musik");
             Swedish.AddLanguage("Boombox", "Bärbart ljudsystem");
-            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");*/
+            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");
         }
 
         public static AssetBundle QuickLoadAssetBundle(string name)
