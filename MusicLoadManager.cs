@@ -68,10 +68,7 @@ namespace FantomLis.BoomboxExtended
                         AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
-                            float[] _a = new float[clip.samples];
-                            clip.GetData(_a, 0);
-                            byte[] fileData = new byte[_a.Length*4];
-                            Buffer.BlockCopy(_a, 0, fileData, 0, fileData.Length);
+                            byte[] fileData = ClipsToByte(clip); 
                             Boombox.log.LogInfo(SHA256FromBytes(fileData));
                             clip.name = Path.GetFileName(file) + SHA256FromBytes(fileData).Substring(0, 16);
                             AudioClips.Add(file + SHA256FromBytes(fileData).Substring(0, 16),clip);
@@ -95,6 +92,15 @@ namespace FantomLis.BoomboxExtended
                 return AudioType.MPEG;
 
             return AudioType.UNKNOWN;
+        }
+
+        public static byte[] ClipsToByte(AudioClip clip)
+        {
+            float[] _a = new float[clip.samples];
+            clip.GetData(_a, 0);
+            byte[] fileData = new byte[_a.Length*4];
+            Buffer.BlockCopy(_a, 0, fileData, 0, fileData.Length);
+            return fileData;
         }
         
         private static string SHA256FromBytes(byte[] data)
