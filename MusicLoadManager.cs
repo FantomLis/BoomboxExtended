@@ -16,6 +16,7 @@ namespace FantomLis.BoomboxExtended
     {
         private static MusicManager instance;
         public static Dictionary<string, AudioClip> AudioClips = new ();
+        public static string _music_hash_splitter_replacer = "\'/\'/\'";
 
         protected static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
@@ -70,8 +71,8 @@ namespace FantomLis.BoomboxExtended
                         {
                             byte[] fileData = ClipsToByte(clip); 
                             Boombox.log.LogInfo(SHA256FromBytes(fileData));
-                            clip.name = Path.GetFileName(file) + SHA256FromBytes(fileData).Substring(0, 16);
-                            AudioClips.Add(file + SHA256FromBytes(fileData).Substring(0, 16),clip);
+                            clip.name = Path.GetFileName(file).Replace("//", _music_hash_splitter_replacer) + "//" + SHA256FromBytes(fileData).Substring(0, 16);
+                            AudioClips.Add(file + "//" + SHA256FromBytes(fileData).Substring(0, 16),clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                         }

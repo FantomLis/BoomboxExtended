@@ -262,16 +262,17 @@ namespace FantomLis.BoomboxExtended
         private string getMusicName(string name)
         {
             int length;
+            name = name.Split("//")[0].Replace(MusicManager._music_hash_splitter_replacer,"//");
             if ((length = name.LastIndexOf('.')) != -1)
             {
                 name = name.Substring(0, length);
             }
 
-            if (name.Length > 15) {
-                name = name.Substring(0, 15);
+            if (name.Length > 31) {
+                name = name.Substring(0, 31);
                 name = name + "...";
             }
-
+            
             return name;
         }
     }
