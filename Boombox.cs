@@ -3,13 +3,15 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using ShopUtils;
-using ShopUtils.Language;
-using ShopUtils.Network;
+//using ShopUtils;
+/*using ShopUtils.Language;*/
+//using ShopUtils.Network;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using MyceliumNetworking;
+using ShopUtils;
+using ShopUtils.Network;
 using UnityEngine;
 using UnityEngine.Localization;
 
@@ -49,16 +51,15 @@ namespace FantomLis.BoomboxExtended
 
         private void EventRegister()
         {
-            
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                MyceliumNetwork.SetLobbyData("Boombox."+_BatteryCapacityKey,
                     Config.Bind(_Section, _BatteryCapacityKey, 250f,
                         "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value);
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>(_BatteryCapacityKey);
+                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox."+_BatteryCapacityKey);
             };
             MyceliumNetwork.LobbyLeft += () =>
             {
@@ -79,7 +80,7 @@ namespace FantomLis.BoomboxExtended
 
             log = Logger;
 
-            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
+            MyceliumNetwork.RegisterLobbyDataKey("Boombox."+"Boombox.BatteryCapacity");
             BatteryCapacity = Config.Bind(_Section, _BatteryCapacityKey, 250f,
                 "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value;
             Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}");
