@@ -46,7 +46,7 @@ namespace FantomLis.BoomboxExtended
 
         void Start()
         {
-            MusicLoadManager.StartLoadMusic();
+            MusicManager.StartLoadMusic();
         }
 
         private void LoadConfig()

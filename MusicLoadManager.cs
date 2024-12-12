@@ -7,16 +7,16 @@ using UnityEngine.Networking;
 
 namespace FantomLis.BoomboxExtended
 {
-    public class MusicLoadManager : MonoBehaviour
+    public class MusicManager : MonoBehaviour
     {
-        private static MusicLoadManager instance;
+        private static MusicManager instance;
         public static Dictionary<string, AudioClip> AudioClips = new ();
 
         protected static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
             if (instance == null)
             {
-                instance = new GameObject("MusicLoader").AddComponent<MusicLoadManager>();
+                instance = new GameObject("MusicLoader").AddComponent<MusicManager>();
                 DontDestroyOnLoad(instance);
             }
 
