@@ -46,12 +46,12 @@ namespace FantomLis.BoomboxExtended
         {
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MyceliumNetwork.SetLobbyData("Boombox.BatterySize",
-                    Config.Bind("Config", "BatteryCapacity", 250f).Value);
+                MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                    Config.Bind("Config", "_BatteryCapacity", 250f, "Sets maximum battery capacity in seconds for boombox (-1 - infinite)").Value);
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                Logger.LogInfo(MyceliumNetwork.GetLobbyData<float>("Boombox.BatterySize"));
+                Logger.LogInfo(MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity"));
             };
         }
 
@@ -69,7 +69,7 @@ namespace FantomLis.BoomboxExtended
 
             
             //TODO: rework this
-            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatterySize");
+            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
             
             Networks.SetNetworkSync(new Dictionary<string, object>
             {
