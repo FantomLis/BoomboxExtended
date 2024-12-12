@@ -8,6 +8,7 @@ using ShopUtils.Network;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Localization;
 
@@ -37,6 +38,14 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
+            MyceliumNetwork.LobbyEntered += () =>
+            {
+                MusicManager.LoadMusic(MyceliumNetwork.LobbyHost.m_SteamID.ToString(), true);
+            };
+            MyceliumNetwork.LobbyCreated += () =>
+            {
+                MusicManager.LoadMusic("Custom Song", true);
+            };
             LoadConfig();
             LoadBoombox();
             LoadLangauge();
