@@ -17,6 +17,7 @@ namespace FantomLis.BoomboxExtended
         private static MusicManager instance;
         public static Dictionary<string, AudioClip> AudioClips = new ();
         private static readonly string _music_hash_splitter_replacer = "\'/\'/\'";
+        public static int ChunkSize = 1024 * 16;
 
         public static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
@@ -42,6 +43,7 @@ namespace FantomLis.BoomboxExtended
         protected static IEnumerator LoadMusic(string pathToFolder = "Custom Songs", bool resetLoadedClips = true)
         {
             if (resetLoadedClips) AudioClips.Clear();
+            Boombox.log.LogInfo("2");
             string path = Path.Combine(Paths.PluginPath,"Boombox", pathToFolder);
             if (!Directory.Exists(path))
             {
@@ -78,6 +80,7 @@ namespace FantomLis.BoomboxExtended
                     }
                 }
             }
+            Boombox.log.LogInfo($"Finished loading all music!");
         }
 
         public static string DehashAudioClipName(string name) => name.Replace(_music_hash_splitter_replacer, "//");
@@ -108,7 +111,7 @@ namespace FantomLis.BoomboxExtended
 
         public static byte[] GetChunk(AudioClip clip, int i)
         {
-            return ClipsToByte(clip).Skip(i * 256).Take(256).ToArray();
+            return ClipsToByte(clip).Skip(i * ChunkSize).Take(ChunkSize).ToArray();
         }
 
         public static byte[] GetChunk(string clip, int i) => GetChunk(AudioClips[clip], i);

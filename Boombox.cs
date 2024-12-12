@@ -12,8 +12,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using MyceliumNetworking;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Localization;
+using Zorro.Settings;
 
 namespace FantomLis.BoomboxExtended
 {
@@ -21,7 +23,7 @@ namespace FantomLis.BoomboxExtended
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
     [BepInDependency("hyydsz-ShopUtils")]
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
-    public class Boombox : BaseUnityPlugin
+    public class Boombox 
     {
         public static ManualLogSource log;
 
@@ -39,7 +41,7 @@ namespace FantomLis.BoomboxExtended
 
         public static ConfigEntry<KeyCode> VolumeUpKey;
         public static ConfigEntry<KeyCode> VolumeDownKey;
-        public static readonly uint modId = 614702256 + uint.Parse(MyPluginInfo.PLUGIN_VERSION.Split('.')[0]);
+        public static readonly uint modId = 614702256;
 
 
         private static Dictionary<string, byte[]> _loadingFiles = new();
@@ -68,7 +70,7 @@ namespace FantomLis.BoomboxExtended
         
         public static IEnumerator RequestAudioClip(AudioClip c, RPCInfo info)
         {
-            for (int x = 0; x <= MusicManager.ClipsToByte(c).Length; x += 256)
+            for (int x = 0; x <= MusicManager.ClipsToByte(c).Length; x += MusicManager.ChunkSize)
             {
                 MyceliumNetwork.RPCTarget(modId, nameof(ReceiveAudioClip), info.SenderSteamID, ReliableType.Reliable, MusicManager.GetChunk(c,x/256));
                 yield return new WaitForSeconds(AudioSendChunkTime);
@@ -88,6 +90,7 @@ namespace FantomLis.BoomboxExtended
         
         void Awake()
         {
+            harmony.PatchAll();
             MyceliumNetwork.RegisterNetworkObject(this, modId);
             MyceliumNetwork.LobbyLeft += () => _loadingFiles.Clear();
             MyceliumNetwork.LobbyEntered += () =>
@@ -96,17 +99,17 @@ namespace FantomLis.BoomboxExtended
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MusicManager.StartLoadMusic("Custom Song", true);
+                MusicManager.StartLoadMusic("Custom Songs", true);
             };
             LoadConfig();
             LoadBoombox();
             LoadLangauge();
-
-            harmony.PatchAll();
+            log.LogInfo("b");
         }
 
         void Start()
         {
+            log.LogInfo("a");
             MusicManager.StartLoadMusic();
         }
 
@@ -138,7 +141,7 @@ namespace FantomLis.BoomboxExtended
 
             Item item = asset.LoadAsset<Item>("Boombox");
             item.itemObject.AddComponent<BoomboxBehaviour>();
-
+            log.LogInfo("LoadBoombox -> before Regia");
             Entries.RegisterAll();
             Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind("Config", "BoomboxPrice", 100).Value);
             Networks.RegisterItemPrice(item);
@@ -217,5 +220,22 @@ namespace FantomLis.BoomboxExtended
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), name);
             return AssetBundle.LoadFromFile(path);
         }
+
+        public void OnDestroy()
+        {
+            MyceliumNetwork.DeregisterNetworkObject(this, modId);
+        }
+    }
+
+    public class BatteryCapacityConfig : FloatSetting, IExposedSetting
+    {
+        public override void ApplyValue()
+        {
+            Boombox.log.LogDebug($"Value {this.GetType().Name} changed to {Value}");
+        }
+        protected override float GetDefaultValue() => 250f;
+        protected override float2 GetMinMaxValue() => new float2(-1, 10000);
+        public SettingCategory GetSettingCategory() => SettingCategory.Mods;
+        public string GetDisplayName() => "Battery capacity (-1 for infinite capacity)";
     }
 }
