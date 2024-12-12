@@ -18,7 +18,7 @@ namespace FantomLis.BoomboxExtended
         public static Dictionary<string, AudioClip> AudioClips = new ();
         private static readonly string _music_hash_splitter_replacer = "\'/\'/\'";
 
-        protected static new Coroutine StartCoroutine(IEnumerator enumerator)
+        public static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
             if (instance == null)
             {
@@ -28,22 +28,21 @@ namespace FantomLis.BoomboxExtended
 
             return ((MonoBehaviour)instance).StartCoroutine(enumerator);
         }
-
-        public static void StartLoadMusic()
-        {
-            StartCoroutine(LoadMusic());
-        }
-        
-        
+    
         /// <summary>
         /// Loads music from folder
         /// </summary>
         /// <param name="pathToFolder">Path to folder to load music (default: "Custom Songs", if player is host)</param>
         /// <param name="resetLoadedClips">Clears loaded clips</param>
-        public static IEnumerator LoadMusic(string pathToFolder = "Custom Songs", bool resetLoadedClips = true)
+        public static void StartLoadMusic(string pathToFolder = "Custom Songs", bool resetLoadedClips = true)
+        {
+            StartCoroutine(LoadMusic(pathToFolder, resetLoadedClips));
+        }
+        
+        protected static IEnumerator LoadMusic(string pathToFolder = "Custom Songs", bool resetLoadedClips = true)
         {
             if (resetLoadedClips) AudioClips.Clear();
-            string path = Path.Combine(Paths.PluginPath, pathToFolder);
+            string path = Path.Combine(Paths.PluginPath,"Boombox", pathToFolder);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -106,7 +105,14 @@ namespace FantomLis.BoomboxExtended
             Buffer.BlockCopy(_a, 0, fileData, 0, fileData.Length);
             return fileData;
         }
-        
+
+        public static byte[] GetChunk(AudioClip clip, int i)
+        {
+            return ClipsToByte(clip).Skip(i * 256).Take(256).ToArray();
+        }
+
+        public static byte[] GetChunk(string clip, int i) => GetChunk(AudioClips[clip], i);
+            
         private static string SHA256FromBytes(byte[] data)
         {
             var crypt = new SHA256Managed();
