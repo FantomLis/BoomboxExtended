@@ -3,6 +3,7 @@ using BepInEx;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,7 +17,7 @@ namespace FantomLis.BoomboxExtended
     {
         private static MusicManager instance;
         public static Dictionary<string, AudioClip> AudioClips = new ();
-        public static string _music_hash_splitter_replacer = "\'/\'/\'";
+        public static readonly string _music_hash_splitter_replacer = "\'/\'/\'";
 
         protected static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
@@ -51,7 +52,7 @@ namespace FantomLis.BoomboxExtended
 
             foreach (string file in Directory.GetFiles(path))
             {
-                if (AudioClips.ContainsKey(file)) continue; 
+                if (AudioClips.Keys.Any(t => t.StartsWith(file))) continue; 
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
