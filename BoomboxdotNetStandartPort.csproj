@@ -63,7 +63,7 @@
 
     <!-- Package References - Game Assemblies -->
     <ItemGroup Condition="$(CI) == 'true'">
-        <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" PrivateAssets="all"/>
+        <PackageReference Include="ContentWarning.GameLibs.Steam" Version="0.1.11-a-ngd.0" PrivateAssets="all" />
     </ItemGroup>
     <ItemGroup>
       <Reference Include="Photon3Unity3D">
