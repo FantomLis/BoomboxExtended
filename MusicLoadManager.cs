@@ -1,7 +1,12 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using pworld.Scripts.Extensions;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -49,6 +54,9 @@ namespace FantomLis.BoomboxExtended
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
+                    byte[] fileData = File.ReadAllBytes(file);
+                    Boombox.log.LogInfo(SHA256FromBytes(fileData));
+                    
                     UnityWebRequest loader = UnityWebRequestMultimedia.GetAudioClip(file, type);
 
                     DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)loader.downloadHandler;
@@ -63,7 +71,7 @@ namespace FantomLis.BoomboxExtended
                         AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
-                            clip.name = Path.GetFileName(file);
+                            clip.name = Path.GetFileName(file) + SHA256FromBytes(fileData).Substring(0, 16);
                             AudioClips.Add(file,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
@@ -85,6 +93,18 @@ namespace FantomLis.BoomboxExtended
                 return AudioType.MPEG;
 
             return AudioType.UNKNOWN;
+        }
+        
+        private static string SHA256FromBytes(byte[] data)
+        {
+            var crypt = new SHA256Managed();
+            string hash = String.Empty;
+            byte[] crypto = crypt.ComputeHash(data);
+            foreach (byte theByte in crypto)
+            {
+                hash += theByte.ToString("x2");
+            }
+            return hash;
         }
     }
 }
