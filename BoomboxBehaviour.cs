@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using ShopUtils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,7 +39,7 @@ namespace FantomLis.BoomboxExtended
 
         public override void ConfigItem(ItemInstanceData data, PhotonView playerView)
         {
-            if (!Boombox.InfiniteBattery)
+            if (Boombox.BatteryCapacity >= 0)
             {
                 if (!data.TryGetEntry(out batteryEntry))
                 {
@@ -152,7 +151,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            if (!Boombox.InfiniteBattery) {
+            if (Boombox.BatteryCapacity >= 0) {
                 if (batteryEntry.m_charge < 0f)
                 {
                     onOffEntry.on = false;
@@ -183,7 +182,7 @@ namespace FantomLis.BoomboxExtended
 
             if (flag)
             {
-                if (!Boombox.InfiniteBattery) {
+                if (Boombox.BatteryCapacity > 0) {
                     batteryEntry.m_charge -= Time.deltaTime;
                 }
 

@@ -1,47 +1,93 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using ShopUtils;
-using ShopUtils.Language;
-using ShopUtils.Network;
+//using ShopUtils;
+/*using ShopUtils.Language;*/
+//using ShopUtils.Network;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using MyceliumNetworking;
+using ShopUtils;
+using ShopUtils.Language;
+using ShopUtils.Network;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Serialization;
 
 namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    [BepInDependency("hyydsz-ShopUtils")]
+    [BepInDependency("hyydsz-ShopUtils")] // Not compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
+        public enum BoomboxMusicSelectionMethod : byte
+        {
+            SelectionUI = 0,
+            ScrollWheel = 1,
+            Original = 2,
+            Default = 0
+        }
+        
         public static ManualLogSource log;
-
-        public const string ModGUID = "hyydsz-Boombox";
-        public const string ModName = "Boombox";
-        public const string ModVersion = "1.1.5";
-
-        private readonly Harmony harmony = new Harmony(ModGUID);
 
         public static AssetBundle asset;
 
+        /// <summary>
+        /// Global setting, sets should Boombox use battery or not.
+        /// Deprecated, do not use.
+        /// </summary>
+        [Obsolete("Use BatteryCapacity == -1 instead", true)]
         public static bool InfiniteBattery = false;
-        public static float BatteryCapacity = 250f;
+        
+        /// <summary>
+        /// Global setting, sets battery capacity for Boombox in the shop
+        /// </summary>
+        public static float BatteryCapacity;
+        /// <summary>
+        /// Client-only setting, selects how music selection works
+        /// </summary>
+        public BoomboxMusicSelectionMethod BoomboxMethod = BoomboxMusicSelectionMethod.Default;
 
         public static ConfigEntry<KeyCode> VolumeUpKey;
         public static ConfigEntry<KeyCode> VolumeDownKey;
+        
+        private const string _Section = "Config";
+        private ConfigEntry<float> _BatteryCapacityKey;
+        private const string _BoomboxPrice = "BoomboxPrice";
+        
+        
+        private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
         void Awake()
         {
+            EventRegister();
             LoadConfig();
             LoadBoombox();
             LoadLangauge();
 
             harmony.PatchAll();
+        }
+
+        private void EventRegister()
+        {
+            MyceliumNetwork.LobbyCreated += () =>
+            {
+                MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                    _BatteryCapacityKey.Value);
+            };
+            MyceliumNetwork.LobbyEntered += () =>
+            {
+                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
+            };
+            MyceliumNetwork.LobbyLeft += () =>
+            {
+                BatteryCapacity = _BatteryCapacityKey.Value;
+            };
         }
 
         void Start()
@@ -51,24 +97,17 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadConfig()
         {
-            VolumeUpKey = Config.Bind("Config", "VolumeUp", KeyCode.Equals);
-            VolumeDownKey = Config.Bind("Config", "VolumeDown", KeyCode.Minus);
-
+            VolumeUpKey = Config.Bind(_Section, "VolumeUp", KeyCode.Equals);
+            VolumeDownKey = Config.Bind(_Section, "VolumeDown", KeyCode.Minus);
+            _BatteryCapacityKey = Config.Bind(_Section, "BatteryCapacity", 250f,
+                "Sets maximum battery capacity in seconds for boombox (-1 - infinite)");
+            BoomboxMethod = Config.Bind(_Section, "BoomboxMusicSelectionType", BoomboxMusicSelectionMethod.Default, 
+                "Sets how music selection works.").Value;
             log = Logger;
 
-            Networks.SetNetworkSync(new Dictionary<string, object>
-            {
-                {"BoomboxInfiniteBattery", Config.Bind("Config", "InfiniteBattery", false).Value},
-                {"BoomboxBattery", Config.Bind("Config", "BatteryCapacity", 250f).Value }
-            },
-            (dic) =>
-            {
-                // throw error
-                InfiniteBattery = bool.Parse(dic["BoomboxInfiniteBattery"]);
-                BatteryCapacity = float.Parse(dic["BoomboxBattery"]);
-
-                Logger.LogInfo($"Boombox Load [InfiniteBattery: {InfiniteBattery}, BatteryCapacity: {BatteryCapacity}]");
-            });
+            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
+            BatteryCapacity = _BatteryCapacityKey.Value;
+            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}, Music Selection method: {BoomboxMethod}");
         }
 
         private void LoadBoombox()
@@ -79,7 +118,7 @@ namespace FantomLis.BoomboxExtended
             item.itemObject.AddComponent<BoomboxBehaviour>();
 
             Entries.RegisterAll();
-            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind("Config", "BoomboxPrice", 100).Value);
+            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, _BoomboxPrice, 100, "Price for boombox.").Value);
             Networks.RegisterItemPrice(item);
         }
 
@@ -153,7 +192,7 @@ namespace FantomLis.BoomboxExtended
 
         public static AssetBundle QuickLoadAssetBundle(string name)
         {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), name);
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);
         }
     }
