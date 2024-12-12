@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,8 +10,9 @@ namespace FantomLis.BoomboxExtended
     public class MusicLoadManager : MonoBehaviour
     {
         private static MusicLoadManager instance;
+        public static Dictionary<string, AudioClip> AudioClips = new ();
 
-        public static new Coroutine StartCoroutine(IEnumerator enumerator)
+        protected static new Coroutine StartCoroutine(IEnumerator enumerator)
         {
             if (instance == null)
             {
@@ -26,19 +28,16 @@ namespace FantomLis.BoomboxExtended
             StartCoroutine(LoadMusic());
         }
         
-        /*
+        
         /// <summary>
         /// Loads music from folder
         /// </summary>
         /// <param name="pathToFolder">Path to folder to load music (default: "Custom Song", if player is host)</param>
-        */
-        /*public static IEnumerator LoadMusic(string pathToFolder = "Custom Song")
+        /// <param name="resetLoadedClips">Clears loaded clips</param>
+        public static IEnumerator LoadMusic(string pathToFolder = "Custom Song", bool resetLoadedClips = true)
         {
-            string path = Path.Combine(Paths.PluginPath, pathToFolder);*/
-        /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
-        public static IEnumerator LoadMusic()
-        {
-            string path = Path.Combine(Paths.PluginPath, "Custom Songs");
+            if (resetLoadedClips) AudioClips.Clear();
+            string path = Path.Combine(Paths.PluginPath, pathToFolder);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -46,7 +45,7 @@ namespace FantomLis.BoomboxExtended
 
             foreach (string file in Directory.GetFiles(path))
             {
-                
+                if (AudioClips.ContainsKey(file)) continue; 
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
@@ -65,7 +64,7 @@ namespace FantomLis.BoomboxExtended
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
                             clip.name = Path.GetFileName(file);
-                            BoomboxBehaviour.clips.Add(file,clip);
+                            AudioClips.Add(file,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                         }

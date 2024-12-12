@@ -9,8 +9,6 @@ namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
-        public static Dictionary<string, AudioClip> clips = new ();
-
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;
         private TimeEntry timeEntry;
@@ -78,7 +76,7 @@ namespace FantomLis.BoomboxExtended
             {
                 musicEntry = new MusicEntry()
                 {
-                    selectMusicId = clips.Keys.FirstOrDefault() ?? string.Empty,
+                    selectMusicId = MusicLoadManager.AudioClips.Keys.FirstOrDefault() ?? string.Empty,
                 };
 
                 data.AddDataEntry(musicEntry);
@@ -103,7 +101,7 @@ namespace FantomLis.BoomboxExtended
             {
                 if (Player.localPlayer.input.clickWasPressed)
                 {
-                    if (clips.Count == 0) 
+                    if (MusicLoadManager.AudioClips.Count == 0) 
                     {
                         HelmetText.Instance.SetHelmetText("No Music", 2f);
                     }
@@ -118,9 +116,9 @@ namespace FantomLis.BoomboxExtended
 
                 if (Player.localPlayer.input.aimWasPressed)
                 {
-                    if (clips.Count > 0)
+                    if (MusicLoadManager.AudioClips.Count > 0)
                     {
-                        musicEntry.selectMusicId = clips.Keys.ToArray()[((++currentIndex) % clips.Count)];
+                        musicEntry.selectMusicId = MusicLoadManager.AudioClips.Keys.ToArray()[((++currentIndex) % MusicLoadManager.AudioClips.Count)];
                         musicEntry.UpdateMusicName();
                         musicEntry.SetDirty();
 
@@ -170,7 +168,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (checkMusic(musicEntry.selectMusicId))
                     {
-                        Music.clip = clips[musicEntry.selectMusicId];
+                        Music.clip = MusicLoadManager.AudioClips[musicEntry.selectMusicId];
                         Music.time = timeEntry.currentTime;
                         Music.Play();
                     }
@@ -193,7 +191,7 @@ namespace FantomLis.BoomboxExtended
 
         public static bool checkMusic(string id)    
         {
-            return clips.ContainsKey(id);
+            return MusicLoadManager.AudioClips.ContainsKey(id);
         }
     }
 
@@ -250,9 +248,9 @@ namespace FantomLis.BoomboxExtended
         {
             MusicName = string.Empty;
 
-            if (BoomboxBehaviour.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
+            if (MusicLoadManager.AudioClips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
             {
-                MusicName = getMusicName(BoomboxBehaviour.clips[selectMusicId].name);
+                MusicName = getMusicName(MusicLoadManager.AudioClips[selectMusicId].name);
             }
         }
 
