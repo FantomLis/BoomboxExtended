@@ -6,6 +6,7 @@ using Zorro.Settings;
 
 namespace FantomLis.BoomboxExtended.Settings;
 
+[ContentWarningSetting]
 public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
 {
     public enum BoomboxMusicSelectionMethod : byte
