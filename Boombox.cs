@@ -68,7 +68,6 @@ namespace FantomLis.BoomboxExtended
             log = Logger;
             log.LogDebug("Pre-Loading started...");
             harmony.PatchAll();
-            EventRegister();
             LoadLangauge();
             log.LogDebug("Pre-Loading finished.");
             log.LogDebug("Patching started...");
@@ -111,6 +110,7 @@ namespace FantomLis.BoomboxExtended
         void Start()
         {
             log.LogDebug("Loading started...");
+            EventRegister();
             LoadConfig();
             LoadBoombox();
             log.LogDebug("Music loading started...");
