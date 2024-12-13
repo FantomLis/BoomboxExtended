@@ -78,7 +78,7 @@ namespace FantomLis.BoomboxExtended
             };
             MyceliumNetwork.LobbyLeft += () =>
             {
-                CurrentBatteryCapacity = BatteryCapacity.Value;
+                CurrentBatteryCapacity = BatteryCapacity?.Value ?? BatteryCapacitySetting.DefaultValue();
             };
             log.LogDebug("Event registered.");
         }
