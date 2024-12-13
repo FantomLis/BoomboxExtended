@@ -14,6 +14,7 @@ using ShopUtils.Network;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
+using Zorro.Core;
 
 // TODO: Port this mod to SteamWorkshop 
 namespace FantomLis.BoomboxExtended
@@ -122,12 +123,14 @@ namespace FantomLis.BoomboxExtended
 
                 Item item = asset.LoadAsset<Item>("Boombox");
                 item.itemObject.AddComponent<BoomboxBehaviour>();
+                item.Category = ShopItemCategory.Misc;
+                item.purchasable = true;
+                item.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 Entries.RegisterAll();
-                Items.RegisterShopItem(item, ShopItemCategory.Misc, GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value);
-                Networks.RegisterItemPrice(item);
+                SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(item);
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)

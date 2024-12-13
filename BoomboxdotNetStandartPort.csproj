@@ -80,6 +80,24 @@
       <Reference Include="PhotonUnityNetworking.Utilities">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
       </Reference>
+      <Reference Include="Sirenix.OdinInspector.Attributes">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Attributes.dll</HintPath>
+      </Reference>
+      <Reference Include="Sirenix.OdinInspector.Modules.Unity.Addressables">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Modules.Unity.Addressables.dll</HintPath>
+      </Reference>
+      <Reference Include="Sirenix.OdinInspector.Modules.UnityLocalization">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Modules.UnityLocalization.dll</HintPath>
+      </Reference>
+      <Reference Include="Sirenix.Serialization">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Serialization.dll</HintPath>
+      </Reference>
+      <Reference Include="Sirenix.Serialization.Config">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Serialization.Config.dll</HintPath>
+      </Reference>
+      <Reference Include="Sirenix.Utilities">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Utilities.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.Mathematics">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Mathematics.dll</HintPath>
       </Reference>
