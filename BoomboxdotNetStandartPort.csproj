@@ -98,6 +98,9 @@
       <Reference Include="Sirenix.Utilities">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Utilities.dll</HintPath>
       </Reference>
+      <Reference Include="Unity.Localization">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Localization.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.Mathematics">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Mathematics.dll</HintPath>
       </Reference>

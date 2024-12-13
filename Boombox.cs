@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using FantomLis.BoomboxExtended.Settings;
 using MyceliumNetworking;
@@ -151,6 +153,8 @@ namespace FantomLis.BoomboxExtended
                 
                 Entries.RegisterAll();
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
+                /*RoundArtifactSpawner.me.possibleSpawns =
+                    RoundArtifactSpawner.me.possibleSpawns.Concat([BoomboxItem]).ToArray();*/
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
@@ -161,7 +165,7 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadLangauge()
         {
-            /*Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
+            Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
             Chinese.AddLanguage("Boombox_ToolTips", "[LMB] 播放;[RMB] 切换音乐");
             Chinese.AddLanguage("Boombox", "音响");
             Chinese.AddLanguage("BoomboxVolume", "{0}% 音量");
@@ -224,7 +228,7 @@ namespace FantomLis.BoomboxExtended
             Locale Swedish = Languages.GetLanguage(LanguageEnum.Swedish);
             Swedish.AddLanguage("Boombox_ToolTips", "[LMB] Spela musik;[RMB] Byt musik");
             Swedish.AddLanguage("Boombox", "Bärbart ljudsystem");
-            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");*/
+            Swedish.AddLanguage("BoomboxVolume", "{0}% volym");
         }
 
         public static AssetBundle QuickLoadAssetBundle(string name)
