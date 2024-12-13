@@ -14,12 +14,12 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
 
-// TODO: Port this mod to SteamWorkshop (multiplayer on old version is not working)
+// TODO: Port this mod to SteamWorkshop 
 namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    [BepInDependency("hyydsz-ShopUtils")] // Partually compatible with new version
+    [BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
