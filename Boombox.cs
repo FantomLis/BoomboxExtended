@@ -17,14 +17,12 @@ using UnityEngine.Serialization;
 // TODO: Port this mod to SteamWorkshop (multiplayer on old version is not working)
 namespace FantomLis.BoomboxExtended
 {
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    //[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
     [BepInDependency("hyydsz-ShopUtils")] // Partually compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
-    public class Boombox : BaseUnityPlugin
+    public class Boombox 
     {
-        
-        
         public static ManualLogSource log;
 
         public static AssetBundle asset;
@@ -36,7 +34,7 @@ namespace FantomLis.BoomboxExtended
         /// <summary>
         /// Current battery capacity for this lobby (not from config)
         /// </summary>
-        public static float CurrentBatteryCapacity;
+        public static float CurrentBatteryCapacity { protected set; get; }
         /// <summary>
         /// Client-only setting, selects how music selection works
         /// </summary>
@@ -109,23 +107,22 @@ namespace FantomLis.BoomboxExtended
             string boomboxAssetbundle = "boombox.assetBundle";
             try
             {
-                
                 asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
 
                 Item item = asset.LoadAsset<Item>("Boombox");
                 item.itemObject.AddComponent<BoomboxBehaviour>();
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
+                
+                Entries.RegisterAll();
+                Items.RegisterShopItem(item, ShopItemCategory.Misc, GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value);
+                Networks.RegisterItemPrice(item);
+                log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
             {
                 log.LogFatal($"Resource {boomboxAssetbundle} failed to load: {ex.Message} ({ex.StackTrace})");
             }
-
-            Entries.RegisterAll();
-            Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, _BoomboxPrice, 100, "Price for boombox.").Value);
-            Networks.RegisterItemPrice(item);
-            log.LogDebug("Loading boombox finished!");
         }
 
         private void LoadLangauge()
