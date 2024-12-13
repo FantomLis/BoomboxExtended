@@ -5,6 +5,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.IO;
 using System.Reflection;
+using FantomLis.BoomboxExtended.Settings;
 using MyceliumNetworking;
 using ShopUtils;
 using ShopUtils.Language;
@@ -18,43 +19,33 @@ namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    [BepInDependency("hyydsz-ShopUtils")] // Not compatible with new version
+    [BepInDependency("hyydsz-ShopUtils")] // Partually compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
-        public enum BoomboxMusicSelectionMethod : byte
-        {
-            SelectionUI = 0,
-            ScrollWheel = 1,
-            Original = 2,
-            Default = 0
-        }
+        
         
         public static ManualLogSource log;
 
         public static AssetBundle asset;
-
-        /// <summary>
-        /// Global setting, sets should Boombox use battery or not.
-        /// Deprecated, do not use.
-        /// </summary>
-        [Obsolete("Use BatteryCapacity == -1 instead", true)]
-        public static bool InfiniteBattery = false;
         
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
         /// </summary>
-        public static float BatteryCapacity;
+        public static BatteryCapacitySetting BatteryCapacity;
+        /// <summary>
+        /// Current battery capacity for this lobby (not from config)
+        /// </summary>
+        public static float CurrentBatteryCapacity;
         /// <summary>
         /// Client-only setting, selects how music selection works
         /// </summary>
-        public BoomboxMusicSelectionMethod BoomboxMethod = BoomboxMusicSelectionMethod.Default;
+        public MusicSelectionMethodSetting BoomboxMethod;
 
-        public static ConfigEntry<KeyCode> VolumeUpKey;
-        public static ConfigEntry<KeyCode> VolumeDownKey;
-        
+        public static VolumeUpSetting VolumeUpKey;
+        public static VolumeDownSetting VolumeDownKey;
+
         private const string _Section = "Config";
-        private ConfigEntry<float> _BatteryCapacityKey;
         private const string _BoomboxPrice = "BoomboxPrice";
         
         
@@ -74,16 +65,17 @@ namespace FantomLis.BoomboxExtended
         {
             MyceliumNetwork.LobbyCreated += () =>
             {
+                MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
                 MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
-                    _BatteryCapacityKey.Value);
+                    BatteryCapacity.Value);
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                BatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
+                CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
             };
             MyceliumNetwork.LobbyLeft += () =>
             {
-                BatteryCapacity = _BatteryCapacityKey.Value;
+                CurrentBatteryCapacity = BatteryCapacity.Value;
             };
         }
 
@@ -94,29 +86,38 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadConfig()
         {
-            VolumeUpKey = Config.Bind(_Section, "VolumeUp", KeyCode.Equals);
-            VolumeDownKey = Config.Bind(_Section, "VolumeDown", KeyCode.Minus);
-            _BatteryCapacityKey = Config.Bind(_Section, "BatteryCapacity", 250f,
-                "Sets maximum battery capacity in seconds for boombox (-1 - infinite)");
-            BoomboxMethod = Config.Bind(_Section, "BoomboxMusicSelectionType", BoomboxMusicSelectionMethod.Default, 
-                "Sets how music selection works.").Value;
+            VolumeUpKey ??= GameHandler.Instance.SettingsHandler.GetSetting<VolumeUpSetting>();
+            VolumeDownKey ??= GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
+            BatteryCapacity ??= GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
+            BoomboxMethod ??= GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             log = Logger;
-
-            MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
-            BatteryCapacity = _BatteryCapacityKey.Value;
-            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity}, Music Selection method: {BoomboxMethod}");
+            CurrentBatteryCapacity = BatteryCapacity.Value;
+            
+            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
         }
 
         private void LoadBoombox()
         {
-            asset = QuickLoadAssetBundle("boombox.assetBundle"); // Why boombox not using .assetBundle filetype?
+            string boomboxAssetbundle = "boombox.assetBundle";
+            try
+            {
+                
+                asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
 
-            Item item = asset.LoadAsset<Item>("Boombox");
-            item.itemObject.AddComponent<BoomboxBehaviour>();
+                Item item = asset.LoadAsset<Item>("Boombox");
+                item.itemObject.AddComponent<BoomboxBehaviour>();
+
+                log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
+            }
+            catch (Exception ex)
+            {
+                log.LogFatal($"Resource {boomboxAssetbundle} failed to load: {ex.Message} ({ex.StackTrace})");
+            }
 
             Entries.RegisterAll();
             Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, _BoomboxPrice, 100, "Price for boombox.").Value);
             Networks.RegisterItemPrice(item);
+            log.LogInfo("Loading boombox finished!");
         }
 
         private void LoadLangauge()
