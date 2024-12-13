@@ -24,7 +24,7 @@ namespace FantomLis.BoomboxExtended
     public class Boombox : BaseUnityPlugin
     {
         public static ManualLogSource log;
-        public static Boombox Self;
+        public static Boombox? Self;
 
         public static AssetBundle asset;
         
@@ -51,7 +51,8 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
-            Self = this;
+            if (Self != null) return;
+            Self ??= this;
             log = Logger;
             log.LogDebug("Pre-Loading started...");
             harmony.PatchAll();
