@@ -38,7 +38,7 @@ namespace FantomLis.BoomboxExtended
         /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
         public static IEnumerator LoadMusic()
         {
-            string path = Path.Combine(Paths.PluginPath, "Custom Songs");
+            string path = Path.Combine(Paths.GameRootPath, "Plugins/Boombox", "Custom Songs");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -46,7 +46,6 @@ namespace FantomLis.BoomboxExtended
 
             foreach (string file in Directory.GetFiles(path))
             {
-                
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {

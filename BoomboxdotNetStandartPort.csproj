@@ -105,6 +105,6 @@
     </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
-        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;" DestinationFolder="C:\Users\creat\AppData\Roaming\r2modmanPlus-local\ContentWarning\profiles\Default-Dev\BepInEx\plugins\!DEBUG" />
+        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
     </Target>
 </Project>

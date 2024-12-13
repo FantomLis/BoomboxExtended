@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -48,6 +49,11 @@ namespace FantomLis.BoomboxExtended
         
         private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
+        static Boombox()
+        {
+            new GameObject("BoomboxLoader").AddComponent<Boombox>().Awake();
+        }
+        
         void Awake()
         {
             log = Logger;
@@ -75,7 +81,7 @@ namespace FantomLis.BoomboxExtended
             MyceliumNetwork.LobbyEntered += () =>
             {
                 if (!MyceliumNetwork.IsHost) CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
-            };
+            };  
             MyceliumNetwork.LobbyLeft += () =>
             {
                 CurrentBatteryCapacity = BatteryCapacity?.Value ?? BatteryCapacitySetting.DefaultValue();
