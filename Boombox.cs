@@ -53,12 +53,16 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
+            log.LogDebug("Loading started...");
             EventRegister();
             LoadConfig();
             LoadBoombox();
             LoadLangauge();
-
+            log.LogDebug("Loading finished.");
+            log.LogDebug("Patching started...");
             harmony.PatchAll();
+            log.LogDebug("Patching finished.");
+            log.LogInfo("Pre-game load finished!");
         }
 
         private void EventRegister()
@@ -77,11 +81,15 @@ namespace FantomLis.BoomboxExtended
             {
                 CurrentBatteryCapacity = BatteryCapacity.Value;
             };
+            log.LogDebug("Event registered.");
         }
 
         void Start()
         {
+            log.LogDebug("Music loading started...");
             MusicLoadManager.StartLoadMusic();
+            log.LogDebug("Music loading finished.");
+            log.LogInfo("Music is ready!");
         }
 
         private void LoadConfig()
@@ -93,7 +101,7 @@ namespace FantomLis.BoomboxExtended
             log = Logger;
             CurrentBatteryCapacity = BatteryCapacity.Value;
             
-            Debug.Log($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
+            log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
         }
 
         private void LoadBoombox()
@@ -117,7 +125,7 @@ namespace FantomLis.BoomboxExtended
             Entries.RegisterAll();
             Items.RegisterShopItem(item, ShopItemCategory.Misc, Config.Bind(_Section, _BoomboxPrice, 100, "Price for boombox.").Value);
             Networks.RegisterItemPrice(item);
-            log.LogInfo("Loading boombox finished!");
+            log.LogDebug("Loading boombox finished!");
         }
 
         private void LoadLangauge()
