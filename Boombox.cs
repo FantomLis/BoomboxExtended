@@ -38,17 +38,23 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         public static float CurrentBatteryCapacity { protected set; get; }
         /// <summary>
+        /// Current boombox price for this lobby (not from config)
+        /// </summary>
+        public static int CurrentBoomboxPrice{ protected set; get; }
+        /// <summary>
         /// Client-only setting, selects how music selection works
         /// </summary>
         public static MusicSelectionMethodSetting BoomboxMethod;
-
+        public static BoomboxPriceSetting BoomboxPrice;
         public static VolumeUpSetting VolumeUpKey;
         public static VolumeDownSetting VolumeDownKey;
 
-        private static readonly string _Section = "Config";
-        private static readonly string _BoomboxPrice = "BoomboxPrice";
+        static string _boomboxBCID = "Boombox.BatteryCapacity";
+        static string _boomboxBPID = "Boombox.BoomboxPrice";
         
         private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+
+        private static Item BoomboxItem;
 
         static Boombox()
         {
@@ -74,20 +80,30 @@ namespace FantomLis.BoomboxExtended
             {
                 if (MyceliumNetwork.IsHost)
                 {
-                    MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
-                    MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                    MyceliumNetwork.SetLobbyData(_boomboxBCID,
                         BatteryCapacity.Value);
+                    MyceliumNetwork.SetLobbyData(_boomboxBPID, BoomboxPrice.Value);
                 }
             };
-            MyceliumNetwork.LobbyEntered += () =>
-            {
-                if (!MyceliumNetwork.IsHost) CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
-            };  
+            MyceliumNetwork.LobbyEntered += () => x();  
             MyceliumNetwork.LobbyLeft += () =>
             {
-                CurrentBatteryCapacity = BatteryCapacity?.Value ?? BatteryCapacitySetting.DefaultValue();
+                CurrentBatteryCapacity = BatteryCapacity.Value;
+                CurrentBoomboxPrice = BoomboxPrice.Value;
+                BoomboxItem.price = CurrentBoomboxPrice;
             };
+            MyceliumNetwork.LobbyDataUpdated += (a) => x();  
             log.LogDebug("Event registered.");
+
+            void x()
+            {
+                if (!MyceliumNetwork.IsHost)
+                {
+                    CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>(_boomboxBCID);
+                    CurrentBoomboxPrice = MyceliumNetwork.GetLobbyData<int>(_boomboxBPID);
+                    BoomboxItem.price = CurrentBoomboxPrice;
+                }
+            }
         }
 
         void Start()
@@ -110,6 +126,10 @@ namespace FantomLis.BoomboxExtended
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
             BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             CurrentBatteryCapacity = BatteryCapacity.Value;
+
+            
+            MyceliumNetwork.RegisterLobbyDataKey(_boomboxBCID);
+            MyceliumNetwork.RegisterLobbyDataKey(_boomboxBPID);
             
             log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
         }
@@ -120,17 +140,17 @@ namespace FantomLis.BoomboxExtended
             try
             {
                 asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
-
-                Item item = asset.LoadAsset<Item>("Boombox");
-                item.itemObject.AddComponent<BoomboxBehaviour>();
-                item.Category = ShopItemCategory.Misc;
-                item.purchasable = true;
-                item.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
+                
+                BoomboxItem = asset.LoadAsset<Item>("Boombox");
+                BoomboxItem.itemObject.AddComponent<BoomboxBehaviour>();
+                BoomboxItem.Category = ShopItemCategory.Misc;
+                BoomboxItem.purchasable = true;
+                BoomboxItem.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 Entries.RegisterAll();
-                SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(item);
+                SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
