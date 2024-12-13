@@ -17,13 +17,14 @@ using UnityEngine.Serialization;
 // TODO: Port this mod to SteamWorkshop (multiplayer on old version is not working)
 namespace FantomLis.BoomboxExtended
 {
-    //[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
     [BepInDependency("hyydsz-ShopUtils")] // Partually compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
-    public class Boombox 
+    public class Boombox : BaseUnityPlugin
     {
         public static ManualLogSource log;
+        public static Boombox Self;
 
         public static AssetBundle asset;
         
@@ -38,27 +39,26 @@ namespace FantomLis.BoomboxExtended
         /// <summary>
         /// Client-only setting, selects how music selection works
         /// </summary>
-        public MusicSelectionMethodSetting BoomboxMethod;
+        public static MusicSelectionMethodSetting BoomboxMethod;
 
         public static VolumeUpSetting VolumeUpKey;
         public static VolumeDownSetting VolumeDownKey;
 
-        private const string _Section = "Config";
-        private const string _BoomboxPrice = "BoomboxPrice";
+        private static readonly string _Section = "Config";
+        private static readonly string _BoomboxPrice = "BoomboxPrice";
         
-        
-        private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+        private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
         void Awake()
         {
-            log.LogDebug("Loading started...");
-            EventRegister();
-            LoadConfig();
-            LoadBoombox();
-            LoadLangauge();
-            log.LogDebug("Loading finished.");
-            log.LogDebug("Patching started...");
+            log.LogDebug("Pre-Loading started...");
+            Self = this;
+            log = Logger;
             harmony.PatchAll();
+            EventRegister();
+            LoadLangauge();
+            log.LogDebug("Pre-Loading finished.");
+            log.LogDebug("Patching started...");
             log.LogDebug("Patching finished.");
             log.LogInfo("Pre-game load finished!");
         }
@@ -84,25 +84,40 @@ namespace FantomLis.BoomboxExtended
 
         void Start()
         {
+            log.LogDebug("Loading started...");
+            LoadConfig();
+            LoadBoombox();
             log.LogDebug("Music loading started...");
             MusicLoadManager.StartLoadMusic();
             log.LogDebug("Music loading finished.");
             log.LogInfo("Music is ready!");
+            log.LogDebug("Loading finished.");
         }
 
-        private void LoadConfig()
+        static Boombox()
         {
-            VolumeUpKey ??= GameHandler.Instance.SettingsHandler.GetSetting<VolumeUpSetting>();
-            VolumeDownKey ??= GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
-            BatteryCapacity ??= GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
-            BoomboxMethod ??= GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
-            log = Logger;
+            GameObject gameLoadObject = new GameObject("Awaiting for Boombox creation...");
+            LoadingManager.BoomboxPreLoadDone += () =>
+            {
+                Self?.Start();
+            };
+            gameLoadObject.AddComponent<LoadingManager>()
+                .StartCoroutine(nameof(LoadingManager.AwaitForBoomboxCreation));
+        }
+        
+        private static void LoadConfig()
+        {
+            log.LogDebug($"Config loading started...");
+            VolumeUpKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeUpSetting>();
+            VolumeDownKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
+            BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
+            BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             CurrentBatteryCapacity = BatteryCapacity.Value;
             
             log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
         }
 
-        private void LoadBoombox()
+        private static void LoadBoombox()
         {
             string boomboxAssetbundle = "boombox.assetBundle";
             try
@@ -121,7 +136,7 @@ namespace FantomLis.BoomboxExtended
             }
             catch (Exception ex)
             {
-                log.LogFatal($"Resource {boomboxAssetbundle} failed to load: {ex.Message} ({ex.StackTrace})");
+                log.LogFatal($"Boombox failed to load: {ex.Message} ({ex.StackTrace})");
             }
         }
 

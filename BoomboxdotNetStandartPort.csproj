@@ -80,6 +80,9 @@
       <Reference Include="PhotonUnityNetworking.Utilities">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
       </Reference>
+      <Reference Include="Unity.Mathematics">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Mathematics.dll</HintPath>
+      </Reference>
       <Reference Include="UnityEngine.LocalizationModule">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
       </Reference>

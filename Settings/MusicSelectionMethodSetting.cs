@@ -21,7 +21,7 @@ public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
     public string GetDisplayName() => "Boombox music selection method";
     public override void ApplyValue() => Boombox.log.LogDebug($"Parameter {GetDisplayName()} is set to {Value}");
 
-    protected override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
+    public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
     public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList();
 }

@@ -39,14 +39,14 @@ namespace FantomLis.BoomboxExtended
 
         public override void ConfigItem(ItemInstanceData data, PhotonView playerView)
         {
-            if (Boombox.BatteryCapacity >= 0)
+            if (Boombox.BatteryCapacity.Value >= 0)
             {
                 if (!data.TryGetEntry(out batteryEntry))
                 {
                     batteryEntry = new BatteryEntry()
                     {
-                        m_charge = Boombox.BatteryCapacity,
-                        m_maxCharge = Boombox.BatteryCapacity
+                        m_charge = Boombox.BatteryCapacity.Value,
+                        m_maxCharge = Boombox.BatteryCapacity.Value
                     };
 
                     data.AddDataEntry(batteryEntry);
@@ -130,7 +130,7 @@ namespace FantomLis.BoomboxExtended
                     Click.Play();
                 }
 
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Value))
+                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
                 {
                     if (volumeEntry.volume <= 9) {
                         volumeEntry.volume += 1;
@@ -140,7 +140,7 @@ namespace FantomLis.BoomboxExtended
                     Click.Play();
                 }
 
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Value))
+                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Keycode()))
                 {
                     if (volumeEntry.volume >= 1) {
                         volumeEntry.volume -= 1;
@@ -151,7 +151,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            if (Boombox.BatteryCapacity >= 0) {
+            if (Boombox.BatteryCapacity.Value >= 0) {
                 if (batteryEntry.m_charge < 0f)
                 {
                     onOffEntry.on = false;
@@ -182,7 +182,7 @@ namespace FantomLis.BoomboxExtended
 
             if (flag)
             {
-                if (Boombox.BatteryCapacity > 0) {
+                if (Boombox.BatteryCapacity.Value > 0) {
                     batteryEntry.m_charge -= Time.deltaTime;
                 }
 
