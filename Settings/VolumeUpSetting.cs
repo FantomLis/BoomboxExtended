@@ -14,5 +14,5 @@ public class VolumeUpSetting : KeyCodeSetting, IExposedSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.MouseKeyboard;
 
-    public string GetDisplayName() => "Boombox volume up key";
+    public string GetDisplayName() => "Boombox Volume Up Key";
 }

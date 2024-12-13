@@ -18,7 +18,7 @@ public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
-    public string GetDisplayName() => "Boombox music selection method";
+    public string GetDisplayName() => "Boombox Music Selection Method";
     public override void ApplyValue() => Boombox.log.LogDebug($"Parameter {GetDisplayName()} is set to {Value}");
 
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
