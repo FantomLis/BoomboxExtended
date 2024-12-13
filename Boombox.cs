@@ -51,9 +51,9 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
-            log.LogDebug("Pre-Loading started...");
             Self = this;
             log = Logger;
+            log.LogDebug("Pre-Loading started...");
             harmony.PatchAll();
             EventRegister();
             LoadLangauge();
