@@ -127,13 +127,14 @@ namespace FantomLis.BoomboxExtended
             VolumeDownKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
             BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
+            BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
             CurrentBatteryCapacity = BatteryCapacity.Value;
-
+            CurrentBoomboxPrice = BoomboxPrice.Value;
             
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBCID);
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBPID);
             
-            log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}");
+            log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
         }
 
         private static void LoadBoombox()
