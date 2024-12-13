@@ -68,13 +68,16 @@ namespace FantomLis.BoomboxExtended
         {
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
-                MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
-                    BatteryCapacity.Value);
+                if (MyceliumNetwork.IsHost)
+                {
+                    MyceliumNetwork.RegisterLobbyDataKey("Boombox.BatteryCapacity");
+                    MyceliumNetwork.SetLobbyData("Boombox.BatteryCapacity",
+                        BatteryCapacity.Value);
+                }
             };
             MyceliumNetwork.LobbyEntered += () =>
             {
-                CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
+                if (!MyceliumNetwork.IsHost) CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>("Boombox.BatteryCapacity");
             };
             MyceliumNetwork.LobbyLeft += () =>
             {
