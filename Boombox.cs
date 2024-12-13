@@ -10,9 +10,7 @@ using System.Linq;
 using System.Reflection;
 using FantomLis.BoomboxExtended.Settings;
 using MyceliumNetworking;
-using ShopUtils;
-using ShopUtils.Language;
-using ShopUtils.Network;
+/*using ShopUtils;*/
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
@@ -23,7 +21,7 @@ namespace FantomLis.BoomboxExtended
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    [BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
+    //[BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
@@ -67,11 +65,11 @@ namespace FantomLis.BoomboxExtended
         {
             log = Logger;
             log.LogDebug("Pre-Loading started...");
-            harmony.PatchAll();
-            LoadLangauge();
-            log.LogDebug("Pre-Loading finished.");
             log.LogDebug("Patching started...");
+            harmony.PatchAll();
             log.LogDebug("Patching finished.");
+            //LoadLangauge();
+            log.LogDebug("Pre-Loading finished.");
             log.LogInfo("Pre-game load finished!");
         }
 
@@ -152,7 +150,7 @@ namespace FantomLis.BoomboxExtended
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
-                Entries.RegisterAll();
+                //Entries.RegisterAll();
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
                 /*RoundArtifactSpawner.me.possibleSpawns =
                     RoundArtifactSpawner.me.possibleSpawns.Concat([BoomboxItem]).ToArray();*/
@@ -164,7 +162,7 @@ namespace FantomLis.BoomboxExtended
             }
         }
 
-        private void LoadLangauge()
+        /*private void LoadLangauge()
         {
             Locale Chinese = Languages.GetLanguage(LanguageEnum.ChineseSimplified);
             Chinese.AddLanguage("Boombox_ToolTips", "[LMB] 播放;[RMB] 切换音乐");
@@ -230,7 +228,7 @@ namespace FantomLis.BoomboxExtended
             Swedish.AddLanguage("Boombox_ToolTips", "[LMB] Spela musik;[RMB] Byt musik");
             Swedish.AddLanguage("Boombox", "Bärbart ljudsystem");
             Swedish.AddLanguage("BoomboxVolume", "{0}% volym");
-        }
+        }*/
 
         public static AssetBundle QuickLoadAssetBundle(string name)
         {
