@@ -24,7 +24,6 @@ namespace FantomLis.BoomboxExtended
     public class Boombox : BaseUnityPlugin
     {
         public static ManualLogSource log;
-        public static Boombox? Self;
 
         public static AssetBundle asset;
         
@@ -51,8 +50,6 @@ namespace FantomLis.BoomboxExtended
 
         void Awake()
         {
-            if (Self != null) return;
-            Self ??= this;
             log = Logger;
             log.LogDebug("Pre-Loading started...");
             harmony.PatchAll();
@@ -96,17 +93,6 @@ namespace FantomLis.BoomboxExtended
             log.LogDebug("Music loading finished.");
             log.LogInfo("Music is ready!");
             log.LogDebug("Loading finished.");
-        }
-
-        static Boombox()
-        {
-            GameObject gameLoadObject = new GameObject("Awaiting for Boombox creation...");
-            LoadingManager.BoomboxPreLoadDone += () =>
-            {
-                Self?.Start();
-            };
-            gameLoadObject.AddComponent<LoadingManager>()
-                .StartCoroutine(nameof(LoadingManager.AwaitForBoomboxCreation));
         }
         
         private static void LoadConfig()
