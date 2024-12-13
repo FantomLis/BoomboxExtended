@@ -9,8 +9,8 @@ public class VolumeUpSetting : KeyCodeSetting, IExposedSetting
 {
     public override void ApplyValue() => Boombox.log.LogDebug($"Parameter {GetDisplayName()} is set to {Value}");
 
-    public override int GetDefaultValue() => (int) KeyCode.Plus;
-    protected override KeyCode GetDefaultKey() => KeyCode.Plus;
+    public override int GetDefaultValue() => (int) KeyCode.Equals;
+    protected override KeyCode GetDefaultKey() => KeyCode.Equals;
 
     public SettingCategory GetSettingCategory() => SettingCategory.MouseKeyboard;
 
