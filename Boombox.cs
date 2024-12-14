@@ -23,7 +23,7 @@ namespace FantomLis.BoomboxExtended
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
     [BepInDependency("hyydsz-ShopUtils")]
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
-    public class Boombox 
+    public class Boombox : BaseUnityPlugin
     {
         public static ManualLogSource log;
 
