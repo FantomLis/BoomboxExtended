@@ -132,11 +132,11 @@ namespace FantomLis.BoomboxExtended
             MyceliumNetwork.LobbyLeft += () => _loadingFiles.Clear();
             MyceliumNetwork.LobbyEntered += () =>
             {
-                MyceliumNetwork.RPCTarget(modId, nameof(RequestAudioClips), MyceliumNetwork.LobbyHost, ReliableType.Reliable);
+                if (!MyceliumNetwork.IsHost) MyceliumNetwork.RPCTarget(modId, nameof(RequestAudioClips), MyceliumNetwork.LobbyHost, ReliableType.Reliable);
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MusicLoadManager.StartLoadMusic("Custom Songs", true);
+                if (!MyceliumNetwork.IsHost) MusicLoadManager.StartLoadMusic("Custom Songs", true);
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
