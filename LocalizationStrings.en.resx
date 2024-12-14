@@ -33,6 +33,6 @@
         <value>[{key}] Volume down</value>
     </data>
     <data name="Volume" xml:space="preserve">
-        <value>Volume {0}</value>
+        <value>Volume</value>
     </data>
 </root>
