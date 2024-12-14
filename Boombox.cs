@@ -208,7 +208,9 @@ namespace FantomLis.BoomboxExtended
             {
                 yield return new WaitForSeconds(0.25f);
                 if (!Player.localPlayer) continue;
-                foreach (var v in AlertQueue)
+                var x = AlertQueue.ToArray();
+                AlertQueue.Clear();
+                foreach (var v in x)
                 {
                     ShowRevenueAlert(v);
                 }
