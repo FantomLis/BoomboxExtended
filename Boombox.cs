@@ -28,6 +28,7 @@ namespace FantomLis.BoomboxExtended
         public static ManualLogSource log;
 
         public static AssetBundle asset;
+        public const string ItemName = "Boombox";
         
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
@@ -49,8 +50,8 @@ namespace FantomLis.BoomboxExtended
         public static VolumeUpSetting VolumeUpKey;
         public static VolumeDownSetting VolumeDownKey;
 
-        static string _boomboxBCID = "Boombox.BatteryCapacity";
-        static string _boomboxBPID = "Boombox.BoomboxPrice";
+        static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
+        static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
         
         private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
 
@@ -58,7 +59,7 @@ namespace FantomLis.BoomboxExtended
 
         static Boombox()
         {
-            new GameObject("BoomboxLoader").AddComponent<Boombox>().Awake();
+            new GameObject($"{ItemName}Loader").AddComponent<Boombox>().Awake();
         }
         
         void Awake()
@@ -92,7 +93,7 @@ namespace FantomLis.BoomboxExtended
                 BoomboxItem.price = CurrentBoomboxPrice;
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
-            log.LogDebug("Event registered.");
+            log.LogDebug("All events registered.");
 
             void x()
             {
@@ -142,7 +143,7 @@ namespace FantomLis.BoomboxExtended
             {
                 asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
                 
-                BoomboxItem = asset.LoadAsset<Item>("Boombox");
+                BoomboxItem = asset.LoadAsset<Item>(ItemName);
                 BoomboxItem.itemObject.AddComponent<BoomboxBehaviour>();
                 BoomboxItem.Category = ShopItemCategory.Misc;
                 BoomboxItem.purchasable = true;
