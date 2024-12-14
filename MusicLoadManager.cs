@@ -1,6 +1,8 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using System.Collections;
 using System.IO;
+using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -43,6 +45,7 @@ namespace FantomLis.BoomboxExtended
             {
                 Directory.CreateDirectory(path);
             }
+            BoomboxBehaviour.clips.Clear();
 
             foreach (string file in Directory.GetFiles(path))
             {
@@ -63,14 +66,18 @@ namespace FantomLis.BoomboxExtended
                         AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
+                            if (BoomboxBehaviour.clips.ContainsKey(file)) continue;
                             clip.name = Path.GetFileName(file);
-                            BoomboxBehaviour.clips.Add(file,clip);
+                            BoomboxBehaviour.clips.Add(clip.name,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
+                            Boombox.ShowRevenueAlert("Loaded music", clip.name);
                         }
                     }
                 }
             }
+            Boombox.log.LogInfo($"Music loading finished!");
+            Boombox.ShowRevenueAlert("Loading music finished!", "", true);
         }
 
         private static AudioType GetAudioType(string path)
