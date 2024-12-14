@@ -123,7 +123,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @Volume {0}.
+        ///   Looks up a localized string similar to @Volume.
         /// </summary>
         internal static string Volume {
             get {

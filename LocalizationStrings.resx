@@ -25,7 +25,7 @@
         <value>[{key}] @Boombox_UseToolTip</value>
     </data>
     <data name="Volume" xml:space="preserve">
-        <value>@Volume {0}</value>
+        <value>@Volume</value>
     </data>
     <data name="Boombox_ClickSwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_ClickSwitchTrackToolTip</value>
