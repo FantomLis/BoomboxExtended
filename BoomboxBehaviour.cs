@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FantomLis.BoomboxExtended.Settings;
 using UnityEngine;
 using Zorro.Core.Serizalization;
 namespace FantomLis.BoomboxExtended
@@ -20,6 +21,7 @@ namespace FantomLis.BoomboxExtended
         private AudioSource Music;
         
         private string currentId;
+        private float lastChangeTime;
 
         void Awake()
         {
@@ -114,19 +116,51 @@ namespace FantomLis.BoomboxExtended
                     Click.Play();
                 }
 
-                if (Player.localPlayer.input.aimWasPressed)
+                switch (Boombox.CurrentBoomboxMethod())
                 {
-                    if (clips.Count > 0)
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
+                    default: 
                     {
-                        musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
-                        musicEntry.UpdateMusicName();
-                        musicEntry.SetDirty();
+                        if (Player.localPlayer.input.aimWasPressed)
+                        {
+                            if (clips.Count > 0)
+                            {
+                                musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
+                                musicEntry.UpdateMusicName();
+                                musicEntry.SetDirty();
 
-                        timeEntry.currentTime = 0;
-                        timeEntry.SetDirty();
+                                timeEntry.currentTime = 0;
+                                timeEntry.SetDirty();
+                            }
+
+                            Click.Play();
+                        }
+                        break;
                     }
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
+                        if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
+                        {
+                            var x = musicEntry.currentIndex;
+                            musicEntry.currentIndex =
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                            if (clips.Count > 0)
+                            {
+                                musicEntry.selectMusicId =
+                                    clips.Keys.ToArray()[musicEntry.currentIndex];
+                                musicEntry.UpdateMusicName();
+                                musicEntry.SetDirty();
 
-                    Click.Play();
+                                timeEntry.currentTime = 0;
+                                timeEntry.SetDirty();
+                            }
+
+                            if (x != musicEntry.currentIndex)
+                            {
+                                lastChangeTime = Time.time;
+                                Click.Play();
+                            }
+                        }
+                        break;
                 }
 
                 if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
