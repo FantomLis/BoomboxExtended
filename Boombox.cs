@@ -223,7 +223,7 @@ namespace FantomLis.BoomboxExtended
             StringBuilder b = new();
             for (int i = 0; i < v.Value.Count; i++)
             {
-                if (i >= 2)
+                if (i >= 1)
                 {
                     b.Append($"and more ({v.Value.Count - i})");
                     break;
