@@ -11,4 +11,28 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="Boombox" xml:space="preserve">
+        <value>Boombox</value>
+    </data>
+    <data name="Boombox_ClickSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Switch Music</value>
+    </data>
+    <data name="Boombox_ScrollSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Scroll Music</value>
+    </data>
+    <data name="Boombox_UISwitchToolTip" xml:space="preserve">
+        <value>[{key}] Open Boombox UI</value>
+    </data>
+    <data name="Boombox_UseToolTip" xml:space="preserve">
+        <value>[{key}] Play music</value>
+    </data>
+    <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] Volume up</value>
+    </data>
+    <data name="Boombox_VolumeDownToolTip" xml:space="preserve">
+        <value>[{key}] Volume down</value>
+    </data>
+    <data name="Volume" xml:space="preserve">
+        <value>Volume {0}</value>
+    </data>
 </root>
