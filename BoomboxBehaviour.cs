@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using ShopUtils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,8 @@ namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
+        public static Dictionary<string, AudioClip> clips = new ();
+
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;
         private TimeEntry timeEntry;
@@ -17,8 +18,7 @@ namespace FantomLis.BoomboxExtended
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
-
-        private int currentIndex = 0;
+        
         private string currentId;
 
         void Awake()
@@ -38,14 +38,14 @@ namespace FantomLis.BoomboxExtended
 
         public override void ConfigItem(ItemInstanceData data, PhotonView playerView)
         {
-            if (!Boombox.InfiniteBattery)
+            if (Boombox.BatteryCapacity.Value >= 0)
             {
                 if (!data.TryGetEntry(out batteryEntry))
                 {
                     batteryEntry = new BatteryEntry()
                     {
-                        m_charge = Boombox.BatteryCapacity,
-                        m_maxCharge = Boombox.BatteryCapacity
+                        m_charge = Boombox.BatteryCapacity.Value,
+                        m_maxCharge = Boombox.BatteryCapacity.Value
                     };
 
                     data.AddDataEntry(batteryEntry);
@@ -118,7 +118,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (MusicManager.AudioClips.Count > 0)
                     {
-                        musicEntry.selectMusicId = MusicManager.AudioClips.Keys.ToArray()[((++currentIndex) % MusicManager.AudioClips.Count)];
+                        musicEntry.selectMusicId = MusicManager.AudioClips.Keys.ToArray()[((++musicEntry.currentIndex) % MusicManager.AudioClips.Count)];
                         musicEntry.UpdateMusicName();
                         musicEntry.SetDirty();
 
@@ -129,7 +129,7 @@ namespace FantomLis.BoomboxExtended
                     Click.Play();
                 }
 
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Value))
+                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
                 {
                     if (volumeEntry.volume <= 9) {
                         volumeEntry.volume += 1;
@@ -139,7 +139,7 @@ namespace FantomLis.BoomboxExtended
                     Click.Play();
                 }
 
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Value))
+                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Keycode()))
                 {
                     if (volumeEntry.volume >= 1) {
                         volumeEntry.volume -= 1;
@@ -150,7 +150,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            if (!Boombox.InfiniteBattery) {
+            if (Boombox.BatteryCapacity.Value >= 0) {
                 if (batteryEntry.m_charge < 0f)
                 {
                     onOffEntry.on = false;
@@ -181,7 +181,7 @@ namespace FantomLis.BoomboxExtended
 
             if (flag)
             {
-                if (!Boombox.InfiniteBattery) {
+                if (Boombox.BatteryCapacity.Value > 0) {
                     batteryEntry.m_charge -= Time.deltaTime;
                 }
 
@@ -204,7 +204,7 @@ namespace FantomLis.BoomboxExtended
 
         public VolumeEntry()
         {
-            VolumeLanguage = "{0}% Volume";
+            VolumeLanguage = $"{{0}}% {LocalizationStrings.Volume}";
         }
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
@@ -231,17 +231,19 @@ namespace FantomLis.BoomboxExtended
     public class MusicEntry : ItemDataEntry, IHaveUIData
     {
         private string MusicName;
-
+        public int currentIndex = 0;
         public string selectMusicId;
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
             selectMusicId = binaryDeserializer.ReadString(Encoding.UTF8);
+            currentIndex = binaryDeserializer.ReadInt();
         }
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
             binarySerializer.WriteString(selectMusicId, Encoding.UTF8);
+            binarySerializer.WriteInt(currentIndex);
         }
 
         public void UpdateMusicName()

@@ -4,7 +4,12 @@
         <AssemblyName>FantomLis.BoomboxExtended</AssemblyName>
         <Product>BoomboxExtended</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.0.0</Version>
+        <Version>0.1</Version>
+        <Description>Test desc pls work</Description>
+        <Authors>FantomLis</Authors>
+        <Company>FantomLis</Company>
+        <AssemblyVersion></AssemblyVersion>
+        <Title>BoomboxExtended</Title>
     </PropertyGroup>
 
     <!-- Project Properties -->
@@ -13,7 +18,6 @@
         <RootNamespace>FantomLis.BoomboxExtended</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
-        <CWDir Condition="'$(CWDir)' == '' ">"F:\SteamLibrary\steamapps\common\Content Warning"</CWDir>
     </PropertyGroup>
 
     <!-- Enable Nullable for better IDE null-checking -->
@@ -55,10 +59,7 @@
     </ItemGroup>
 
     <!-- References - Game Assemblies -->
-    <ItemGroup Condition="$(CI) != 'true'">
-        <Reference Include="$(ManagedDirectory)Assembly-CSharp.dll" Private="false"/>
-    </ItemGroup>
-    
+
     <!-- Add boombox.assetBundle to build -->
     <ItemGroup>
         <None Include="boombox.assetBundle" CopyToOutputDirectory="PreserveNewest"/>
@@ -70,67 +71,94 @@
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Assembly-CSharp.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="com.rlabrecque.steamworks.net">
           <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
         </Reference>
-        <Reference Include="mscorlib">
-            <HintPath>\Content Warning_Data\Managed\mscorlib.dll</HintPath>
-        </Reference>
-        <Reference Include="mscorlib">
-            <HintPath>$(CWDir)\Content Warning_Data\Managed\mscorlib.dll</HintPath>
-        </Reference>
-        <Reference Include="MyceliumNetworkingForCW">
-          <HintPath>..\..\AppData\Roaming\r2modmanPlus-local\ContentWarning\profiles\Default-Dev\BepInEx\plugins\RugbugRedfern-MyceliumNetworking\MyceliumNetworking\MyceliumNetworkingForCW.dll</HintPath>
-        </Reference>
-        <Reference Include="netstandard">
-            <HintPath>$(CWDir)\Content Warning_Data\Managed\netstandard.dll</HintPath>
-        </Reference>
         <Reference Include="Photon3Unity3D">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Photon3Unity3D.dll</HintPath>
-        </Reference>
-        <Reference Include="PhotonChat">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonChat.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Photon3Unity3D.dll</HintPath>
         </Reference>
         <Reference Include="PhotonRealtime">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonRealtime.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonRealtime.dll</HintPath>
         </Reference>
         <Reference Include="PhotonUnityNetworking">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.dll</HintPath>
         </Reference>
         <Reference Include="PhotonUnityNetworking.Utilities">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonUnityNetworking.Utilities.dll</HintPath>
         </Reference>
-        <Reference Include="PhotonVoice">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonVoice.dll</HintPath>
+        <Reference Include="Sirenix.OdinInspector.Attributes">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Attributes.dll</HintPath>
         </Reference>
-        <Reference Include="PhotonVoice.API">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonVoice.API.dll</HintPath>
+        <Reference Include="Sirenix.OdinInspector.Modules.Unity.Addressables">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Modules.Unity.Addressables.dll</HintPath>
         </Reference>
-        <Reference Include="PhotonVoice.PUN">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\PhotonVoice.PUN.dll</HintPath>
+        <Reference Include="Sirenix.OdinInspector.Modules.UnityLocalization">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.OdinInspector.Modules.UnityLocalization.dll</HintPath>
         </Reference>
-        <Reference Include="pworld">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\pworld.dll</HintPath>
+        <Reference Include="Sirenix.Serialization">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Serialization.dll</HintPath>
         </Reference>
-        <Reference Include="System.Runtime.Serialization">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\System.Runtime.Serialization.dll</HintPath>
+        <Reference Include="Sirenix.Serialization.Config">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Serialization.Config.dll</HintPath>
+        </Reference>
+        <Reference Include="Sirenix.Utilities">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Utilities.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Localization">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Localization.dll</HintPath>
         </Reference>
         <Reference Include="Unity.Mathematics">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Mathematics.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Mathematics.dll</HintPath>
         </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-            <HintPath>$(CWDir)\Content Warning_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-        <Reference Include="0Harmony">
-            <HintPath>$(CWDir)\Content Warning_Data\Managed\0Harmony.dll</HintPath>
+        <Reference Include="UnityEngine.LocalizationModule">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
         </Reference>
         <Reference Include="Zorro.Core.Runtime">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Core.Runtime.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Core.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="Zorro.PhotonUtility">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.PhotonUtility.dll</HintPath>
+        </Reference>
+        <Reference Include="Zorro.Recorder">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Recorder.dll</HintPath>
         </Reference>
         <Reference Include="Zorro.Settings.Runtime">
-          <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Settings.Runtime.dll</HintPath>
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Settings.Runtime.dll</HintPath>
         </Reference>
+        <Reference Include="Zorro.UI.Runtime">
+            <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.UI.Runtime.dll</HintPath>
+        </Reference>
+
     </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="LocalizationStrings.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="LocalizationStrings.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="LocalizationStrings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>LocalizationStrings.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <Locales Include="$(OutputPath)\en\**"/>
+    </ItemGroup>
+    <!-- Works only on my pc now -->
+    <Target Name="CopyOutputFileToGame" AfterTargets="Build">
+        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png;boombox.assetBundle;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
+    </Target>
+    <Target Name="CopyOutputFolderToGame" AfterTargets="Build">
+        <Copy SourceFiles="@(Locales)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\en" />
+    </Target>
 </Project>
