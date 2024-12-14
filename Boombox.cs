@@ -207,7 +207,7 @@ namespace FantomLis.BoomboxExtended
             while (Self)
             {
                 yield return new WaitForSeconds(0.25f);
-                if (MyceliumNetwork.InLobby) yield break;
+                if (!Player.localPlayer) continue;
                 foreach (var v in AlertQueue)
                 {
                     ShowRevenueAlert(v);
@@ -217,6 +217,7 @@ namespace FantomLis.BoomboxExtended
 
         private static void ShowRevenueAlert(KeyValuePair<string, List<string>> v)
         {
+            if (!Player.localPlayer) return;
             StringBuilder b = new();
             for (int i = 0; i < v.Value.Count; i++)
             {
@@ -228,7 +229,7 @@ namespace FantomLis.BoomboxExtended
 
                 b.Append(v.Value[i] + "\n");
             }
-            if (Player.localPlayer) UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
+            UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
                 MoneyCellUI.MoneyCellType.Revenue);
         }
     }
