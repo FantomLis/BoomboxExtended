@@ -136,14 +136,26 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Update="LocalizationStrings.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
       <Compile Update="LocalizationStrings.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>LocalizationStrings.resx</DependentUpon>
       </Compile>
     </ItemGroup>
+    <ItemGroup>
+        <Locales Include="$(OutputPath)\en\**"/>
+    </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
-        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
+        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png;boombox.assetBundle;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
+    </Target>
+    <Target Name="CopyOutputFolderToGame" AfterTargets="Build">
+        <Copy SourceFiles="@(Locales)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\en" />
     </Target>
 </Project>
