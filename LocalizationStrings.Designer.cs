@@ -69,11 +69,29 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_SwitchTrackToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchTrackToolTip.
         /// </summary>
-        internal static string Boombox_SwitchTrackToolTip {
+        internal static string Boombox_ClickSwitchToolTip {
             get {
-                return ResourceManager.GetString("Boombox_SwitchTrackToolTip", resourceCulture);
+                return ResourceManager.GetString("Boombox_ClickSwitchToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{key}] @Boombox_ScrollSwitchTrackToolTip.
+        /// </summary>
+        internal static string Boombox_ScrollSwitchToolTip {
+            get {
+                return ResourceManager.GetString("Boombox_ScrollSwitchToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{key}] @Boombox_UISwitchTrackToolTip.
+        /// </summary>
+        internal static string Boombox_UISwitchToolTip {
+            get {
+                return ResourceManager.GetString("Boombox_UISwitchToolTip", resourceCulture);
             }
         }
         
@@ -87,16 +105,25 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_VolumeToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_VolumeDownToolTip.
         /// </summary>
-        internal static string Boombox_VolumeToolTip {
+        internal static string Boombox_VolumeDownToolTip {
             get {
-                return ResourceManager.GetString("Boombox_VolumeToolTip", resourceCulture);
+                return ResourceManager.GetString("Boombox_VolumeDownToolTip", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @Volume.
+        ///   Looks up a localized string similar to [{key}] @Boombox_VolumeUpToolTip.
+        /// </summary>
+        internal static string Boombox_VolumeUpToolTip {
+            get {
+                return ResourceManager.GetString("Boombox_VolumeUpToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Volume {0}.
         /// </summary>
         internal static string Volume {
             get {
