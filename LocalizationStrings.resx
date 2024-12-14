@@ -19,15 +19,18 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="Boombox" xml:space="preserve">
-        <value>@boombox</value>
+        <value>@Boombox</value>
     </data>
-    <data name="Boombox_ToolTip1" xml:space="preserve">
-        <value>[{key}] @boombox_tooltip1</value>
+    <data name="Boombox_UseToolTip" xml:space="preserve">
+        <value>[{key}] @Boombox_UseToolTip</value>
     </data>
-    <data name="VolumeText" xml:space="preserve">
-        <value>@volume</value>
+    <data name="Volume" xml:space="preserve">
+        <value>@Volume</value>
     </data>
-    <data name="Boombox_ToolTip2" xml:space="preserve">
-        <value>[{key}] @boombox_tooltip2</value>
+    <data name="Boombox_SwitchTrackToolTip" xml:space="preserve">
+        <value>[{key}] @Boombox_SwitchTrackToolTip</value>
+    </data>
+    <data name="Boombox_VolumeToolTip" xml:space="preserve">
+        <value>[{key}] @Boombox_VolumeToolTip</value>
     </data>
 </root>
