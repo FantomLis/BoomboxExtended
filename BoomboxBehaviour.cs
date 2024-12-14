@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,18 @@ namespace FantomLis.BoomboxExtended
         
         private string currentId;
         private float lastChangeTime;
+
+        private void OnGUI()
+        {
+            Rect windowRect = new Rect(Screen.width/2f - Screen.width*0.3f, Screen.height/2f - Screen.height*0.3f, Screen.width*0.3f, Screen.height*0.3f);
+            GUI.Window(0, windowRect, DoMyWindow, "Music Selection");
+        }
+        public int selGridInt = 0;
+        private void DoMyWindow(int windowID)
+        {
+            selGridInt = GUI.SelectionGrid(new Rect(0,0, Screen.width*0.3f, Screen.height*0.3f), selGridInt, clips.Keys.ToArray(), 1);
+            GUI.DragWindow();
+        }
 
         void Awake()
         {
@@ -118,6 +131,18 @@ namespace FantomLis.BoomboxExtended
 
                 switch (Boombox.CurrentBoomboxMethod())
                 {
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
+                    {
+                        if (Player.localPlayer.input.aimWasPressed)
+                        {
+                            Click.Play();
+                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
+                                break;
+                            }
+                            
+                        }
+                        break;
+                    }
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
                     default: 
                     {
