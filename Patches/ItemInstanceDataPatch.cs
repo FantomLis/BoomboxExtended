@@ -15,7 +15,7 @@ public class ItemInstanceDataPatch
             __result = 11;
         else if (type == typeof (VolumeEntry))
             __result = 12;
-        Debug.LogError(__exception);
+        else if (__exception != null) throw __exception;
         return null;
     }
     
@@ -29,8 +29,10 @@ public class ItemInstanceDataPatch
                 __result = (ItemDataEntry) new MusicEntry();break;
             case 12:
                 __result = (ItemDataEntry) new VolumeEntry();break;
+            default: 
+                if (__exception != null) throw __exception;
+                break;
         }
-        Debug.LogError(__exception);
         return null;
     }
 }
