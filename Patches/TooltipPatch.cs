@@ -48,9 +48,9 @@ public class TooltipPatch
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
             x.Add(new ItemKeyTooltip(useText, usePrompt, 
                 useGlyphTypes));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeUpToolTip, new HardcodedPrompt(((KeyCode)Boombox.VolumeUpKey.Value).ToString()), 
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeUpToolTip, new HardcodedPrompt("["+((KeyCode)Boombox.VolumeUpKey.Value).ToString()+"]"), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeDownToolTip, new HardcodedPrompt(((KeyCode)Boombox.VolumeDownKey.Value).ToString()), 
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeDownToolTip, new HardcodedPrompt(("["+(KeyCode)Boombox.VolumeDownKey.Value).ToString()+"]"), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
             __result = x;
             return;
