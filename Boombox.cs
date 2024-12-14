@@ -46,6 +46,9 @@ namespace FantomLis.BoomboxExtended
         /// Client-only setting, selects how music selection works
         /// </summary>
         public static MusicSelectionMethodSetting BoomboxMethod;
+
+        public static MusicSelectionMethodSetting.BoomboxMusicSelectionMethod CurrentBoomboxMethod() =>
+            (MusicSelectionMethodSetting.BoomboxMusicSelectionMethod) BoomboxMethod.Value;
         public static BoomboxPriceSetting BoomboxPrice;
         public static VolumeUpSetting VolumeUpKey;
         public static VolumeDownSetting VolumeDownKey;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FantomLis.BoomboxExtended.Settings;
 using HarmonyLib;
 
 namespace FantomLis.BoomboxExtended.Patches;
@@ -27,8 +28,17 @@ public class TooltipPatch
         if (__instance.name.ToLower().Trim().Equals(Boombox.ItemName.ToLower()))
         {
             var x = new List<IHaveUIData>();
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip1, new HardcodedPrompt(ControllerGlyphs.GetSprite(0)), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip2, new HardcodedPrompt(ControllerGlyphs.GetSprite(1)), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.SecondaryUseItem])));
+            var usePrompt = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel 
+                ? new HardcodedPrompt(ControllerGlyphs.GetSprite(2)) : new HardcodedPrompt(ControllerGlyphs.GetSprite(1));
+            var useGlyphTypes = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel 
+                ? new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.SecondaryUseItem]) : 
+                new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.ZoomOut,
+                    ControllerGlyphs.GlyphType.ZoomIn]);
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_UseToolTip, 
+                new HardcodedPrompt(ControllerGlyphs.GetSprite(0)), 
+                new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ClickSwitchToolTip, usePrompt, 
+                useGlyphTypes));
             __result = x;
             return;
         }
