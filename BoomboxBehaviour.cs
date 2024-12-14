@@ -18,8 +18,7 @@ namespace FantomLis.BoomboxExtended
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
-
-        private int currentIndex = 0;
+        
         private string currentId;
 
         void Awake()
@@ -119,7 +118,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (clips.Count > 0)
                     {
-                        musicEntry.selectMusicId = clips.Keys.ToArray()[((++currentIndex) % clips.Count)];
+                        musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
                         musicEntry.UpdateMusicName();
                         musicEntry.SetDirty();
 
@@ -232,17 +231,19 @@ namespace FantomLis.BoomboxExtended
     public class MusicEntry : ItemDataEntry, IHaveUIData
     {
         private string MusicName;
-
+        public int currentIndex = 0;
         public string selectMusicId;
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
             selectMusicId = binaryDeserializer.ReadString(Encoding.UTF8);
+            currentIndex = binaryDeserializer.ReadInt();
         }
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
             binarySerializer.WriteString(selectMusicId, Encoding.UTF8);
+            binarySerializer.WriteInt(currentIndex);
         }
 
         public void UpdateMusicName()
