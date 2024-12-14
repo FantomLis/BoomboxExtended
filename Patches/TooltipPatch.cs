@@ -27,8 +27,8 @@ public class TooltipPatch
         if (__instance.name.ToLower().Trim().Equals(Boombox.ItemName.ToLower()))
         {
             var x = new List<IHaveUIData>();
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip1, new InteractKeybindSetting(), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip2, new ToggleSelfieModeKeybindSetting(), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.SecondaryUseItem])));
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip1, new HardcodedPrompt(ControllerGlyphs.GetSprite(0)), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ToolTip2, new HardcodedPrompt(ControllerGlyphs.GetSprite(1)), new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.SecondaryUseItem])));
             __result = x;
             return;
         }
