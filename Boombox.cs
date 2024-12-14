@@ -85,18 +85,18 @@ namespace FantomLis.BoomboxExtended
         [CustomRPC]
         public void RequestAudioClips(RPCInfo info)
         {
-            foreach (var clip in MusicManager.AudioClips.Values)
+            foreach (var clip in MusicLoadManager.AudioClips.Values)
             {
-                MusicManager.StartCoroutine(RequestAudioClip(clip, info));
+                MusicLoadManager.StartCoroutine(RequestAudioClip(clip, info));
             }
             MyceliumNetwork.RPCTarget(modId, nameof(AudioClipsLoaded), info.SenderSteamID, ReliableType.Reliable);
         }
         
         public IEnumerator RequestAudioClip(AudioClip c, RPCInfo info)
         {
-            for (int x = 0; x <= MusicManager.ClipsToByte(c).Length; x += MusicManager.ChunkSize)
+            for (int x = 0; x <= MusicLoadManager.ClipsToByte(c).Length; x += MusicLoadManager.ChunkSize)
             {
-                MyceliumNetwork.RPCTarget(modId, nameof(ReceiveAudioClip), info.SenderSteamID, ReliableType.Reliable, MusicManager.GetChunk(c,x/256));
+                MyceliumNetwork.RPCTarget(modId, nameof(ReceiveAudioClip), info.SenderSteamID, ReliableType.Reliable, MusicLoadManager.GetChunk(c,x/256));
                 yield return new WaitForSeconds(AudioSendChunkTime);
             }
         }
@@ -107,7 +107,7 @@ namespace FantomLis.BoomboxExtended
         public void AudioClipsLoaded( RPCInfo info)
         {
             if (info.SenderSteamID == MyceliumNetwork.LobbyHost)
-                MusicManager.StartLoadMusic(MyceliumNetwork.LobbyHost.m_SteamID.ToString(), true);
+                MusicLoadManager.StartLoadMusic(MyceliumNetwork.LobbyHost.m_SteamID.ToString(), true);
             else
             {
                 log.LogWarning($"Player {info.SenderSteamID} is not a host, but sent AudioClipsLoaded RPC event!");
@@ -136,7 +136,7 @@ namespace FantomLis.BoomboxExtended
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
-                MusicManager.StartLoadMusic("Custom Songs", true);
+                MusicLoadManager.StartLoadMusic("Custom Songs", true);
             };
             MyceliumNetwork.LobbyCreated += () =>
             {
