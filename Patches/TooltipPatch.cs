@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FantomLis.BoomboxExtended.Settings;
 using HarmonyLib;
+using UnityEngine;
 
 namespace FantomLis.BoomboxExtended.Patches;
 
@@ -34,11 +35,23 @@ public class TooltipPatch
                 ? new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.SecondaryUseItem]) : 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.ZoomOut,
                     ControllerGlyphs.GlyphType.ZoomIn]);
+            var useText = Boombox.CurrentBoomboxMethod() switch
+            {
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default => LocalizationStrings.Boombox_UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI => LocalizationStrings.Boombox_UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel => LocalizationStrings.Boombox_ScrollSwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original => LocalizationStrings.Boombox_ClickSwitchToolTip,
+                _ => string.Empty
+            };
             x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_UseToolTip, 
                 new HardcodedPrompt(ControllerGlyphs.GetSprite(0)), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_ClickSwitchToolTip, usePrompt, 
+            x.Add(new ItemKeyTooltip(useText, usePrompt, 
                 useGlyphTypes));
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeUpToolTip, new HardcodedPrompt(((KeyCode)Boombox.VolumeUpKey.Value).ToString()), 
+                new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
+            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeDownToolTip, new HardcodedPrompt(((KeyCode)Boombox.VolumeDownKey.Value).ToString()), 
+                new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
             __result = x;
             return;
         }
