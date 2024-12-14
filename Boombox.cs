@@ -228,7 +228,7 @@ namespace FantomLis.BoomboxExtended
 
                 b.Append(v.Value[i] + "\n");
             }
-            UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
+            if (Player.localPlayer) UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
                 MoneyCellUI.MoneyCellType.Revenue);
         }
     }
