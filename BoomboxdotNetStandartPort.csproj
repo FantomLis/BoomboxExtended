@@ -129,6 +129,19 @@
       </Reference>
         
     </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="LocalizationStrings.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Localization.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="LocalizationStrings.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LocalizationStrings.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
