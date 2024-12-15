@@ -77,7 +77,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
             Boombox.log.LogInfo($"Music loading finished!");
-            Boombox.ShowRevenueAlert("Loading music finished!", "", true);
+            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {BoomboxBehaviour.clips.Count.ToString()} tracks");
         }
 
         private static AudioType GetAudioType(string path)
