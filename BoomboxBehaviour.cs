@@ -6,6 +6,7 @@ using System.Text;
 using FantomLis.BoomboxExtended.Settings;
 using Sirenix.Utilities;
 using UnityEngine;
+using Zorro.ControllerSupport;
 using Zorro.Core.Serizalization;
 namespace FantomLis.BoomboxExtended
 {
@@ -31,7 +32,7 @@ namespace FantomLis.BoomboxExtended
             if (isHeldByMe && openUI)
             {
                 GUI.BeginGroup(windowRect);
-                selectionScroll = GUI.BeginScrollView(new Rect(20,20, Screen.width*0.3f-40, Screen.height*0.3f-40), selectionScroll, new Rect(0,0,Screen.width*0.3f, clips.Count * 25f * Screen.height/1080f));
+                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*0.3f-40, Screen.height*0.3f-40), selectionScroll, new Rect(0,0, Screen.width*0.3f-40, Screen.height*0.3f-40));
                 var x = musicEntry.currentIndex;
                 musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*0.3f-40, clips.Count * 25f * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
@@ -42,6 +43,7 @@ namespace FantomLis.BoomboxExtended
 
                     timeEntry.currentTime = 0;
                     timeEntry.SetDirty();
+                    openUI = false;
                 }
                 GUI.EndScrollView();
                 GUI.EndGroup();
@@ -148,8 +150,9 @@ namespace FantomLis.BoomboxExtended
                 {
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
                     {
-                        openUI = Player.localPlayer.input.aimIsPressed;
-                        if (Player.localPlayer.input.aimIsPressed)
+                        openUI = Input.GetKey(KeyCode.Mouse0) || Player.localPlayer.input.aimIsPressed;
+                        Player.localPlayer.data.isInTitleCardTerminal = openUI;
+                        if (openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);

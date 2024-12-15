@@ -103,6 +103,12 @@
       <Reference Include="Sirenix.Utilities">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Sirenix.Utilities.dll</HintPath>
       </Reference>
+      <Reference Include="Unity.InputSystem">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.InputSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.InputSystem.ForUI">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.InputSystem.ForUI.dll</HintPath>
+      </Reference>
       <Reference Include="Unity.Localization">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Unity.Localization.dll</HintPath>
       </Reference>
@@ -111,6 +117,9 @@
       </Reference>
       <Reference Include="UnityEngine.LocalizationModule">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
+      </Reference>
+      <Reference Include="Zorro.ControllerSupport">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.ControllerSupport.dll</HintPath>
       </Reference>
       <Reference Include="Zorro.Core.Runtime">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Core.Runtime.dll</HintPath>
