@@ -140,7 +140,7 @@ namespace FantomLis.BoomboxExtended
                     {
                         if (Player.localPlayer.input.aimIsPressed)
                         {
-                            Click.Play();
+                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
                                 break;
                             }
