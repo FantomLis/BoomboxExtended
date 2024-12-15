@@ -138,7 +138,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
                     {
-                        if (Player.localPlayer.input.aimWasPressed)
+                        if (Player.localPlayer.input.aimIsPressed)
                         {
                             Click.Play();
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
