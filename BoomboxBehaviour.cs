@@ -136,6 +136,7 @@ namespace FantomLis.BoomboxExtended
                 switch (Boombox.CurrentBoomboxMethod())
                 {
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll:
                     {
                         openUI = Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed;
                         Player.localPlayer.data.isInTitleCardTerminal = openUI;
@@ -234,6 +235,13 @@ namespace FantomLis.BoomboxExtended
                                     Click.Play();
                                 }
                             }
+                        }
+                        break;
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll: 
+                        if (openUI)
+                        {
+                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
+                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f); }
                         }
                         break;
                 }
