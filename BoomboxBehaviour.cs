@@ -144,7 +144,29 @@ namespace FantomLis.BoomboxExtended
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
                                 break;
                             }
-                            
+                            // TODO: Open UI
+                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
+                            {
+                                var x = musicEntry.currentIndex;
+                                musicEntry.currentIndex =
+                                    (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                                if (clips.Count > 0)
+                                {
+                                    musicEntry.selectMusicId =
+                                        clips.Keys.ToArray()[musicEntry.currentIndex];
+                                    musicEntry.UpdateMusicName();
+                                    musicEntry.SetDirty();
+
+                                    timeEntry.currentTime = 0;
+                                    timeEntry.SetDirty();
+                                }
+
+                                if (x != musicEntry.currentIndex)
+                                {
+                                    lastChangeTime = Time.time;
+                                    Click.Play();
+                                }
+                            }
                         }
                         break;
                     }
