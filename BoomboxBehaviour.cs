@@ -138,7 +138,7 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll:
                     {
-                        openUI = Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed;
+                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && clips.Count > 0;
                         Player.localPlayer.data.isInTitleCardTerminal = openUI;
                         break;
                     }
