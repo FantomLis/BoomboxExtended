@@ -9,6 +9,7 @@ using HarmonyLib;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using FantomLis.BoomboxExtended.Settings;
 using MyceliumNetworking;
 /*using ShopUtils;*/
@@ -17,6 +18,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Serialization;
 using Zorro.Core;
+using Zorro.UI.Modal;
 
 // TODO: Port this mod to SteamWorkshop 
 namespace FantomLis.BoomboxExtended
@@ -31,6 +33,9 @@ namespace FantomLis.BoomboxExtended
 
         public static AssetBundle asset;
         public const string ItemName = "Boombox";
+
+        protected static Dictionary<string, List<string>> AlertQueue = new();
+        public static Boombox Self;
         
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
@@ -64,7 +69,9 @@ namespace FantomLis.BoomboxExtended
 
         static Boombox()
         {
-            new GameObject($"{ItemName}Loader").AddComponent<Boombox>().Awake();
+            Self = new GameObject($"{ItemName}Loader").AddComponent<Boombox>();
+            DontDestroyOnLoad(Self.transform);
+            Self.Awake();
         }
         
         void Awake()
@@ -88,6 +95,7 @@ namespace FantomLis.BoomboxExtended
                     MyceliumNetwork.SetLobbyData(_boomboxBCID,
                         BatteryCapacity.Value);
                     MyceliumNetwork.SetLobbyData(_boomboxBPID, BoomboxPrice.Value);
+                    MusicLoadManager.StartLoadMusic();
                 }
             };
             MyceliumNetwork.LobbyEntered += () => x();  
@@ -117,6 +125,7 @@ namespace FantomLis.BoomboxExtended
             EventRegister();
             LoadConfig();
             LoadBoombox();
+            Self.StartCoroutine(DrawAllPendingAlerts());
             log.LogDebug("Music loading started...");
             MusicLoadManager.StartLoadMusic();
             log.LogDebug("Music loading finished.");
@@ -156,15 +165,13 @@ namespace FantomLis.BoomboxExtended
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
-                //Entries.RegisterAll();
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
-                /*RoundArtifactSpawner.me.possibleSpawns =
-                    RoundArtifactSpawner.me.possibleSpawns.Concat([BoomboxItem]).ToArray();*/
+                //RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
             {
-                log.LogFatal($"Boombox failed to load: {ex.Message} ({ex.StackTrace})");
+                log.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
             }
         }
 
@@ -177,6 +184,59 @@ namespace FantomLis.BoomboxExtended
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);
+        }
+
+        public static void DropQueuedAlert(string header)
+        {
+            if (AlertQueue.TryGetValue(header, out List<string> list))
+                list.Clear();
+        }
+        public static void ShowRevenueAlert(string header, string body, bool forceNow = false, bool dropQueuedAlert = false)
+        {
+            if (forceNow)
+            {
+                ShowRevenueAlert(new KeyValuePair<string, List<string>>(header, [body]));
+                return;
+            }
+            if (AlertQueue.TryGetValue(header, out List<string> list))
+            {
+                if (dropQueuedAlert) list.Clear();
+                list.Add(body);
+            }
+            else AlertQueue.Add(header, new List<string>([body]));
+        }
+
+        private static IEnumerator DrawAllPendingAlerts()
+        {
+            while (Self)
+            {
+                yield return new WaitForSeconds(0.25f);
+                if (!Player.localPlayer) continue;
+                var x = AlertQueue.ToArray();
+                AlertQueue.Clear();
+                foreach (var v in x)
+                {
+                    ShowRevenueAlert(v);
+                }
+            }
+        }
+
+        private static void ShowRevenueAlert(KeyValuePair<string, List<string>> v)
+        {
+            if (!Player.localPlayer) return;
+            StringBuilder b = new();
+            for (int i = 0; i < v.Value.Count; i++)
+            {
+                if (i >= 1 && v.Value.Count() - i > 1)
+                {
+                    b.Append($"... ({v.Value.Count - i} more lines)");
+                    break;
+                }
+
+                b.Append(v.Value[i] + "\n");
+            }
+            UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
+                MoneyCellUI.MoneyCellType.Revenue);
         }
     }
 }
