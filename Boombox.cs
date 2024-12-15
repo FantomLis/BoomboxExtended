@@ -95,8 +95,8 @@ namespace FantomLis.BoomboxExtended
                     MyceliumNetwork.SetLobbyData(_boomboxBCID,
                         BatteryCapacity.Value);
                     MyceliumNetwork.SetLobbyData(_boomboxBPID, BoomboxPrice.Value);
+                    MusicLoadManager.StartLoadMusic();
                 }
-                MusicLoadManager.StartLoadMusic();
             };
             MyceliumNetwork.LobbyEntered += () => x();  
             MyceliumNetwork.LobbyLeft += () =>
@@ -104,7 +104,6 @@ namespace FantomLis.BoomboxExtended
                 CurrentBatteryCapacity = BatteryCapacity.Value;
                 CurrentBoomboxPrice = BoomboxPrice.Value;
                 BoomboxItem.price = CurrentBoomboxPrice;
-                
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
             log.LogDebug("All events registered.");
