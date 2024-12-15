@@ -188,6 +188,11 @@ namespace FantomLis.BoomboxExtended
             return AssetBundle.LoadFromFile(path);
         }
 
+        public static void DropQueuedAlert(string header)
+        {
+            if (AlertQueue.TryGetValue(header, out List<string> list))
+                list.Clear();
+        }
         public static void ShowRevenueAlert(string header, string body, bool forceNow = false, bool dropQueuedAlert = false)
         {
             if (forceNow)
