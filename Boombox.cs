@@ -188,7 +188,7 @@ namespace FantomLis.BoomboxExtended
             return AssetBundle.LoadFromFile(path);
         }
 
-        public static void ShowRevenueAlert(string header, string body, bool forceNow = false)
+        public static void ShowRevenueAlert(string header, string body, bool forceNow = false, bool dropQueuedAlert = false)
         {
             if (forceNow)
             {
@@ -197,6 +197,7 @@ namespace FantomLis.BoomboxExtended
             }
             if (AlertQueue.TryGetValue(header, out List<string> list))
             {
+                if (dropQueuedAlert) list.Clear();
                 list.Add(body);
             }
             else AlertQueue.Add(header, new List<string>([body]));
@@ -225,7 +226,7 @@ namespace FantomLis.BoomboxExtended
             {
                 if (i >= 1)
                 {
-                    b.Append($"and more ({v.Value.Count - i})");
+                    b.Append($"... ({v.Value.Count - i} lines)");
                     break;
                 }
 
