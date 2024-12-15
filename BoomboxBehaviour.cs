@@ -37,7 +37,7 @@ namespace FantomLis.BoomboxExtended
         {
             //GUI.DragWindow(new Rect(0, 0, 10000, 20));
             selectionScroll = GUI.BeginScrollView(new Rect (10,20, Screen.width*0.30f-10f,Screen.height*0.30f-30), selectionScroll, new Rect(0, 0, Screen.width*0.30f, clips.Count * 25f));
-            selGridInt = GUI.SelectionGrid(new Rect (0, 0, (Screen.width*0.3f-20), clips.Count * 25f), selGridInt, clips.Keys.ToArray(), 1); 
+            musicEntry.currentIndex = GUI.SelectionGrid(new Rect (0, 0, (Screen.width*0.3f-20), clips.Count * 25f), musicEntry.currentIndex, clips.Keys.ToArray(), 1); 
             GUI.EndScrollView();
         }
 
