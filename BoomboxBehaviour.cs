@@ -207,6 +207,7 @@ namespace FantomLis.BoomboxExtended
                         }
                         break;
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI: 
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
                         if (openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
