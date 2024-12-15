@@ -43,7 +43,6 @@ namespace FantomLis.BoomboxExtended
 
                     timeEntry.currentTime = 0;
                     timeEntry.SetDirty();
-                    openUI = false;
                 }
                 GUI.EndScrollView();
                 GUI.EndGroup();
@@ -129,6 +128,18 @@ namespace FantomLis.BoomboxExtended
 
         void Update()
         {
+            if (isHeldByMe)
+            {
+                switch (Boombox.CurrentBoomboxMethod())
+                {
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
+                    {
+                        openUI = Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed;
+                        Player.localPlayer.data.hookedIntoTerminal = openUI;
+                        break;
+                    }
+                }
+            }
             if (isHeldByMe && !Player.localPlayer.HasLockedInput())
             {
                 if (Player.localPlayer.input.clickWasPressed)
@@ -148,41 +159,6 @@ namespace FantomLis.BoomboxExtended
 
                 switch (Boombox.CurrentBoomboxMethod())
                 {
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
-                    {
-                        openUI = Input.GetKey(KeyCode.Mouse0) || Player.localPlayer.input.aimIsPressed;
-                        Player.localPlayer.data.isInTitleCardTerminal = openUI;
-                        if (openUI)
-                        {
-                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
-                                break;
-                            }
-                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
-                            {
-                                var x = musicEntry.currentIndex;
-                                musicEntry.currentIndex =
-                                    (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
-                                if (clips.Count > 0)
-                                {
-                                    musicEntry.selectMusicId =
-                                        clips.Keys.ToArray()[musicEntry.currentIndex];
-                                    musicEntry.UpdateMusicName();
-                                    musicEntry.SetDirty();
-
-                                    timeEntry.currentTime = 0;
-                                    timeEntry.SetDirty();
-                                }
-
-                                if (x != musicEntry.currentIndex)
-                                {
-                                    lastChangeTime = Time.time;
-                                    Click.Play();
-                                }
-                            }
-                        }
-                        break;
-                    }
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
                     default: 
                     {
@@ -223,6 +199,37 @@ namespace FantomLis.BoomboxExtended
                             {
                                 lastChangeTime = Time.time;
                                 Click.Play();
+                            }
+                        }
+                        break;
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI: 
+                        if (openUI)
+                        {
+                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
+                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
+                                break;
+                            }
+                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
+                            {
+                                var x = musicEntry.currentIndex;
+                                musicEntry.currentIndex =
+                                    (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                                if (clips.Count > 0)
+                                {
+                                    musicEntry.selectMusicId =
+                                        clips.Keys.ToArray()[musicEntry.currentIndex];
+                                    musicEntry.UpdateMusicName();
+                                    musicEntry.SetDirty();
+
+                                    timeEntry.currentTime = 0;
+                                    timeEntry.SetDirty();
+                                }
+
+                                if (x != musicEntry.currentIndex)
+                                {
+                                    lastChangeTime = Time.time;
+                                    Click.Play();
+                                }
                             }
                         }
                         break;
