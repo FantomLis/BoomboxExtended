@@ -18,6 +18,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Serialization;
 using Zorro.Core;
+using Zorro.UI.Modal;
 
 // TODO: Port this mod to SteamWorkshop 
 namespace FantomLis.BoomboxExtended
@@ -165,15 +166,13 @@ namespace FantomLis.BoomboxExtended
 
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
-                //Entries.RegisterAll();
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
-                /*RoundArtifactSpawner.me.possibleSpawns =
-                    RoundArtifactSpawner.me.possibleSpawns.Concat([BoomboxItem]).ToArray();*/
+                //RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
             {
-                log.LogFatal($"Boombox failed to load: {ex.Message} ({ex.StackTrace})");
+                log.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
             }
         }
 
