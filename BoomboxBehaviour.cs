@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FantomLis.BoomboxExtended.Settings;
+using Sirenix.Utilities;
 using UnityEngine;
 using Zorro.Core.Serizalization;
 namespace FantomLis.BoomboxExtended
@@ -23,23 +24,32 @@ namespace FantomLis.BoomboxExtended
         
         private string currentId;
         private float lastChangeTime;
-
+        private bool openUI;
+        Rect windowRect = new Rect((Screen.width - Screen.width * 0.3f)/2f , (Screen.height - Screen.height * 0.3f)/2f , Screen.width*0.3f, Screen.height*0.3f);
         private void OnGUI()
         {
-            Rect windowRect = new Rect(Screen.width/2f - Screen.width*0.3f, Screen.height/2f - Screen.height*0.3f, Screen.width*0.3f, Screen.height*0.3f);
-            GUI.Window(0, windowRect, DoMyWindow, "Music Selection");
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (isHeldByMe && openUI)
+            {
+                GUI.BeginGroup(windowRect);
+                selectionScroll = GUI.BeginScrollView(new Rect(20,20, Screen.width*0.3f-40, Screen.height*0.3f-40), selectionScroll, new Rect(0,0,Screen.width*0.3f, clips.Count * 25f * Screen.height/1080f));
+                var x = musicEntry.currentIndex;
+                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*0.3f-40, clips.Count * 25f * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
+                if (x != musicEntry.currentIndex)
+                {
+                    musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
+                    musicEntry.UpdateMusicName();
+                    musicEntry.SetDirty();
+
+                    timeEntry.currentTime = 0;
+                    timeEntry.SetDirty();
+                }
+                GUI.EndScrollView();
+                GUI.EndGroup();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
-        private int selGridInt = 1;
         private Vector2 selectionScroll = new Vector2();
-        private void DoMyWindow(int windowID)
-        {
-            //GUI.DragWindow(new Rect(0, 0, 10000, 20));
-            selectionScroll = GUI.BeginScrollView(new Rect (10,20, Screen.width*0.30f-10f,Screen.height*0.30f-30), selectionScroll, new Rect(0, 0, Screen.width*0.30f, clips.Count * 25f));
-            musicEntry.currentIndex = GUI.SelectionGrid(new Rect (0, 0, (Screen.width*0.3f-20), clips.Count * 25f), musicEntry.currentIndex, clips.Keys.ToArray(), 1); 
-            GUI.EndScrollView();
-        }
 
         void Awake()
         {
@@ -138,13 +148,13 @@ namespace FantomLis.BoomboxExtended
                 {
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
                     {
+                        openUI = Player.localPlayer.input.aimIsPressed;
                         if (Player.localPlayer.input.aimIsPressed)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
                                 break;
                             }
-                            // TODO: Open UI
                             if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
                             {
                                 var x = musicEntry.currentIndex;
