@@ -46,7 +46,7 @@ namespace FantomLis.BoomboxExtended
                 Directory.CreateDirectory(path);
             }
             BoomboxBehaviour.clips.Clear();
-
+            Boombox .DropQueuedAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
                 AudioType type = GetAudioType(file);
@@ -77,7 +77,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
             Boombox.log.LogInfo($"Music loading finished!");
-            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {BoomboxBehaviour.clips.Count.ToString()} tracks");
+            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {BoomboxBehaviour.clips.Count.ToString()} tracks", dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)
