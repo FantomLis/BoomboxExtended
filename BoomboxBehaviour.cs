@@ -13,6 +13,8 @@ namespace FantomLis.BoomboxExtended
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
         public static Dictionary<string, AudioClip> clips = new ();
+        private static readonly float uiSize = 0.3f;
+        private static float SongButtonSize;
 
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;
@@ -26,15 +28,16 @@ namespace FantomLis.BoomboxExtended
         private string currentId;
         private float lastChangeTime;
         private bool openUI;
-        Rect windowRect = new Rect((Screen.width - Screen.width * 0.3f)/2f , (Screen.height - Screen.height * 0.3f)/2f , Screen.width*0.3f, Screen.height*0.3f);
+        Rect windowRect = new Rect((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
         private void OnGUI()
         {
             if (isHeldByMe && openUI)
             {
                 GUI.BeginGroup(windowRect);
-                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*0.3f-40, Screen.height*0.3f-40), selectionScroll, new Rect(0,0,Screen.width*0.3f, clips.Count * 25f * Screen.height/1080f));
+                SongButtonSize = 25f;
+                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, new Rect(0,0,Screen.width*uiSize-40-40, clips.Count * SongButtonSize * Screen.height/1080f));
                 var x = musicEntry.currentIndex;
-                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*0.3f-40, clips.Count * 25f * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
+                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
                 {
                     musicEntry.selectMusicId = clips.Keys.ToArray()[((musicEntry.currentIndex) % clips.Count)];
@@ -135,7 +138,7 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
                     {
                         openUI = Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed;
-                        Player.localPlayer.data.hookedIntoTerminal = openUI;
+                        Player.localPlayer.data.isInTitleCardTerminal = openUI;
                         break;
                     }
                 }
