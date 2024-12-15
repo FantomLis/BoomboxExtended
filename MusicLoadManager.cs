@@ -49,6 +49,7 @@ namespace FantomLis.BoomboxExtended
             Boombox .DropQueuedAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
+                if (BoomboxBehaviour.clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
@@ -66,7 +67,6 @@ namespace FantomLis.BoomboxExtended
                         AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
-                            if (BoomboxBehaviour.clips.ContainsKey(file)) continue;
                             clip.name = Path.GetFileNameWithoutExtension(file);
                             BoomboxBehaviour.clips.Add(clip.name,clip);
 
