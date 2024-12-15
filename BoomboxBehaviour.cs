@@ -28,12 +28,17 @@ namespace FantomLis.BoomboxExtended
         {
             Rect windowRect = new Rect(Screen.width/2f - Screen.width*0.3f, Screen.height/2f - Screen.height*0.3f, Screen.width*0.3f, Screen.height*0.3f);
             GUI.Window(0, windowRect, DoMyWindow, "Music Selection");
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
-        public int selGridInt = 0;
+        private int selGridInt = 1;
+        private Vector2 selectionScroll = new Vector2();
         private void DoMyWindow(int windowID)
         {
-            selGridInt = GUI.SelectionGrid(new Rect(0,0, Screen.width*0.3f, Screen.height*0.3f), selGridInt, clips.Keys.ToArray(), 1);
-            GUI.DragWindow();
+            //GUI.DragWindow(new Rect(0, 0, 10000, 20));
+            selectionScroll = GUI.BeginScrollView(new Rect (10,20, Screen.width*0.30f-10f,Screen.height*0.30f-30), selectionScroll, new Rect(0, 0, Screen.width*0.30f, clips.Count * 25f));
+            selGridInt = GUI.SelectionGrid(new Rect (0, 0, (Screen.width*0.3f-20), clips.Count * 25f), selGridInt, clips.Keys.ToArray(), 1); 
+            GUI.EndScrollView();
         }
 
         void Awake()
