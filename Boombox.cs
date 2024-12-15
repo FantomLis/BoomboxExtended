@@ -229,9 +229,9 @@ namespace FantomLis.BoomboxExtended
             StringBuilder b = new();
             for (int i = 0; i < v.Value.Count; i++)
             {
-                if (i >= 1)
+                if (i >= 1 && v.Value.Count() - i > 1)
                 {
-                    b.Append($"... ({v.Value.Count - i} lines)");
+                    b.Append($"... ({v.Value.Count - i} more lines)");
                     break;
                 }
 
