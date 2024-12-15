@@ -37,7 +37,7 @@ namespace FantomLis.BoomboxExtended
                 musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*0.3f-40, clips.Count * 25f * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
                 {
-                    musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
+                    musicEntry.selectMusicId = clips.Keys.ToArray()[((musicEntry.currentIndex) % clips.Count)];
                     musicEntry.UpdateMusicName();
                     musicEntry.SetDirty();
 
