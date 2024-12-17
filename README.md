@@ -17,3 +17,6 @@ Fork of original mod [Boombox](https://github.com/hyydsz/Boombox) by [hyydsz](ht
 
 ### Dependency
 - [Mycelium Networking by RugBug](https://github.com/RugbugRedfern/Mycelium-Networking-For-Content-Warning)
+
+### TODO List
+https://trello.com/b/pmuWV7Ni <-- it's public
