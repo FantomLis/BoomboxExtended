@@ -12,7 +12,6 @@ namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
-        public static Dictionary<string, AudioClip> clips = new ();
         private static readonly float uiSize = 0.3f;
         private static float SongButtonSize;
 
@@ -39,12 +38,12 @@ namespace FantomLis.BoomboxExtended
                     ? selectionScroll
                     : GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
                     new Rect(0,0,Screen.width*uiSize-40-40, 
-                        clips.Count * SongButtonSize * Screen.height/1080f));
+                        MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f));
                 var x = musicEntry.currentIndex;
-                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
+                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
                 {
-                    musicEntry.selectMusicId = clips.Keys.ToArray()[((musicEntry.currentIndex) % clips.Count)];
+                    musicEntry.selectMusicId = MusicLoadManager.clips.Keys.ToArray()[((musicEntry.currentIndex) % MusicLoadManager.clips.Count)];
                     musicEntry.UpdateMusicName();
                     musicEntry.SetDirty();
 
@@ -113,7 +112,7 @@ namespace FantomLis.BoomboxExtended
             {
                 musicEntry = new MusicEntry()
                 {
-                    selectMusicId = clips.Keys.FirstOrDefault() ?? string.Empty,
+                    selectMusicId = MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty,
                 };
 
                 data.AddDataEntry(musicEntry);
@@ -141,7 +140,7 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
                     {
-                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && clips.Count > 0;
+                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && MusicLoadManager.clips.Count > 0;
                         if (Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod
                                 .SelectionUIScroll)
                         {
@@ -160,12 +159,12 @@ namespace FantomLis.BoomboxExtended
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ clips.Count) % clips.Count;
-                            selectionScroll = Vector2.up * ((musicEntry.currentIndex * SongButtonSize * (Screen.height / 1080f))-(clips.Count * SongButtonSize * Screen.height/1080f/2f));
-                            if (clips.Count > 0)
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
+                            selectionScroll = Vector2.up * ((musicEntry.currentIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
+                            if (MusicLoadManager.clips.Count > 0)
                             {
                                 musicEntry.selectMusicId =
-                                    clips.Keys.ToArray()[musicEntry.currentIndex];
+                                    MusicLoadManager.clips.Keys.ToArray()[musicEntry.currentIndex];
                                 musicEntry.UpdateMusicName();
                                 musicEntry.SetDirty();
 
@@ -187,7 +186,7 @@ namespace FantomLis.BoomboxExtended
             {
                 if (Player.localPlayer.input.clickWasPressed)
                 {
-                    if (clips.Count == 0) 
+                    if (MusicLoadManager.clips.Count == 0) 
                     {
                         HelmetText.Instance.SetHelmetText("No Music", 2f);
                     }
@@ -207,9 +206,9 @@ namespace FantomLis.BoomboxExtended
                     {
                         if (Player.localPlayer.input.aimWasPressed)
                         {
-                            if (clips.Count > 0)
+                            if (MusicLoadManager.clips.Count > 0)
                             {
-                                musicEntry.selectMusicId = clips.Keys.ToArray()[((++musicEntry.currentIndex) % clips.Count)];
+                                musicEntry.selectMusicId = MusicLoadManager.clips.Keys.ToArray()[((++musicEntry.currentIndex) % MusicLoadManager.clips.Count)];
                                 musicEntry.UpdateMusicName();
                                 musicEntry.SetDirty();
 
@@ -226,11 +225,11 @@ namespace FantomLis.BoomboxExtended
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ clips.Count) % clips.Count;
-                            if (clips.Count > 0)
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
+                            if (MusicLoadManager.clips.Count > 0)
                             {
                                 musicEntry.selectMusicId =
-                                    clips.Keys.ToArray()[musicEntry.currentIndex];
+                                    MusicLoadManager.clips.Keys.ToArray()[musicEntry.currentIndex];
                                 musicEntry.UpdateMusicName();
                                 musicEntry.SetDirty();
 
@@ -250,7 +249,7 @@ namespace FantomLis.BoomboxExtended
                         if (openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
+                            if (MusicLoadManager.clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
                                 break;
                             }
                         }
@@ -259,7 +258,7 @@ namespace FantomLis.BoomboxExtended
                         if (openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f); }
+                            if (MusicLoadManager.clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f); }
                         }
                         break;
                 }
@@ -303,7 +302,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (checkMusic(musicEntry.selectMusicId))
                     {
-                        Music.clip = clips[musicEntry.selectMusicId];
+                        Music.clip = MusicLoadManager.clips[musicEntry.selectMusicId];
                         Music.time = timeEntry.currentTime;
                         Music.Play();
                     }
@@ -326,7 +325,7 @@ namespace FantomLis.BoomboxExtended
 
         public static bool checkMusic(string id)    
         {
-            return clips.ContainsKey(id);
+            return MusicLoadManager.clips.ContainsKey(id);
         }
     }
 
@@ -385,9 +384,9 @@ namespace FantomLis.BoomboxExtended
         {
             MusicName = string.Empty;
 
-            if (BoomboxBehaviour.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
+            if (MusicLoadManager.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
             {
-                MusicName = getMusicName(BoomboxBehaviour.clips[selectMusicId].name);
+                MusicName = getMusicName(MusicLoadManager.clips[selectMusicId].name);
             }
         }
 

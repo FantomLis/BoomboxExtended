@@ -1,9 +1,11 @@
 ﻿using System;
 using BepInEx;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,6 +14,7 @@ namespace FantomLis.BoomboxExtended
     public class MusicLoadManager : MonoBehaviour
     {
         private static MusicLoadManager Instance;
+        public static Dictionary<string, AudioClip> clips = new ();
 
         private new static Coroutine StartCoroutine(IEnumerator enumerator)
         {
@@ -41,11 +44,11 @@ namespace FantomLis.BoomboxExtended
             {
                 Directory.CreateDirectory(path);
             }
-            BoomboxBehaviour.clips.Clear();
+            clips.Clear();
             Boombox .DropQueuedAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
-                if (BoomboxBehaviour.clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
+                if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
@@ -64,7 +67,7 @@ namespace FantomLis.BoomboxExtended
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
                             clip.name = Path.GetFileNameWithoutExtension(file);
-                            BoomboxBehaviour.clips.Add(clip.name,clip);
+                            clips.Add(clip.name,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
                             Boombox.ShowRevenueAlert("Loaded music", clip.name);
@@ -73,7 +76,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
             Boombox.log.LogInfo($"Music loading finished!");
-            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {BoomboxBehaviour.clips.Count.ToString()} tracks", dropQueuedAlert:true);
+            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {clips.Count.ToString()} tracks", dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)
