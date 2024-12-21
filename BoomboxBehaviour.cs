@@ -121,10 +121,7 @@ namespace FantomLis.BoomboxExtended
 
             if (!data.TryGetEntry(out volumeEntry))
             {
-                volumeEntry = new VolumeEntry()
-                {
-                    volume = 5
-                };
+                volumeEntry = new VolumeEntry(50);
 
                 data.AddDataEntry(volumeEntry);
             }
@@ -152,7 +149,6 @@ namespace FantomLis.BoomboxExtended
                                 Cursor.visible = true;
                             }
                         }
-                        
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
                                                                           && Boombox.CurrentBoomboxMethod() == 
                                                                           MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse
@@ -166,81 +162,64 @@ namespace FantomLis.BoomboxExtended
                         break;
                     }
                 }
-            }
-            if (isHeldByMe && !Player.localPlayer.HasLockedInput())
-            {
-                if (Player.localPlayer.input.clickWasPressed)
+                if (!Player.localPlayer.HasLockedInput())
                 {
-                    if (MusicLoadManager.clips.Count == 0) 
+                    if (Player.localPlayer.input.clickWasPressed)
                     {
-                        HelmetText.Instance.SetHelmetText("No Music", 2f);
-                    }
-                    else
-                    {
-                        onOffEntry.on = !onOffEntry.on;
-                        onOffEntry.SetDirty();
-                    }
-
-                    Click.Play();
-                }
-
-                switch (Boombox.CurrentBoomboxMethod())
-                {
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
-                    default: 
-                        if (Player.localPlayer.input.aimWasPressed) TryUpdateMusic(((musicEntry.CurrentIndex + 1) % MusicLoadManager.clips.Count));
-                        break;
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
-                        if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
+                        if (MusicLoadManager.clips.Count == 0) 
                         {
-                            TryUpdateMusic((Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count);
+                            HelmetText.Instance.SetHelmetText("No Music", 2f);
                         }
-                        break;
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll: 
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
-                        if (openUI)
+                        else
                         {
-                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (MusicLoadManager.clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
-                                break;
+                            onOffEntry.on = !onOffEntry.on;
+                            onOffEntry.SetDirty();
+                        }
+
+                        Click.Play();
+                    }
+
+                    switch (Boombox.CurrentBoomboxMethod())
+                    {
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
+                        default: 
+                            if (Player.localPlayer.input.aimWasPressed) TryUpdateMusic(((musicEntry.CurrentIndex + 1) % MusicLoadManager.clips.Count));
+                            break;
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
+                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
+                            {
+                                TryUpdateMusic((Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count);
                             }
-                        }
-                        break;
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse: 
-                        if (openUI)
-                        {
-                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (MusicLoadManager.clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f); }
-                        }
-                        break;
-                }
-
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
-                {
-                    if (volumeEntry.volume <= 9) {
-                        volumeEntry.volume += 1;
-                        volumeEntry.SetDirty();
+                            break;
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll: 
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse: 
+                            if (openUI)
+                            {
+                                if (Player.localPlayer.input.aimWasPressed) Click.Play();
+                                if (MusicLoadManager.clips.Count <= 0)
+                                {
+                                    HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                }
+                            }
+                            break;
                     }
 
-                    Click.Play();
-                }
+                    if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
+                    {
+                        volumeEntry.PlusVolume(10); // TODO: To config parameter
 
-                if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Keycode()))
-                {
-                    if (volumeEntry.volume >= 1) {
-                        volumeEntry.volume -= 1;
-                        volumeEntry.SetDirty();
-                    } 
-
-                    Click.Play();
+                        Click.Play();
+                    }
+                    if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Keycode()))
+                    {
+                        volumeEntry.MinusVolume(10); // TODO: To config parameter
+                        Click.Play();
+                    }
                 }
             }
-
-            if (Boombox.BatteryCapacity.Value >= 0) {
-                if (batteryEntry.m_charge < 0f)
-                {
-                    onOffEntry.on = false;
-                }
+            if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
+                onOffEntry.on = false;
             }
 
             Music.volume = volumeEntry.GetVolume();
@@ -283,34 +262,47 @@ namespace FantomLis.BoomboxExtended
 
     public class VolumeEntry : ItemDataEntry, IHaveUIData
     {
-        public int volume;
-        public int max_volume = 10;
+        public int Volume { get; private set; }
 
-        private string VolumeLanguage = "{0}% Volume";
+        private string VolumeLanguage;
 
-        public VolumeEntry()
+        /// <summary>
+        /// Updates volume
+        /// </summary>
+        /// <param name="vol">Volume from 0 to 100</param>
+        public void UpdateVolume(int vol)
+        {
+            Volume = Math.Clamp(vol, 0, 100);
+            SetDirty();
+        }
+
+        public void MinusVolume(int vol) => UpdateVolume(Volume - vol);
+        public void PlusVolume(int vol) => UpdateVolume(Volume + vol);
+
+        public VolumeEntry(int vol = 50)
         {
             VolumeLanguage = $"{{0}}% {LocalizationStrings.Volume}";
+            Volume = Math.Clamp(vol, 0, 100);
         }
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
-            volume = binaryDeserializer.ReadInt();
+            Volume = binaryDeserializer.ReadInt();
         }
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
-            binarySerializer.WriteInt(volume);
+            binarySerializer.WriteInt(Volume);
         }
 
         public float GetVolume()
         {
-            return volume / 10f;
+            return Volume / 10f;
         }
 
         public string GetString()
         {
-            return string.Format(VolumeLanguage, volume * 10);
+            return string.Format(VolumeLanguage, Volume * 10);
         }
     }
 
