@@ -12,8 +12,8 @@ namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
-        private static readonly float uiSize = 0.3f;
-        private static float SongButtonSize;
+        private static readonly float uiSize = 0.4f;
+        private static readonly float SongButtonSize = 25f;
 
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;
@@ -33,28 +33,31 @@ namespace FantomLis.BoomboxExtended
             if (isHeldByMe && openUI)
             {
                 GUI.BeginGroup(windowRect);
-                SongButtonSize = 25f;
                 selectionScroll = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll 
                     ? selectionScroll
                     : GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
                     new Rect(0,0,Screen.width*uiSize-40-40, 
                         MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f));
-                var x = musicEntry.currentIndex;
-                musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
-                if (x != musicEntry.currentIndex)
-                {
-                    musicEntry.selectMusicId = MusicLoadManager.clips.Keys.ToArray()[((musicEntry.currentIndex) % MusicLoadManager.clips.Count)];
-                    musicEntry.UpdateMusicName();
-                    musicEntry.SetDirty();
-
-                    timeEntry.currentTime = 0;
-                    timeEntry.SetDirty();
-                    Click.Play();
-                }
+                var x = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.CurrentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
+                TryUpdateMusic(x);
                 GUI.EndScrollView();
                 GUI.EndGroup();
             }
         }
+
+        private bool TryUpdateMusic(int index)
+        {
+            if (index != musicEntry.CurrentIndex && musicEntry.TryUpdateMusicEntry(index))
+            {
+                timeEntry.currentTime = 0;
+                timeEntry.SetDirty();
+                Click.Play();
+                lastChangeTime = Time.time;
+                return true;
+            }
+            return false;
+        }
+
         private Vector2 selectionScroll = new Vector2();
 
         void Awake()
@@ -110,10 +113,8 @@ namespace FantomLis.BoomboxExtended
 
             if (!data.TryGetEntry(out musicEntry))
             {
-                musicEntry = new MusicEntry()
-                {
-                    selectMusicId = MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty,
-                };
+                musicEntry = new MusicEntry();
+                musicEntry.UpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty);
 
                 data.AddDataEntry(musicEntry);
             }
@@ -157,26 +158,10 @@ namespace FantomLis.BoomboxExtended
                                                                           MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse
                                                                           && openUI)
                         {
-                            var x = musicEntry.currentIndex;
-                            musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
-                            selectionScroll = Vector2.up * ((musicEntry.currentIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
-                            if (MusicLoadManager.clips.Count > 0)
-                            {
-                                musicEntry.selectMusicId =
-                                    MusicLoadManager.clips.Keys.ToArray()[musicEntry.currentIndex];
-                                musicEntry.UpdateMusicName();
-                                musicEntry.SetDirty();
-
-                                timeEntry.currentTime = 0;
-                                timeEntry.SetDirty();
-                            }
-
-                            if (x != musicEntry.currentIndex)
-                            {
-                                lastChangeTime = Time.time;
-                                Click.Play();
-                            }
+                            var x =
+                                (Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
+                            TryUpdateMusic(x);
+                            selectionScroll = Vector2.up * ((musicEntry.CurrentIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
                         }
                         break;
                     }
@@ -203,45 +188,12 @@ namespace FantomLis.BoomboxExtended
                 {
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
                     default: 
-                    {
-                        if (Player.localPlayer.input.aimWasPressed)
-                        {
-                            if (MusicLoadManager.clips.Count > 0)
-                            {
-                                musicEntry.selectMusicId = MusicLoadManager.clips.Keys.ToArray()[((++musicEntry.currentIndex) % MusicLoadManager.clips.Count)];
-                                musicEntry.UpdateMusicName();
-                                musicEntry.SetDirty();
-
-                                timeEntry.currentTime = 0;
-                                timeEntry.SetDirty();
-                            }
-
-                            Click.Play();
-                        }
+                        if (Player.localPlayer.input.aimWasPressed) TryUpdateMusic(((musicEntry.CurrentIndex + 1) % MusicLoadManager.clips.Count));
                         break;
-                    }
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
                         {
-                            var x = musicEntry.currentIndex;
-                            musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
-                            if (MusicLoadManager.clips.Count > 0)
-                            {
-                                musicEntry.selectMusicId =
-                                    MusicLoadManager.clips.Keys.ToArray()[musicEntry.currentIndex];
-                                musicEntry.UpdateMusicName();
-                                musicEntry.SetDirty();
-
-                                timeEntry.currentTime = 0;
-                                timeEntry.SetDirty();
-                            }
-
-                            if (x != musicEntry.currentIndex)
-                            {
-                                lastChangeTime = Time.time;
-                                Click.Play();
-                            }
+                            TryUpdateMusic((Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count);
                         }
                         break;
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll: 
@@ -294,15 +246,15 @@ namespace FantomLis.BoomboxExtended
             Music.volume = volumeEntry.GetVolume();
 
             bool flag = onOffEntry.on;
-            if (flag != Music.isPlaying || currentId != musicEntry.selectMusicId)
+            if (flag != Music.isPlaying || currentId != musicEntry.SelectMusicID)
             {
-                currentId = musicEntry.selectMusicId;
+                currentId = musicEntry.SelectMusicID;
 
                 if (flag)
                 {
-                    if (checkMusic(musicEntry.selectMusicId))
+                    if (checkMusic(musicEntry.SelectMusicID))
                     {
-                        Music.clip = MusicLoadManager.clips[musicEntry.selectMusicId];
+                        Music.clip = MusicLoadManager.clips[musicEntry.SelectMusicID];
                         Music.time = timeEntry.currentTime;
                         Music.Play();
                     }
@@ -365,37 +317,63 @@ namespace FantomLis.BoomboxExtended
     public class MusicEntry : ItemDataEntry, IHaveUIData
     {
         private string MusicName;
-        public int currentIndex = 0;
-        public string selectMusicId;
+        public int CurrentIndex { private set; get; }
+        public string SelectMusicID { private set; get; }
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
-            selectMusicId = binaryDeserializer.ReadString(Encoding.UTF8);
-            currentIndex = binaryDeserializer.ReadInt();
+            SelectMusicID = binaryDeserializer.ReadString(Encoding.UTF8);
+            CurrentIndex = binaryDeserializer.ReadInt();
+        }
+
+        public bool TryUpdateMusicEntry(int MusicIndex)
+        {
+            try
+            {
+                if (MusicLoadManager.clips.Count <= 0) return false;
+                CurrentIndex = MusicIndex;
+                SelectMusicID = MusicLoadManager.clips.Keys.ToArray()[((CurrentIndex) % MusicLoadManager.clips.Count)];
+                UpdateMusicName();
+                SetDirty();
+                return true;
+            }
+            catch (IndexOutOfRangeException ex) { return false;}
+        }
+
+        public void UpdateMusicEntry(string MusicID)
+        {
+            SelectMusicID = MusicID;
+            UpdateMusicName();
+            SetDirty();
+        }
+        
+        public void UpdateMusicEntry(int MusicIndex)
+        {
+            CurrentIndex = MusicIndex;
+            SelectMusicID = MusicLoadManager.clips.Keys.ToArray()[((CurrentIndex) % MusicLoadManager.clips.Count)];
+            UpdateMusicName();
+            SetDirty();
         }
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
-            binarySerializer.WriteString(selectMusicId, Encoding.UTF8);
-            binarySerializer.WriteInt(currentIndex);
+            binarySerializer.WriteString(SelectMusicID, Encoding.UTF8);
+            binarySerializer.WriteInt(CurrentIndex);
         }
 
         public void UpdateMusicName()
         {
             MusicName = string.Empty;
 
-            if (MusicLoadManager.clips.Count > 0 && BoomboxBehaviour.checkMusic(selectMusicId))
+            if (MusicLoadManager.clips.Count > 0 && BoomboxBehaviour.checkMusic(SelectMusicID))
             {
-                MusicName = getMusicName(MusicLoadManager.clips[selectMusicId].name);
+                MusicName = GetDisplayName(MusicLoadManager.clips[SelectMusicID].name);
             }
         }
 
-        public string GetString()
-        {
-            return MusicName;
-        }
+        public string GetString() => MusicName;
 
-        private string getMusicName(string name)
+        private string GetDisplayName(string name)
         {
             int length;
             if ((length = name.LastIndexOf('.')) != -1)
@@ -403,8 +381,8 @@ namespace FantomLis.BoomboxExtended
                 name = name.Substring(0, length);
             }
 
-            if (name.Length > 15) {
-                name = name.Substring(0, 15);
+            if (name.Length > 29) {
+                name = name.Substring(0, 29);
                 name = name + "...";
             }
 
