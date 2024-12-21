@@ -159,7 +159,7 @@ namespace FantomLis.BoomboxExtended
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ clips.Count) % clips.Count;
                             selectionScroll = Vector2.up * ((musicEntry.currentIndex * SongButtonSize * (Screen.height / 1080f))+clips.Count * SongButtonSize * Screen.height/1080f/2f);
                             if (clips.Count > 0)
                             {
@@ -225,7 +225,7 @@ namespace FantomLis.BoomboxExtended
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
-                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ clips.Count) % clips.Count;
                             if (clips.Count > 0)
                             {
                                 musicEntry.selectMusicId =
