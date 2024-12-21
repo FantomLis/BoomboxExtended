@@ -52,8 +52,6 @@ namespace FantomLis.BoomboxExtended
                 }
                 GUI.EndScrollView();
                 GUI.EndGroup();
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
             }
         }
         private Vector2 selectionScroll = new Vector2();
@@ -142,7 +140,13 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll:
                     {
                         openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && clips.Count > 0;
-                        Player.localPlayer.data.isInTitleCardTerminal = openUI;
+                        if (Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod
+                                .SelectionUI)
+                        {
+                            Player.localPlayer.data.isInTitleCardTerminal = openUI;
+                            Cursor.lockState = CursorLockMode.None;
+                            Cursor.visible = true;
+                        }
                         
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
                                                                           && Boombox.CurrentBoomboxMethod() == 
