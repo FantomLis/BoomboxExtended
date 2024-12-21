@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Settings;
 using MyceliumNetworking;
 /*using ShopUtils;*/
@@ -34,7 +35,7 @@ namespace FantomLis.BoomboxExtended
         public static AssetBundle asset;
         public const string ItemName = "Boombox";
 
-        protected static Dictionary<string, List<string>> AlertQueue = new();
+        
         public static Boombox Self;
         
         /// <summary>
@@ -125,10 +126,6 @@ namespace FantomLis.BoomboxExtended
             EventRegister();
             LoadConfig();
             LoadBoombox();
-            Self.StartCoroutine(DrawAllPendingAlerts());
-            log.LogDebug("Music loading started...");
-            MusicLoadManager.StartLoadMusic();
-            log.LogDebug("Music loading finished.");
             log.LogInfo("Music is ready!");
             log.LogDebug("Loading finished.");
         }
@@ -136,6 +133,9 @@ namespace FantomLis.BoomboxExtended
         private static void LoadConfig()
         {
             log.LogDebug($"Config loading started...");
+
+            #region Load settings
+
             VolumeUpKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeUpSetting>();
             VolumeDownKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
@@ -143,9 +143,15 @@ namespace FantomLis.BoomboxExtended
             BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
-            
+
+            #endregion
+
+            #region Registering Lobby Data
+
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBCID);
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBPID);
+
+            #endregion
             
             log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
         }
@@ -186,57 +192,6 @@ namespace FantomLis.BoomboxExtended
             return AssetBundle.LoadFromFile(path);
         }
 
-        public static void DropQueuedAlert(string header)
-        {
-            if (AlertQueue.TryGetValue(header, out List<string> list))
-                list.Clear();
-        }
-        public static void ShowRevenueAlert(string header, string body, bool forceNow = false, bool dropQueuedAlert = false)
-        {
-            if (forceNow)
-            {
-                ShowRevenueAlert(new KeyValuePair<string, List<string>>(header, [body]));
-                return;
-            }
-            if (AlertQueue.TryGetValue(header, out List<string> list))
-            {
-                if (dropQueuedAlert) list.Clear();
-                list.Add(body);
-            }
-            else AlertQueue.Add(header, new List<string>([body]));
-        }
-
-        private static IEnumerator DrawAllPendingAlerts()
-        {
-            while (Self)
-            {
-                yield return new WaitForSeconds(0.25f);
-                if (!Player.localPlayer) continue;
-                var x = AlertQueue.ToArray();
-                AlertQueue.Clear();
-                foreach (var v in x)
-                {
-                    ShowRevenueAlert(v);
-                }
-            }
-        }
-
-        private static void ShowRevenueAlert(KeyValuePair<string, List<string>> v)
-        {
-            if (!Player.localPlayer) return;
-            StringBuilder b = new();
-            for (int i = 0; i < v.Value.Count; i++)
-            {
-                if (i >= 1 && v.Value.Count() - i > 1)
-                {
-                    b.Append($"... ({v.Value.Count - i} more lines)");
-                    break;
-                }
-
-                b.Append(v.Value[i] + "\n");
-            }
-            UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
-                MoneyCellUI.MoneyCellType.Revenue);
-        }
+        
     }
 }

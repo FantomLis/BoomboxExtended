@@ -56,7 +56,7 @@ namespace FantomLis.BoomboxExtended
             {
                 Directory.CreateDirectory(path);
             }
-            Boombox .DropQueuedAlert("Loaded music");
+            AlertUtils.DropQueuedMoneyCellAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
                 if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
@@ -81,13 +81,13 @@ namespace FantomLis.BoomboxExtended
                             clips.Add(clip.name,clip);
 
                             Boombox.log.LogInfo($"Music Loaded: {clip.name}");
-                            Boombox.ShowRevenueAlert("Loaded music", clip.name);
+                            AlertUtils.AddMoneyCellAlert("Loaded music", MoneyCellUI.MoneyCellType.Revenue, clip.name);
                         }
                     }
                 }
             }
             Boombox.log.LogInfo($"Music loading finished!");
-            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {clips.Count.ToString()} tracks", dropQueuedAlert:true);
+            AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} tracks", dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)
