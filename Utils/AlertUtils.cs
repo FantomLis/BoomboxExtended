@@ -34,13 +34,10 @@ public class AlertUtils
     
     private static IEnumerator DrawAllPendingMoneyCellAlerts(MoneyCellAlertContainer a)
     {
-        while (Boombox.Self)
-        {
-            yield return new WaitForSeconds(0.25f);
-            if (!Player.localPlayer) continue;
-            ShowMoneyCellAlert(a);
-            MoneyCellAlertQueue.Remove(a);
-        }
+        yield return new WaitForSeconds(0.25f);
+        if (!Player.localPlayer) yield break;
+        ShowMoneyCellAlert(a);
+        MoneyCellAlertQueue.Remove(a);
     }
     
     private static void ShowMoneyCellAlert(MoneyCellAlertContainer a)
