@@ -144,8 +144,11 @@ namespace FantomLis.BoomboxExtended
                                 .SelectionUIScroll)
                         {
                             Player.localPlayer.data.isInTitleCardTerminal = openUI;
-                            Cursor.lockState = CursorLockMode.None;
-                            Cursor.visible = true;
+                            if (openUI)
+                            {
+                                Cursor.lockState = CursorLockMode.None;
+                                Cursor.visible = true;
+                            }
                         }
                         
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
