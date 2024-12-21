@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using FantomLis.BoomboxExtended.Containers;
@@ -38,6 +39,7 @@ public class AlertUtils
             yield return new WaitForSeconds(0.25f);
             if (!Player.localPlayer) continue;
             ShowMoneyCellAlert(a);
+            MoneyCellAlertQueue.Remove(a);
         }
     }
     
@@ -49,7 +51,7 @@ public class AlertUtils
         a.Description.ForEach(x => {
             for (int i = 0; i < x.Length; i+= 32)
             {
-                d.Add(x.Substring(i,32));
+                d.Add(x.Substring(i,Math.Min(32, x.Length-i)));
             }
         });
         for (int i = 0; i < d.Count; i++)
