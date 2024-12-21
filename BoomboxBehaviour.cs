@@ -155,7 +155,8 @@ namespace FantomLis.BoomboxExtended
                         
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
                                                                           && Boombox.CurrentBoomboxMethod() == 
-                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse)
+                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse
+                                                                          && openUI)
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
