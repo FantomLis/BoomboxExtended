@@ -35,9 +35,11 @@ namespace FantomLis.BoomboxExtended
             {
                 GUI.BeginGroup(windowRect);
                 SongButtonSize = 25f;
-                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
+                selectionScroll = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll 
+                    ? selectionScroll
+                    : GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
                     new Rect(0,0,Screen.width*uiSize-40-40, 
-                        Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll ? clips.Count * SongButtonSize * Screen.height/1080f : Screen.height*uiSize-40));
+                        clips.Count * SongButtonSize * Screen.height/1080f));
                 var x = musicEntry.currentIndex;
                 musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
@@ -158,6 +160,7 @@ namespace FantomLis.BoomboxExtended
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
                                 (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                            selectionScroll = Vector2.up * ((musicEntry.currentIndex * SongButtonSize * (Screen.height / 1080f))+clips.Count * SongButtonSize * Screen.height/1080f/2f);
                             if (clips.Count > 0)
                             {
                                 musicEntry.selectMusicId =
