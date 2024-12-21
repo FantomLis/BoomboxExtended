@@ -48,6 +48,7 @@ namespace FantomLis.BoomboxExtended
 
                     timeEntry.currentTime = 0;
                     timeEntry.SetDirty();
+                    Click.Play();
                 }
                 GUI.EndScrollView();
                 GUI.EndGroup();
