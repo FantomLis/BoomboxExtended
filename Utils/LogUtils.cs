@@ -22,8 +22,7 @@ public static class LogUtils
     {
         if (type == LogType.Debug && !IsDebug) return;
         StringBuilder b = new();
-        b.Append($"[{LogSource}]");
-        b.Append(type.ToString());
+        b.Append($"[{LogSource} : {type.ToString()}] ");
         b.Append(text);
         switch (type)
         {
