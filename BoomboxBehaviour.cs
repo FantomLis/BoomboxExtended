@@ -35,7 +35,9 @@ namespace FantomLis.BoomboxExtended
             {
                 GUI.BeginGroup(windowRect);
                 SongButtonSize = 25f;
-                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, new Rect(0,0,Screen.width*uiSize-40-40, clips.Count * SongButtonSize * Screen.height/1080f));
+                selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
+                    new Rect(0,0,Screen.width*uiSize-40-40, 
+                        Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI ? clips.Count * SongButtonSize * Screen.height/1080f : Screen.height*uiSize-40));
                 var x = musicEntry.currentIndex;
                 musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
@@ -140,6 +142,31 @@ namespace FantomLis.BoomboxExtended
                     {
                         openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && clips.Count > 0;
                         Player.localPlayer.data.isInTitleCardTerminal = openUI;
+                        
+                        if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
+                                                                          && Boombox.CurrentBoomboxMethod() == 
+                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll)
+                        {
+                            var x = musicEntry.currentIndex;
+                            musicEntry.currentIndex =
+                                (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
+                            if (clips.Count > 0)
+                            {
+                                musicEntry.selectMusicId =
+                                    clips.Keys.ToArray()[musicEntry.currentIndex];
+                                musicEntry.UpdateMusicName();
+                                musicEntry.SetDirty();
+
+                                timeEntry.currentTime = 0;
+                                timeEntry.SetDirty();
+                            }
+
+                            if (x != musicEntry.currentIndex)
+                            {
+                                lastChangeTime = Time.time;
+                                Click.Play();
+                            }
+                        }
                         break;
                     }
                 }
@@ -213,28 +240,6 @@ namespace FantomLis.BoomboxExtended
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (clips.Count <= 0)  {HelmetText.Instance.SetHelmetText("No Music", 2f);
                                 break;
-                            }
-                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
-                            {
-                                var x = musicEntry.currentIndex;
-                                musicEntry.currentIndex =
-                                    (Mathf.RoundToInt(musicEntry.currentIndex + Input.GetAxis("Mouse ScrollWheel") * 10)+ clips.Count) % clips.Count;
-                                if (clips.Count > 0)
-                                {
-                                    musicEntry.selectMusicId =
-                                        clips.Keys.ToArray()[musicEntry.currentIndex];
-                                    musicEntry.UpdateMusicName();
-                                    musicEntry.SetDirty();
-
-                                    timeEntry.currentTime = 0;
-                                    timeEntry.SetDirty();
-                                }
-
-                                if (x != musicEntry.currentIndex)
-                                {
-                                    lastChangeTime = Time.time;
-                                    Click.Play();
-                                }
                             }
                         }
                         break;
