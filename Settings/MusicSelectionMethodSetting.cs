@@ -11,8 +11,8 @@ public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
 {
     public enum BoomboxMusicSelectionMethod : byte
     {
-        SelectionUI = 1,
-        SelectionUINoScroll = 4,
+        SelectionUIScroll = 1,
+        SelectionUIMouse = 4,
         ScrollWheel = 2,
         Original = 3,
         Default = 0

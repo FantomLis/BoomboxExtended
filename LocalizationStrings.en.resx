@@ -44,10 +44,10 @@
     <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
         <value>Scroll Wheel</value>
     </data>
-    <data name="SelectionMethod.SelectionUI" xml:space="preserve">
-        <value>Selection Interface</value>
+    <data name="SelectionMethod.SelectionUIScrollWheel" xml:space="preserve">
+        <value>Selection UI (mouse)</value>
     </data>
-    <data name="SelectionMethod.SelectionUINoScroll" xml:space="preserve">
-        <value>Selection Interface (w/o scroll)</value>
+    <data name="SelectionMethod.SelectionUIMouse" xml:space="preserve">
+        <value>Selection UI (scroll)</value>
     </data>
 </root>

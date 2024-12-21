@@ -37,7 +37,7 @@ namespace FantomLis.BoomboxExtended
                 SongButtonSize = 25f;
                 selectionScroll = GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
                     new Rect(0,0,Screen.width*uiSize-40-40, 
-                        Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI ? clips.Count * SongButtonSize * Screen.height/1080f : Screen.height*uiSize-40));
+                        Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll ? clips.Count * SongButtonSize * Screen.height/1080f : Screen.height*uiSize-40));
                 var x = musicEntry.currentIndex;
                 musicEntry.currentIndex = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.currentIndex, clips.Keys.ToArray(), 1);
                 if (x != musicEntry.currentIndex)
@@ -136,12 +136,12 @@ namespace FantomLis.BoomboxExtended
             {
                 switch (Boombox.CurrentBoomboxMethod())
                 {
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI:
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll:
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
                     {
                         openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && clips.Count > 0;
                         if (Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod
-                                .SelectionUI)
+                                .SelectionUIScroll)
                         {
                             Player.localPlayer.data.isInTitleCardTerminal = openUI;
                             Cursor.lockState = CursorLockMode.None;
@@ -150,7 +150,7 @@ namespace FantomLis.BoomboxExtended
                         
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
                                                                           && Boombox.CurrentBoomboxMethod() == 
-                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll)
+                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse)
                         {
                             var x = musicEntry.currentIndex;
                             musicEntry.currentIndex =
@@ -238,7 +238,7 @@ namespace FantomLis.BoomboxExtended
                             }
                         }
                         break;
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUI: 
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll: 
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
                         if (openUI)
                         {
@@ -248,7 +248,7 @@ namespace FantomLis.BoomboxExtended
                             }
                         }
                         break;
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUINoScroll: 
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse: 
                         if (openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
