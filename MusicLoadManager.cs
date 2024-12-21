@@ -16,15 +16,28 @@ namespace FantomLis.BoomboxExtended
         private static MusicLoadManager Instance;
         public static Dictionary<string, AudioClip> clips = new ();
 
+        /// <summary>
+        /// Default Root Path from which music is searching
+        /// </summary>
+        public static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
         private new static Coroutine StartCoroutine(IEnumerator enumerator)
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
         }
 
-        public static void StartLoadMusic()
+        /// <summary>
+        /// Loads music from folder
+        /// </summary>
+        /// <param name="rootPath">Root path from which music is searching (null = <see cref="MusicLoadManager.RootPath"/>)</param>
+        /// <param name="musicPath">Path to music folder in Root</param>
+        /// <param name="reloadAllSongs">Fully reload all songs</param>
+        public static void StartLoadMusic(string? rootPath = null, string musicPath = "Custom Songs", bool reloadAllSongs = true)
         {
-            StartCoroutine(LoadMusic());
+            rootPath ??= RootPath;
+            string path = System.IO.Path.Combine(rootPath, musicPath);
+            if (reloadAllSongs) clips.Clear();
+            StartCoroutine(LoadMusic(path));
         }
         
         /*
@@ -37,14 +50,12 @@ namespace FantomLis.BoomboxExtended
         {
             string path = Path.Combine(Paths.PluginPath, pathToFolder);*/
         /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
-        public static IEnumerator LoadMusic()
+        public static IEnumerator LoadMusic(string path)
         {
-            string path = Path.Combine(Paths.GameRootPath, "Plugins/Boombox", "Custom Songs");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            clips.Clear();
             Boombox .DropQueuedAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
