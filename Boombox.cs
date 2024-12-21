@@ -69,8 +69,7 @@ namespace FantomLis.BoomboxExtended
 
         static Boombox()
         {
-            Self = new GameObject($"{ItemName}Loader").AddComponent<Boombox>();
-            DontDestroyOnLoad(Self.transform);
+            Self = GameObjectUtils.MakeNewDontDestroyOnLoad($"{ItemName}Loader").AddComponent<Boombox>();
             Self.Awake();
         }
         
