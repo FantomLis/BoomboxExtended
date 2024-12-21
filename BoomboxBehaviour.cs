@@ -27,6 +27,7 @@ namespace FantomLis.BoomboxExtended
         private string currentId;
         private float lastChangeTime;
         private bool openUI;
+        private Vector2 selectionScroll = new Vector2();
         Rect windowRect = new Rect((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
         private void OnGUI()
         {
@@ -58,21 +59,11 @@ namespace FantomLis.BoomboxExtended
             return false;
         }
 
-        private Vector2 selectionScroll = new Vector2();
-
         void Awake()
         {
             Click = transform.Find("SFX/Click").GetComponent<SFX_PlayOneShot>();
             Music = GetComponent<AudioSource>();
-            var gameHandler = GameHandler.Instance;
-            if (gameHandler != null)
-            {
-                var sfxVolumeSetting = gameHandler.SettingsHandler.GetSetting<SFXVolumeSetting>();
-                if (sfxVolumeSetting != null)
-                {
-                    Music.outputAudioMixerGroup = sfxVolumeSetting.mixerGroup;
-                }
-            }
+            Music.outputAudioMixerGroup = GameHandler.Instance?.SettingsHandler.GetSetting<SFXVolumeSetting>()?.mixerGroup ?? Music.outputAudioMixerGroup;
         }
 
         public override void ConfigItem(ItemInstanceData data, PhotonView playerView)
