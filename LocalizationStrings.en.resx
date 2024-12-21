@@ -35,4 +35,19 @@
     <data name="Volume" xml:space="preserve">
         <value>Volume</value>
     </data>
+    <data name="SelectionMethod.Default" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="SelectionMethod.Original" xml:space="preserve">
+        <value>Original</value>
+    </data>
+    <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
+        <value>Scroll Wheel</value>
+    </data>
+    <data name="SelectionMethod.SelectionUI" xml:space="preserve">
+        <value>Selection Interface</value>
+    </data>
+    <data name="SelectionMethod.SelectionUINoScroll" xml:space="preserve">
+        <value>Selection Interface (w/o scroll)</value>
+    </data>
 </root>
