@@ -2,6 +2,7 @@
 using BepInEx;
 using System.Collections;
 using System.IO;
+using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,17 +11,12 @@ namespace FantomLis.BoomboxExtended
 {
     public class MusicLoadManager : MonoBehaviour
     {
-        private static MusicLoadManager instance;
+        private static MusicLoadManager Instance;
 
-        public static new Coroutine StartCoroutine(IEnumerator enumerator)
+        private new static Coroutine StartCoroutine(IEnumerator enumerator)
         {
-            if (instance == null)
-            {
-                instance = new GameObject("MusicLoader").AddComponent<MusicLoadManager>();
-                DontDestroyOnLoad(instance);
-            }
-
-            return ((MonoBehaviour)instance).StartCoroutine(enumerator);
+            Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
+            return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
         }
 
         public static void StartLoadMusic()
