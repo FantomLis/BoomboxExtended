@@ -80,13 +80,13 @@ namespace FantomLis.BoomboxExtended
                             clip.name = Path.GetFileNameWithoutExtension(file);
                             clips.Add(clip.name,clip);
 
-                            Boombox.log.LogInfo($"Music Loaded: {clip.name}");
+                            LogUtils.LogInfo($"Music Loaded: {clip.name}");
                             AlertUtils.AddMoneyCellAlert("Loaded music", MoneyCellUI.MoneyCellType.Revenue, clip.name);
                         }
                     }
                 }
             }
-            Boombox.log.LogInfo($"Music loading finished!");
+            LogUtils.LogInfo($"Music loading finished!");
             AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} tracks", dropQueuedAlert:true);
         }
 

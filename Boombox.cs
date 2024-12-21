@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Settings;
+using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
 /*using ShopUtils;*/
 using UnityEngine;
@@ -30,11 +31,9 @@ namespace FantomLis.BoomboxExtended
     [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
     public class Boombox : BaseUnityPlugin
     {
-        public static ManualLogSource log;
-
-        public static AssetBundle asset;
         public const string ItemName = "Boombox";
         public static Boombox Self;
+        public static bool IsDebug = true;
         
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
@@ -75,14 +74,13 @@ namespace FantomLis.BoomboxExtended
         
         void Awake()
         {
-            log = Logger;
-            log.LogDebug("Pre-Loading started...");
-            log.LogDebug("Patching started...");
+            LogUtils.LogDebug("Pre-Loading started...");
+            LogUtils.LogDebug("Patching started...");
             harmony.PatchAll();
-            log.LogDebug("Patching finished.");
+            LogUtils.LogDebug("Patching finished.");
             LoadLanguages();
-            log.LogDebug("Pre-Loading finished.");
-            log.LogInfo("Pre-game load finished!");
+            LogUtils.LogDebug("Pre-Loading finished.");
+            LogUtils.LogInfo("Pre-game load finished!");
         }
 
         private void EventRegister()
@@ -105,7 +103,7 @@ namespace FantomLis.BoomboxExtended
                 BoomboxItem.price = CurrentBoomboxPrice;
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
-            log.LogDebug("All events registered.");
+            LogUtils.LogDebug("All events registered.");
 
             void x()
             {
@@ -120,17 +118,17 @@ namespace FantomLis.BoomboxExtended
 
         void Start()
         {
-            log.LogDebug("Loading started...");
+            LogUtils.LogDebug("Loading started...");
             EventRegister();
             LoadConfig();
             LoadBoombox();
-            log.LogInfo("Music is ready!");
-            log.LogDebug("Loading finished.");
+            LogUtils.LogInfo("Music is ready!");
+            LogUtils.LogDebug("Loading finished.");
         }
         
         private static void LoadConfig()
         {
-            log.LogDebug($"Config loading started...");
+            LogUtils.LogDebug($"Config loading started...");
 
             #region Load settings
 
@@ -139,6 +137,7 @@ namespace FantomLis.BoomboxExtended
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
             BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
+            IsDebug = GameHandler.Instance.SettingsHandler.GetSetting<VerboseLoggingSetting>().Value;
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
 
@@ -151,30 +150,29 @@ namespace FantomLis.BoomboxExtended
 
             #endregion
             
-            log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
+            LogUtils.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
         }
 
         private static void LoadBoombox()
         {
-            string boomboxAssetbundle = "boombox.assetBundle";
             try
             {
-                asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
-                
+                string boomboxAssetbundle = "boombox.assetBundle";
+                AssetBundle asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
                 BoomboxItem = asset.LoadAsset<Item>(ItemName);
                 BoomboxItem.itemObject.AddComponent<BoomboxBehaviour>();
                 BoomboxItem.Category = ShopItemCategory.Misc;
                 BoomboxItem.purchasable = true;
                 BoomboxItem.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
 
-                log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
+                LogUtils.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
-                log.LogDebug("Loading boombox finished!");
+                LogUtils.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
             {
-                log.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
+                LogUtils.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
             }
         }
         
