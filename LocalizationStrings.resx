@@ -42,4 +42,19 @@
     <data name="Boombox_VolumeDownToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_VolumeDownToolTip</value>
     </data>
+    <data name="SelectionMethod.Default" xml:space="preserve">
+        <value>@Default</value>
+    </data>
+    <data name="SelectionMethod.Original" xml:space="preserve">
+        <value>@Original</value>
+    </data>
+    <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
+        <value>@ScrollWheel</value>
+    </data>
+    <data name="SelectionMethod.SelectionUI" xml:space="preserve">
+        <value>@SelectionUI</value>
+    </data>
+    <data name="SelectionMethod.SelectionUINoScroll" xml:space="preserve">
+        <value>@SelectionUINoScroll</value>
+    </data>
 </root>

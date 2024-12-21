@@ -25,5 +25,5 @@ public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
 
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
-    public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList();
+    public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList().Select(x => LocalizationStrings.ResourceManager.GetString("SelectionMethod."+x) ?? "#BAD_NAME").ToList();
 }
