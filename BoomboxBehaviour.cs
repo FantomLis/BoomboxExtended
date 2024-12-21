@@ -24,14 +24,13 @@ namespace FantomLis.BoomboxExtended
         private SFX_PlayOneShot Click;
         private AudioSource Music;
         
-        private string currentId;
         private float lastChangeTime;
         private bool openUI;
         private Vector2 selectionScroll = new Vector2();
         Rect windowRect = new ((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
         private void OnGUI()
         {
-            if (isHeldByMe && openUI)
+            if (openUI)
             {
                 GUI.BeginGroup(windowRect);
                 float h = MusicLoadManager.clips.Count * SongButtonSize * Screen.height / 1080f;
@@ -105,9 +104,8 @@ namespace FantomLis.BoomboxExtended
             if (!data.TryGetEntry(out musicEntry))
             {
                 musicEntry = new MusicEntry();
-                musicEntry.UpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty);
-
                 data.AddDataEntry(musicEntry);
+                musicEntry.UpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty);
             }
 
             if (!data.TryGetEntry(out volumeEntry))
@@ -116,8 +114,7 @@ namespace FantomLis.BoomboxExtended
 
                 data.AddDataEntry(volumeEntry);
             }
-
-            musicEntry.UpdateMusicName();
+            
         }
 
         void Update()
@@ -129,7 +126,7 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
                     {
-                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && MusicLoadManager.clips.Count > 0;
+                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && MusicLoadManager.clips.Count > 0 && isHeldByMe;
                         if (Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod
                                 .SelectionUIScroll)
                         {
@@ -216,18 +213,13 @@ namespace FantomLis.BoomboxExtended
             Music.volume = volumeEntry.GetVolume();
 
             bool flag = onOffEntry.on;
-            if (flag != Music.isPlaying || currentId != musicEntry.SelectMusicID)
+            if (flag != Music.isPlaying)
             {
-                currentId = musicEntry.SelectMusicID;
-
-                if (flag)
+                if (flag && checkMusic(musicEntry.SelectMusicID))
                 {
-                    if (checkMusic(musicEntry.SelectMusicID))
-                    {
-                        Music.clip = MusicLoadManager.clips[musicEntry.SelectMusicID];
-                        Music.time = timeEntry.currentTime;
-                        Music.Play();
-                    }
+                    Music.clip = MusicLoadManager.clips[musicEntry.SelectMusicID];
+                    Music.time = timeEntry.currentTime;
+                    Music.Play();
                 }
                 else
                 {
@@ -235,14 +227,8 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            if (flag)
-            {
-                if (Boombox.BatteryCapacity.Value > 0) {
-                    batteryEntry.m_charge -= Time.deltaTime;
-                }
-
-                timeEntry.currentTime = Music.time;
-            }
+            batteryEntry.m_charge -= (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
+            timeEntry.currentTime = Music.time;
         }
 
         public static bool checkMusic(string id)    
