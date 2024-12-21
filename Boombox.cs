@@ -33,8 +33,11 @@ namespace FantomLis.BoomboxExtended
     {
         public const string ItemName = "Boombox";
         public static Boombox Self;
-        public static bool IsDebug = true;
         
+        /// <summary>
+        /// Client-only setting, enables verbose logging
+        /// </summary>
+        public static bool IsDebug = true;
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
         /// </summary>
@@ -62,7 +65,6 @@ namespace FantomLis.BoomboxExtended
         static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
         
         private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-
         private static Item BoomboxItem;
 
         static Boombox()
