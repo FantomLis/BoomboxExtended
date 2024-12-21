@@ -34,8 +34,6 @@ namespace FantomLis.BoomboxExtended
 
         public static AssetBundle asset;
         public const string ItemName = "Boombox";
-
-        
         public static Boombox Self;
         
         /// <summary>
@@ -172,7 +170,6 @@ namespace FantomLis.BoomboxExtended
                 log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
-                //RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
                 log.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
@@ -180,6 +177,8 @@ namespace FantomLis.BoomboxExtended
                 log.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
             }
         }
+        
+        public static void RegisterBoomboxAsArtifact() => RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
 
         private void LoadLanguages()
         {
@@ -191,7 +190,5 @@ namespace FantomLis.BoomboxExtended
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);
         }
-
-        
     }
 }
