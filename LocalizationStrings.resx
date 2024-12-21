@@ -51,7 +51,7 @@
     <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
         <value>@ScrollWheel</value>
     </data>
-    <data name="SelectionMethod.SelectionUIScrollWheel" xml:space="preserve">
+    <data name="SelectionMethod.SelectionUIScroll" xml:space="preserve">
         <value>@SelectionUI</value>
     </data>
     <data name="SelectionMethod.SelectionUIMouse" xml:space="preserve">
