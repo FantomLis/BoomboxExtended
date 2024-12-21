@@ -28,18 +28,18 @@ namespace FantomLis.BoomboxExtended
         private float lastChangeTime;
         private bool openUI;
         private Vector2 selectionScroll = new Vector2();
-        Rect windowRect = new Rect((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
+        Rect windowRect = new ((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
         private void OnGUI()
         {
             if (isHeldByMe && openUI)
             {
                 GUI.BeginGroup(windowRect);
+                float h = MusicLoadManager.clips.Count * SongButtonSize * Screen.height / 1080f;
                 selectionScroll = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll 
                     ? selectionScroll
-                    : GUI.BeginScrollView(new Rect(0,0, Screen.width*uiSize-40, Screen.height*uiSize-40), selectionScroll, 
-                    new Rect(0,0,Screen.width*uiSize-40-40, 
-                        MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f));
-                var x = GUI.SelectionGrid(new Rect(0,0,Screen.width*uiSize-40, MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f), musicEntry.CurrentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
+                    : GUI.BeginScrollView(new Rect(0,0, windowRect.width-40, windowRect.height-40), selectionScroll, 
+                    new Rect(0,0,windowRect.width-80,h));
+                var x = GUI.SelectionGrid(new Rect(0,0,windowRect.width-40, h), musicEntry.CurrentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
                 TryUpdateMusic(x);
                 GUI.EndScrollView();
                 GUI.EndGroup();
