@@ -19,10 +19,15 @@ public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
         Default = 0
     }
 
+    public List<Action<MusicSelectionMethodSetting>> UpdateValueActionList = new([((a) =>
+    {
+        {LogUtils.LogDebug($"Parameter {a.GetDisplayName()} is set to {a.Value}");}
+    })]);
+
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
     public string GetDisplayName() => "Boombox Music Selection Method";
-    public override void ApplyValue() => LogUtils.LogDebug($"Parameter {GetDisplayName()} is set to {Value}");
+    public override void ApplyValue() => UpdateValueActionList.ForEach(x => x.Invoke(this));
 
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
