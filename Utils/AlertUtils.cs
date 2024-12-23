@@ -35,7 +35,8 @@ public class AlertUtils
     private static IEnumerator DrawAllPendingMoneyCellAlerts(MoneyCellAlertContainer a)
     {
         yield return new WaitForSeconds(0.25f);
-        if (!Player.localPlayer) yield break;
+        yield return new WaitUntil(() => Player.localPlayer);
+        if (!MoneyCellAlertQueue.Contains(a)) yield break;
         ShowMoneyCellAlert(a);
         MoneyCellAlertQueue.Remove(a);
     }
