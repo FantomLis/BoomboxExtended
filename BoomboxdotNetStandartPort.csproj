@@ -8,8 +8,10 @@
         <Description>Test desc pls work</Description>
         <Authors>FantomLis</Authors>
         <Company>FantomLis</Company>
-        <AssemblyVersion></AssemblyVersion>
+        <AssemblyVersion>0.1</AssemblyVersion>
         <Title>BoomboxExtended</Title>
+        <Configurations>Debug;Release;BepInEx;SteamWorkshop</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <!-- Project Properties -->
@@ -60,6 +62,15 @@
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
     </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BepInEx|AnyCPU'">
+          <DefineConstants>$(DefineConstants);BepInEx</DefineConstants>
+          <OutputPath>bin/Release/BepInEx</OutputPath>
+          <Optimize>true</Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SteamWorkshop|AnyCPU'">
+          <OutputPath>bin/Release/SteamWorkshop</OutputPath>
+          <Optimize>true</Optimize>
+    </PropertyGroup>
 
     <!-- References - Game Assemblies -->
     

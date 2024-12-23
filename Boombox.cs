@@ -22,14 +22,18 @@ using UnityEngine.Serialization;
 using Zorro.Core;
 using Zorro.UI.Modal;
 
-// TODO: Port this mod to SteamWorkshop 
+
 namespace FantomLis.BoomboxExtended
 {
-    //[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+#if BepInEx
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)] // BepInEx compatibility 
+#endif
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    //[BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
-    //[BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
+#if BepInEx
+    public class Boombox : BaseUnityPlugin
+#else
     public class Boombox : MonoBehaviour
+#endif
     {
         public const string ItemName = "Boombox";
         public static Boombox Self;
