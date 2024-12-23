@@ -10,13 +10,13 @@ namespace FantomLis.BoomboxExtended.Settings;
 [ContentWarningSetting]
 public class MusicSelectionMethodSetting : EnumSetting, IExposedSetting
 {
-    public enum BoomboxMusicSelectionMethod : byte
+    public enum BoomboxMusicSelectionMethod
     {
-        SelectionUIScroll = 1,
-        SelectionUIMouse = 4,
-        ScrollWheel = 2,
-        Original = 3,
-        Default = 0
+        SelectionUIScroll,
+        SelectionUIMouse,
+        ScrollWheel,
+        Original,
+        Default
     }
 
     public List<Action<MusicSelectionMethodSetting>> UpdateValueActionList = new([((a) =>

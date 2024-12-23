@@ -56,6 +56,7 @@ namespace FantomLis.BoomboxExtended
             {
                 Directory.CreateDirectory(path);
             }
+            clips.Clear();
             AlertUtils.DropQueuedMoneyCellAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {

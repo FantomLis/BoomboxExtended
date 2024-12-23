@@ -68,7 +68,7 @@ namespace FantomLis.BoomboxExtended
         static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
         static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
         
-        private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+        private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         private static Item BoomboxItem;
 
         static Boombox()
@@ -81,7 +81,7 @@ namespace FantomLis.BoomboxExtended
         {
             LogUtils.LogDebug("Pre-Loading started...");
             LogUtils.LogDebug("Patching started...");
-            harmony.PatchAll();
+            Harmony.PatchAll();
             LogUtils.LogDebug("Patching finished.");
             LoadLanguages();
             LogUtils.LogDebug("Pre-Loading finished.");

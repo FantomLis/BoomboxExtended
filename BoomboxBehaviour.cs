@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FantomLis.BoomboxExtended.Settings;
+using FantomLis.BoomboxExtended.Utils;
 using Sirenix.Utilities;
 using UnityEngine;
 using Zorro.ControllerSupport;
@@ -23,7 +24,6 @@ namespace FantomLis.BoomboxExtended
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
-        
         private float lastChangeTime;
         private bool openUI;
         private Vector2 selectionScroll = new Vector2();
@@ -34,12 +34,10 @@ namespace FantomLis.BoomboxExtended
             {
                 GUI.BeginGroup(windowRect);
                 float h = MusicLoadManager.clips.Count * SongButtonSize * Screen.height / 1080f;
-                selectionScroll = Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll 
-                    ? selectionScroll
-                    : GUI.BeginScrollView(new Rect(0,0, windowRect.width-40, windowRect.height-40), selectionScroll, 
+                selectionScroll = GUI.BeginScrollView(new Rect(0,0, windowRect.width-40, windowRect.height-40), selectionScroll, 
                     new Rect(0,0,windowRect.width-80,h));
-                var x = GUI.SelectionGrid(new Rect(0,0,windowRect.width-40, h), musicEntry.CurrentIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
-                TryUpdateMusic(x);
+                var x = GUI.SelectionGrid(new Rect(0,0,windowRect.width-40, h), musicEntry.MusicIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
+                if (x != musicEntry.MusicIndex) if (!TryUpdateMusic(x)) LogUtils.LogError($"Failed to change music to index {x}.");
                 GUI.EndScrollView();
                 GUI.EndGroup();
             }
@@ -47,15 +45,45 @@ namespace FantomLis.BoomboxExtended
 
         private bool TryUpdateMusic(int index)
         {
-            if (index != musicEntry.CurrentIndex && musicEntry.TryUpdateMusicEntry(index))
+            if (musicEntry.TryUpdateMusicEntry(index))
             {
-                timeEntry.currentTime = 0;
-                timeEntry.SetDirty();
-                Click.Play();
-                lastChangeTime = Time.time;
+                _updateMusic();
                 return true;
             }
             return false;
+        }
+        
+        private bool TryUpdateMusic(string id)
+        {
+            if (musicEntry.TryUpdateMusicEntry(id))
+            {
+                _updateMusic();
+                return true;
+            }
+            return false;
+        }
+        
+        private void NextMusic()
+        {
+            musicEntry.NextMusic();
+            _updateMusic();
+        }
+        
+        private void PreviousMusic()
+        {
+            musicEntry.PreviousMusic();
+            _updateMusic();
+        }
+
+        private void _updateMusic()
+        {
+            timeEntry.currentTime = 0;
+            timeEntry.SetDirty();
+            Click.Play();
+            lastChangeTime = Time.time;
+            musicEntry.UpdateMusicName();
+            Music.clip = MusicLoadManager.clips[musicEntry.MusicID];
+            Music.time = timeEntry.currentTime;
         }
 
         void Awake()
@@ -120,34 +148,68 @@ namespace FantomLis.BoomboxExtended
         {
             if (isHeldByMe)
             {
+                musicEntry.InitializeEntry();
+
                 switch (Boombox.CurrentBoomboxMethod())
                 {
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
-                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
-                    {
-                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) && MusicLoadManager.clips.Count > 0 && isHeldByMe;
-                        if (Boombox.CurrentBoomboxMethod() == MusicSelectionMethodSetting.BoomboxMusicSelectionMethod
-                                .SelectionUIScroll)
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
+                    default:
+                        if (Player.localPlayer.HasLockedInput()) break;
+                        if (Player.localPlayer.input.aimWasPressed)
                         {
-                            Player.localPlayer.data.isInTitleCardTerminal = openUI;
-                            if (openUI)
+                            if (MusicLoadManager.clips.Count <= 0)
                             {
-                                Cursor.lockState = CursorLockMode.None;
-                                Cursor.visible = true;
+                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                break;
                             }
-                        }
-                        if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time 
-                                                                          && Boombox.CurrentBoomboxMethod() == 
-                                                                          MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse
-                                                                          && openUI)
-                        {
-                            var x =
-                                (Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count;
-                            TryUpdateMusic(x);
-                            selectionScroll = Vector2.up * ((musicEntry.CurrentIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
+                            NextMusic();
                         }
                         break;
-                    }
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
+                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) &&
+                                 MusicLoadManager.clips.Count > 0;
+                        Player.localPlayer.data.isInTitleCardTerminal = openUI;
+                        if (openUI)
+                        {
+                            if (Input.GetKeyDown(KeyCode.Mouse1)) Click.Play();
+                            if (MusicLoadManager.clips.Count <= 0)
+                            {
+                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                            }
+                        }
+                        break;
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
+                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
+                        openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) &&
+                                 MusicLoadManager.clips.Count > 0;
+                        if (Player.localPlayer.HasLockedInput()) break;
+                        if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 != 0  && lastChangeTime + 0.1f <= Time.time && openUI)
+                        {
+                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
+                            if (MusicLoadManager.clips.Count <= 0)
+                            {
+                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                break;
+                            }
+                            if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 >= 1) NextMusic();
+                            else if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 <= -1) PreviousMusic();
+                        }
+                        selectionScroll = Vector2.up * ((musicEntry.MusicIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
+                        break;
+                    case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
+                        if (Player.localPlayer.HasLockedInput()) break;
+                        if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 != 0  && lastChangeTime + 0.1f <= Time.time)
+                        {
+                            if (Player.localPlayer.input.aimWasPressed) Click.Play();
+                            if (MusicLoadManager.clips.Count <= 0)
+                            {
+                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                break;
+                            }
+                            if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 >= 1) NextMusic();
+                            else if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 <= -1) PreviousMusic();
+                        }
+                        break;
                 }
                 if (!Player.localPlayer.HasLockedInput())
                 {
@@ -164,32 +226,6 @@ namespace FantomLis.BoomboxExtended
                         }
 
                         Click.Play();
-                    }
-
-                    switch (Boombox.CurrentBoomboxMethod())
-                    {
-                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original:
-                        default: 
-                            if (Player.localPlayer.input.aimWasPressed) TryUpdateMusic(((musicEntry.CurrentIndex + 1) % MusicLoadManager.clips.Count));
-                            break;
-                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
-                            if (Input.GetAxis("Mouse ScrollWheel") * 10 != 0  && lastChangeTime + 0.1f <= Time.time)
-                            {
-                                TryUpdateMusic((Mathf.RoundToInt(musicEntry.CurrentIndex + Input.GetAxis("Mouse ScrollWheel") * -1f * 10)+ MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count);
-                            }
-                            break;
-                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll: 
-                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
-                        case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse: 
-                            if (openUI)
-                            {
-                                if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                                if (MusicLoadManager.clips.Count <= 0)
-                                {
-                                    HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
-                                }
-                            }
-                            break;
                     }
 
                     if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
@@ -209,15 +245,14 @@ namespace FantomLis.BoomboxExtended
                 onOffEntry.on = false;
             }
 
-            Music.volume = volumeEntry.GetVolume();
-            musicEntry.UpdateMusicName();
+            #region Sync on/off state
 
             bool flag = onOffEntry.on;
             if (flag != Music.isPlaying)
             {
-                if (flag && checkMusic(musicEntry.SelectMusicID))
+                if (flag && MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var clip))
                 {
-                    Music.clip = MusicLoadManager.clips[musicEntry.SelectMusicID];
+                    Music.clip = clip;
                     Music.time = timeEntry.currentTime;
                     Music.Play();
                 }
@@ -227,13 +262,15 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
+            #endregion
+
+            #region Update boombox
+
             batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
-        }
+            Music.volume = volumeEntry.GetVolume();
 
-        public static bool checkMusic(string id)    
-        {
-            return MusicLoadManager.clips.ContainsKey(id);
+            #endregion
         }
     }
 
@@ -241,7 +278,7 @@ namespace FantomLis.BoomboxExtended
     {
         public int Volume { get; private set; }
 
-        private string VolumeLanguage;
+        private string VolumeText;
 
         /// <summary>
         /// Updates volume
@@ -258,7 +295,7 @@ namespace FantomLis.BoomboxExtended
 
         public VolumeEntry(int vol = 50)
         {
-            VolumeLanguage = $"{{0}}% {LocalizationStrings.Volume}";
+            VolumeText = $"{{0}}% {LocalizationStrings.Volume}";
             Volume = Math.Clamp(vol, 0, 100);
         }
 
@@ -272,72 +309,54 @@ namespace FantomLis.BoomboxExtended
             binarySerializer.WriteInt(Volume);
         }
 
-        public float GetVolume()
-        {
-            return Volume / 100f;
-        }
+        public float GetVolume() => Volume / 100f;
 
-        public string GetString()
-        {
-            return string.Format(VolumeLanguage, Volume);
-        }
+        public string GetString() => string.Format(VolumeText, Volume);
     }
 
-    public class MusicEntry : ItemDataEntry, IHaveUIData
+    public class MusicEntry(string musicID = "") : ItemDataEntry, IHaveUIData
     {
-        private string MusicName = String.Empty;
-        public int CurrentIndex { private set; get; }
-        public string SelectMusicID { private set; get; }
+        private string MusicName = "No music loaded";
+        public string MusicID { private set; get; } = musicID;
+        public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);
+
+        public void InitializeEntry()
+        {if (string.IsNullOrWhiteSpace(MusicID) || MusicIndex == -1) TryUpdateMusicEntry(MusicLoadManager.clips.Keys.First() ?? ""); } 
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
-            SelectMusicID = binaryDeserializer.ReadString(Encoding.UTF8);
-            CurrentIndex = binaryDeserializer.ReadInt();
+            MusicID = binaryDeserializer.ReadString(Encoding.UTF8);
         }
 
-        public bool TryUpdateMusicEntry(int MusicIndex)
+        public bool TryUpdateMusicEntry(string musicID)
         {
             try
             {
                 if (MusicLoadManager.clips.Count <= 0) return false;
-                CurrentIndex = MusicIndex;
-                SelectMusicID = MusicLoadManager.clips.Keys.ToArray()[((CurrentIndex) % MusicLoadManager.clips.Count)];
-                UpdateMusicName();
+                this.MusicID = musicID;
                 SetDirty();
+                UpdateMusicName();
                 return true;
             }
             catch (IndexOutOfRangeException ex) { return false;}
         }
-
-        public void UpdateMusicEntry(string MusicID)
-        {
-            SelectMusicID = MusicID;
-            UpdateMusicName();
-            SetDirty();
-        }
-        
-        public void UpdateMusicEntry(int MusicIndex)
-        {
-            CurrentIndex = MusicIndex;
-            SelectMusicID = MusicLoadManager.clips.Keys.ToArray()[((CurrentIndex) % MusicLoadManager.clips.Count)];
-            UpdateMusicName();
-            SetDirty();
-        }
+        /// <remarks>Unsafe, can cause wrong music selected when clip dictionary is updated</remarks>
+        public bool TryUpdateMusicEntry(int musicIndex) => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[((musicIndex) % MusicLoadManager.clips.Count)]);
+        public void UpdateMusicEntry(string musicID) => TryUpdateMusicEntry(musicID);
+        public void NextMusic() => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[(MusicIndex + 1 + MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count]);
+        public void PreviousMusic() => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[(MusicIndex - 1 + MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count]);
 
         public override void Serialize(BinarySerializer binarySerializer)
         {
-            binarySerializer.WriteString(SelectMusicID, Encoding.UTF8);
-            binarySerializer.WriteInt(CurrentIndex);
+            binarySerializer.WriteString(MusicID, Encoding.UTF8);
         }
 
         public void UpdateMusicName()
         {
-            MusicName = string.Empty;
-
-            if (MusicLoadManager.clips.Count > 0 && BoomboxBehaviour.checkMusic(SelectMusicID))
-            {
-                MusicName = GetDisplayName(MusicLoadManager.clips[SelectMusicID].name);
-            }
+            if (MusicLoadManager.clips.Count > 0
+                && MusicLoadManager.clips.ContainsKey(MusicID))
+                MusicName = GetDisplayName(MusicLoadManager.clips[MusicID].name);
+            else MusicName = "No music loaded";
         }
 
         public string GetString() => MusicName;
