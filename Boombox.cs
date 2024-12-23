@@ -14,7 +14,6 @@ using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
-/*using ShopUtils;*/
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
