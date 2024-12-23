@@ -321,7 +321,7 @@ namespace FantomLis.BoomboxExtended
         public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);
 
         public void InitializeEntry()
-        {if (string.IsNullOrWhiteSpace(MusicID) || MusicIndex == -1) TryUpdateMusicEntry(MusicLoadManager.clips.Keys.First() ?? ""); } 
+        {if (string.IsNullOrWhiteSpace(MusicID) || MusicIndex == -1) TryUpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? ""); } 
 
         public override void Deserialize(BinaryDeserializer binaryDeserializer)
         {
