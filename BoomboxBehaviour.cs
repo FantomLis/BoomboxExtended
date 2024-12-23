@@ -227,7 +227,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
 
-            batteryEntry.m_charge -= (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
+            batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
         }
 
