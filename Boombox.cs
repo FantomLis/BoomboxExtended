@@ -25,11 +25,11 @@ using Zorro.UI.Modal;
 // TODO: Port this mod to SteamWorkshop 
 namespace FantomLis.BoomboxExtended
 {
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    //[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
     //[BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
-    [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
-    public class Boombox : BaseUnityPlugin
+    //[BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
+    public class Boombox : MonoBehaviour
     {
         public const string ItemName = "Boombox";
         public static Boombox Self;
@@ -86,6 +86,7 @@ namespace FantomLis.BoomboxExtended
 
         private void EventRegister()
         {
+            MyceliumNetwork.Initialize();
             MyceliumNetwork.LobbyCreated += () =>
             {
                 if (MyceliumNetwork.IsHost)
