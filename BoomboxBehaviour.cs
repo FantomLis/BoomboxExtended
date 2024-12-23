@@ -274,7 +274,7 @@ namespace FantomLis.BoomboxExtended
 
         public float GetVolume()
         {
-            return Volume / 10f;
+            return Volume / 100f;
         }
 
         public string GetString()
