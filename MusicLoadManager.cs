@@ -88,7 +88,7 @@ namespace FantomLis.BoomboxExtended
                 }
             }
             LogUtils.LogInfo($"Music loading finished!");
-            AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} tracks", dropQueuedAlert:true);
+            AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} music files", dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)

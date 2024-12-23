@@ -28,16 +28,16 @@
         <value>@Volume</value>
     </data>
     <data name="Boombox_ClickSwitchToolTip" xml:space="preserve">
-        <value>[{key}] @Boombox_ClickSwitchTrackToolTip</value>
+        <value>[{key}] @Boombox_ClickSwitchToolTip</value>
     </data>
     <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_VolumeUpToolTip</value>
     </data>
     <data name="Boombox_ScrollSwitchToolTip" xml:space="preserve">
-        <value>[{key}] @Boombox_ScrollSwitchTrackToolTip</value>
+        <value>[{key}] @Boombox_ScrollSwitchToolTip</value>
     </data>
     <data name="Boombox_UISwitchToolTip" xml:space="preserve">
-        <value>[{key}] @Boombox_UISwitchTrackToolTip</value>
+        <value>[{key}] @Boombox_UISwitchToolTip</value>
     </data>
     <data name="Boombox_VolumeDownToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_VolumeDownToolTip</value>
