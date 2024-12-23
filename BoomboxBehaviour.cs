@@ -105,7 +105,6 @@ namespace FantomLis.BoomboxExtended
             {
                 musicEntry = new MusicEntry();
                 data.AddDataEntry(musicEntry);
-                musicEntry.UpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? string.Empty);
             }
 
             if (!data.TryGetEntry(out volumeEntry))
@@ -211,6 +210,7 @@ namespace FantomLis.BoomboxExtended
             }
 
             Music.volume = volumeEntry.GetVolume();
+            musicEntry.UpdateMusicName();
 
             bool flag = onOffEntry.on;
             if (flag != Music.isPlaying)
@@ -285,7 +285,7 @@ namespace FantomLis.BoomboxExtended
 
     public class MusicEntry : ItemDataEntry, IHaveUIData
     {
-        private string MusicName;
+        private string MusicName = String.Empty;
         public int CurrentIndex { private set; get; }
         public string SelectMusicID { private set; get; }
 
