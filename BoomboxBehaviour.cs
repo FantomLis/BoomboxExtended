@@ -279,7 +279,7 @@ namespace FantomLis.BoomboxExtended
 
         public string GetString()
         {
-            return string.Format(VolumeLanguage, Volume * 10);
+            return string.Format(VolumeLanguage, Volume);
         }
     }
 
