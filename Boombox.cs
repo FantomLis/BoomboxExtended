@@ -10,7 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Settings;
+using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
 /*using ShopUtils;*/
 using UnityEngine;
@@ -20,23 +22,26 @@ using UnityEngine.Serialization;
 using Zorro.Core;
 using Zorro.UI.Modal;
 
-// TODO: Port this mod to SteamWorkshop 
+
 namespace FantomLis.BoomboxExtended
 {
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+#if BepInEx
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)] // BepInEx compatibility 
+#endif
     [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, false)]
-    //[BepInDependency("hyydsz-ShopUtils")] // Partially compatible with new version
-    [BepInDependency("RugbugRedfern.MyceliumNetworking", BepInDependency.DependencyFlags.HardDependency)]
+#if BepInEx
     public class Boombox : BaseUnityPlugin
+#else
+    public class Boombox : MonoBehaviour
+#endif
     {
-        public static ManualLogSource log;
-
-        public static AssetBundle asset;
         public const string ItemName = "Boombox";
-
-        protected static Dictionary<string, List<string>> AlertQueue = new();
         public static Boombox Self;
         
+        /// <summary>
+        /// Client-only setting, enables verbose logging
+        /// </summary>
+        public static bool IsDebug = true;
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
         /// </summary>
@@ -63,31 +68,29 @@ namespace FantomLis.BoomboxExtended
         static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
         static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
         
-        private static readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-
+        private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         private static Item BoomboxItem;
 
         static Boombox()
         {
-            Self = new GameObject($"{ItemName}Loader").AddComponent<Boombox>();
-            DontDestroyOnLoad(Self.transform);
+            Self = GameObjectUtils.MakeNewDontDestroyOnLoad($"{ItemName}Loader").AddComponent<Boombox>();
             Self.Awake();
         }
         
         void Awake()
         {
-            log = Logger;
-            log.LogDebug("Pre-Loading started...");
-            log.LogDebug("Patching started...");
-            harmony.PatchAll();
-            log.LogDebug("Patching finished.");
+            LogUtils.LogDebug("Pre-Loading started...");
+            LogUtils.LogDebug("Patching started...");
+            Harmony.PatchAll();
+            LogUtils.LogDebug("Patching finished.");
             LoadLanguages();
-            log.LogDebug("Pre-Loading finished.");
-            log.LogInfo("Pre-game load finished!");
+            LogUtils.LogDebug("Pre-Loading finished.");
+            LogUtils.LogInfo("Pre-game load finished!");
         }
 
         private void EventRegister()
         {
+            MyceliumNetwork.Initialize();
             MyceliumNetwork.LobbyCreated += () =>
             {
                 if (MyceliumNetwork.IsHost)
@@ -106,7 +109,7 @@ namespace FantomLis.BoomboxExtended
                 BoomboxItem.price = CurrentBoomboxPrice;
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
-            log.LogDebug("All events registered.");
+            LogUtils.LogDebug("All events registered.");
 
             void x()
             {
@@ -121,59 +124,65 @@ namespace FantomLis.BoomboxExtended
 
         void Start()
         {
-            log.LogDebug("Loading started...");
+            LogUtils.LogDebug("Loading started...");
             EventRegister();
             LoadConfig();
             LoadBoombox();
-            Self.StartCoroutine(DrawAllPendingAlerts());
-            log.LogDebug("Music loading started...");
-            MusicLoadManager.StartLoadMusic();
-            log.LogDebug("Music loading finished.");
-            log.LogInfo("Music is ready!");
-            log.LogDebug("Loading finished.");
+            LogUtils.LogInfo("Music is ready!");
+            LogUtils.LogDebug("Loading finished.");
         }
         
         private static void LoadConfig()
         {
-            log.LogDebug($"Config loading started...");
+            LogUtils.LogDebug($"Config loading started...");
+
+            #region Load settings
+
             VolumeUpKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeUpSetting>();
             VolumeDownKey = GameHandler.Instance.SettingsHandler.GetSetting<VolumeDownSetting>();
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
             BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
+            IsDebug = GameHandler.Instance.SettingsHandler.GetSetting<VerboseLoggingSetting>().Value;
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
-            
+
+            #endregion
+
+            #region Registering Lobby Data
+
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBCID);
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBPID);
+
+            #endregion
             
-            log.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
+            LogUtils.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
         }
 
         private static void LoadBoombox()
         {
-            string boomboxAssetbundle = "boombox.assetBundle";
             try
             {
-                asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
-                
+                string boomboxAssetbundle = "boombox.assetBundle";
+                AssetBundle asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
                 BoomboxItem = asset.LoadAsset<Item>(ItemName);
                 BoomboxItem.itemObject.AddComponent<BoomboxBehaviour>();
                 BoomboxItem.Category = ShopItemCategory.Misc;
                 BoomboxItem.purchasable = true;
                 BoomboxItem.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
 
-                log.LogDebug($"Resource {boomboxAssetbundle} loaded!");
+                LogUtils.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
-                //RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
-                log.LogDebug("Loading boombox finished!");
+                LogUtils.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
             {
-                log.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
+                LogUtils.LogFatal($"Boombox failed to load: {ex.Message} \n({ex.StackTrace})");
             }
         }
+        
+        public static void RegisterBoomboxAsArtifact() => RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
 
         private void LoadLanguages()
         {
@@ -184,59 +193,6 @@ namespace FantomLis.BoomboxExtended
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);
-        }
-
-        public static void DropQueuedAlert(string header)
-        {
-            if (AlertQueue.TryGetValue(header, out List<string> list))
-                list.Clear();
-        }
-        public static void ShowRevenueAlert(string header, string body, bool forceNow = false, bool dropQueuedAlert = false)
-        {
-            if (forceNow)
-            {
-                ShowRevenueAlert(new KeyValuePair<string, List<string>>(header, [body]));
-                return;
-            }
-            if (AlertQueue.TryGetValue(header, out List<string> list))
-            {
-                if (dropQueuedAlert) list.Clear();
-                list.Add(body);
-            }
-            else AlertQueue.Add(header, new List<string>([body]));
-        }
-
-        private static IEnumerator DrawAllPendingAlerts()
-        {
-            while (Self)
-            {
-                yield return new WaitForSeconds(0.25f);
-                if (!Player.localPlayer) continue;
-                var x = AlertQueue.ToArray();
-                AlertQueue.Clear();
-                foreach (var v in x)
-                {
-                    ShowRevenueAlert(v);
-                }
-            }
-        }
-
-        private static void ShowRevenueAlert(KeyValuePair<string, List<string>> v)
-        {
-            if (!Player.localPlayer) return;
-            StringBuilder b = new();
-            for (int i = 0; i < v.Value.Count; i++)
-            {
-                if (i >= 1 && v.Value.Count() - i > 1)
-                {
-                    b.Append($"... ({v.Value.Count - i} more lines)");
-                    break;
-                }
-
-                b.Append(v.Value[i] + "\n");
-            }
-            UserInterface.ShowMoneyNotification(v.Key, b.ToString(),
-                MoneyCellUI.MoneyCellType.Revenue);
         }
     }
 }

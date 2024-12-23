@@ -1,8 +1,11 @@
 ﻿using System;
 using BepInEx;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,22 +13,31 @@ namespace FantomLis.BoomboxExtended
 {
     public class MusicLoadManager : MonoBehaviour
     {
-        private static MusicLoadManager instance;
+        private static MusicLoadManager Instance;
+        public static Dictionary<string, AudioClip> clips = new ();
 
-        public static new Coroutine StartCoroutine(IEnumerator enumerator)
+        /// <summary>
+        /// Default Root Path from which music is searching
+        /// </summary>
+        public static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
+        private new static Coroutine StartCoroutine(IEnumerator enumerator)
         {
-            if (instance == null)
-            {
-                instance = new GameObject("MusicLoader").AddComponent<MusicLoadManager>();
-                DontDestroyOnLoad(instance);
-            }
-
-            return ((MonoBehaviour)instance).StartCoroutine(enumerator);
+            Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
+            return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
         }
 
-        public static void StartLoadMusic()
+        /// <summary>
+        /// Loads music from folder
+        /// </summary>
+        /// <param name="rootPath">Root path from which music is searching (null = <see cref="MusicLoadManager.RootPath"/>)</param>
+        /// <param name="musicPath">Path to music folder in Root</param>
+        /// <param name="reloadAllSongs">Fully reload all songs</param>
+        public static void StartLoadMusic(string? rootPath = null, string musicPath = "Custom Songs", bool reloadAllSongs = true)
         {
-            StartCoroutine(LoadMusic());
+            rootPath ??= RootPath;
+            string path = System.IO.Path.Combine(rootPath, musicPath);
+            if (reloadAllSongs) clips.Clear();
+            StartCoroutine(LoadMusic(path));
         }
         
         /*
@@ -38,18 +50,17 @@ namespace FantomLis.BoomboxExtended
         {
             string path = Path.Combine(Paths.PluginPath, pathToFolder);*/
         /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
-        public static IEnumerator LoadMusic()
+        public static IEnumerator LoadMusic(string path)
         {
-            string path = Path.Combine(Paths.GameRootPath, "Plugins/Boombox", "Custom Songs");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            BoomboxBehaviour.clips.Clear();
-            Boombox .DropQueuedAlert("Loaded music");
+            clips.Clear();
+            AlertUtils.DropQueuedMoneyCellAlert("Loaded music");
             foreach (string file in Directory.GetFiles(path))
             {
-                if (BoomboxBehaviour.clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
+                if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
                 AudioType type = GetAudioType(file);
                 if (type != AudioType.UNKNOWN)
                 {
@@ -68,16 +79,16 @@ namespace FantomLis.BoomboxExtended
                         if (clip && clip.loadState == AudioDataLoadState.Loaded)
                         {
                             clip.name = Path.GetFileNameWithoutExtension(file);
-                            BoomboxBehaviour.clips.Add(clip.name,clip);
+                            clips.Add(clip.name,clip);
 
-                            Boombox.log.LogInfo($"Music Loaded: {clip.name}");
-                            Boombox.ShowRevenueAlert("Loaded music", clip.name);
+                            LogUtils.LogInfo($"Music Loaded: {clip.name}");
+                            AlertUtils.AddMoneyCellAlert("Loaded music", MoneyCellUI.MoneyCellType.Revenue, clip.name);
                         }
                     }
                 }
             }
-            Boombox.log.LogInfo($"Music loading finished!");
-            Boombox.ShowRevenueAlert("Loading music finished!", $"Loaded {BoomboxBehaviour.clips.Count.ToString()} tracks", dropQueuedAlert:true);
+            LogUtils.LogInfo($"Music loading finished!");
+            AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} music files", dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)

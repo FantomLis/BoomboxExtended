@@ -69,7 +69,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchTrackToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchMusicToolTip.
         /// </summary>
         internal static string Boombox_ClickSwitchToolTip {
             get {
@@ -78,7 +78,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_ScrollSwitchTrackToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_ScrollSwitchMusicToolTip.
         /// </summary>
         internal static string Boombox_ScrollSwitchToolTip {
             get {
@@ -87,7 +87,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_UISwitchTrackToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_UISwitchMusicToolTip.
         /// </summary>
         internal static string Boombox_UISwitchToolTip {
             get {

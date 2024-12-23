@@ -37,9 +37,9 @@ public class TooltipPatch
                     ControllerGlyphs.GlyphType.ZoomIn]);
             var useText = Boombox.CurrentBoomboxMethod() switch
             {
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default => LocalizationStrings.Boombox_UISwitchToolTip,
                 MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll => LocalizationStrings.Boombox_UISwitchToolTip,
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse => LocalizationStrings.Boombox_UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default => LocalizationStrings.Boombox_UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse => LocalizationStrings.Boombox_UISwitchToolTip, 
                 MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel => LocalizationStrings.Boombox_ScrollSwitchToolTip,
                 MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original => LocalizationStrings.Boombox_ClickSwitchToolTip,
                 _ => string.Empty
