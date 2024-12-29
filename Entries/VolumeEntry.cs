@@ -5,10 +5,10 @@ namespace FantomLis.BoomboxExtended.Entries;
 
 public class VolumeEntry : BaseEntry, IHaveUIData
 {
-    public VolumeEntry(){}
+    public VolumeEntry() : this (50){}
     public int Volume { get; private set; }
 
-    private string VolumeText;
+    private string VolumeText = $"{{0}}% {BoomboxLocalization.BoomboxVolume}";
 
     /// <summary>
     /// Updates volume
@@ -25,7 +25,6 @@ public class VolumeEntry : BaseEntry, IHaveUIData
 
     public VolumeEntry(int vol = 50)
     {
-        VolumeText = $"{{0}}% {BoomboxLocalization.BoomboxVolume}";
         Volume = Math.Clamp(vol, 0, 100);
     }
 
