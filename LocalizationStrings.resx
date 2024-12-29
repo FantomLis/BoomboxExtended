@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -21,40 +21,41 @@
     <data name="Boombox" xml:space="preserve">
         <value>@Boombox</value>
     </data>
-    <data name="Boombox_UseToolTip" xml:space="preserve">
-        <value>[{key}] @Boombox_UseToolTip</value>
-    </data>
-    <data name="Volume" xml:space="preserve">
-        <value>@Volume</value>
-    </data>
     <data name="Boombox_ClickSwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_ClickSwitchToolTip</value>
     </data>
-    <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
-        <value>[{key}] @Boombox_VolumeUpToolTip</value>
     </data>
     <data name="Boombox_ScrollSwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_ScrollSwitchToolTip</value>
     </data>
+    <data name="Boombox_SelectionMethod_Default" xml:space="preserve">
+        <value>@Default</value>
+    </data>
+    <data name="Boombox_SelectionMethod_Original" xml:space="preserve">
+        <value>@Original</value>
+    </data>
+    <data name="Boombox_SelectionMethod_ScrollWheel" xml:space="preserve">
+        <value>@ScrollWheel</value>
+    </data>
+    <data name="Boombox_SelectionMethod_SelectionUIMouse" xml:space="preserve">
+        <value>@SelectionUINoScroll</value>
+    </data>
+    <data name="Boombox_SelectionMethod_SelectionUIScroll" xml:space="preserve">
+        <value>@SelectionUI</value>
+    </data>
     <data name="Boombox_UISwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_UISwitchToolTip</value>
+    </data>
+    <data name="Boombox_UseToolTip" xml:space="preserve">
+        <value>[{key}] @Boombox_UseToolTip</value>
+    </data>
+    <data name="Boombox_Volume" xml:space="preserve">
+        <value>@Volume</value>
     </data>
     <data name="Boombox_VolumeDownToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_VolumeDownToolTip</value>
     </data>
-    <data name="SelectionMethod.Default" xml:space="preserve">
-        <value>@Default</value>
-    </data>
-    <data name="SelectionMethod.Original" xml:space="preserve">
-        <value>@Original</value>
-    </data>
-    <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
-        <value>@ScrollWheel</value>
-    </data>
-    <data name="SelectionMethod.SelectionUIScroll" xml:space="preserve">
-        <value>@SelectionUI</value>
-    </data>
-    <data name="SelectionMethod.SelectionUIMouse" xml:space="preserve">
-        <value>@SelectionUINoScroll</value>
+    <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] @Boombox_VolumeUpToolTip</value>
     </data>
 </root>

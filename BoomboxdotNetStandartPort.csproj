@@ -428,27 +428,26 @@
       </Reference>
         
     </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Update="LocalizationStrings.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Localization.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Update="LocalizationStrings.en.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Localization.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Update="LocalizationStrings.Designer.cs">
+      <ItemGroup>
+        <Compile Update="Localization.Designer.cs">
+        <DependentUpon>LocalizationStrings.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>LocalizationStrings.resx</DependentUpon>
       </Compile>
+        <Compile Update="LocalizationStrings.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>LocalizationStrings.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <Locales Include="$(OutputPath)\en\**"/>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="LocalizationStrings.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">

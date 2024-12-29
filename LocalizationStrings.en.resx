@@ -1,4 +1,4 @@
-﻿<root>
+<root>
     <resheader name="resmimetype">
         <value>text/microsoft-resx</value>
     </resheader>
@@ -20,34 +20,34 @@
     <data name="Boombox_ScrollSwitchToolTip" xml:space="preserve">
         <value>[{key}] Scroll Music</value>
     </data>
+    <data name="Boombox_SelectionMethod_Default" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="Boombox_SelectionMethod_Original" xml:space="preserve">
+        <value>Original</value>
+    </data>
+    <data name="Boombox_SelectionMethod_ScrollWheel" xml:space="preserve">
+        <value>Scroll Wheel</value>
+    </data>
+    <data name="Boombox_SelectionMethod_SelectionUIMouse" xml:space="preserve">
+        <value>Selection UI (mouse) </value>
+    </data>
+    <data name="Boombox_SelectionMethod_SelectionUIScroll" xml:space="preserve">
+        <value>Selection UI (scroll)</value>
+    </data>
     <data name="Boombox_UISwitchToolTip" xml:space="preserve">
         <value>[{key}] Open Boombox UI</value>
     </data>
     <data name="Boombox_UseToolTip" xml:space="preserve">
         <value>[{key}] Play music</value>
     </data>
-    <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
-        <value>[{key}] Volume up</value>
+    <data name="Boombox_Volume" xml:space="preserve">
+        <value>Volume</value>
     </data>
     <data name="Boombox_VolumeDownToolTip" xml:space="preserve">
         <value>[{key}] Volume down</value>
     </data>
-    <data name="Volume" xml:space="preserve">
-        <value>Volume</value>
-    </data>
-    <data name="SelectionMethod.Default" xml:space="preserve">
-        <value>Default</value>
-    </data>
-    <data name="SelectionMethod.Original" xml:space="preserve">
-        <value>Original</value>
-    </data>
-    <data name="SelectionMethod.ScrollWheel" xml:space="preserve">
-        <value>Scroll Wheel</value>
-    </data>
-    <data name="SelectionMethod.SelectionUIScroll" xml:space="preserve">
-        <value>Selection UI (scroll)</value>
-    </data>
-    <data name="SelectionMethod.SelectionUIMouse" xml:space="preserve">
-        <value>Selection UI (mouse) </value>
+    <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] Volume up</value>
     </data>
 </root>

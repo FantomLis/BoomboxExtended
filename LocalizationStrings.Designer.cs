@@ -69,7 +69,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchMusicToolTip.
+        ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchToolTip.
         /// </summary>
         internal static string Boombox_ClickSwitchToolTip {
             get {
@@ -87,7 +87,52 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_UISwitchMusicToolTip.
+        ///   Looks up a localized string similar to @Default.
+        /// </summary>
+        internal static string Boombox_SelectionMethod_Default {
+            get {
+                return ResourceManager.GetString("Boombox_SelectionMethod_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Original.
+        /// </summary>
+        internal static string Boombox_SelectionMethod_Original {
+            get {
+                return ResourceManager.GetString("Boombox_SelectionMethod_Original", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @ScrollWheel.
+        /// </summary>
+        internal static string Boombox_SelectionMethod_ScrollWheel {
+            get {
+                return ResourceManager.GetString("Boombox_SelectionMethod_ScrollWheel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @SelectionUINoScroll.
+        /// </summary>
+        internal static string Boombox_SelectionMethod_SelectionUIMouse {
+            get {
+                return ResourceManager.GetString("Boombox_SelectionMethod_SelectionUIMouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @SelectionUI.
+        /// </summary>
+        internal static string Boombox_SelectionMethod_SelectionUIScroll {
+            get {
+                return ResourceManager.GetString("Boombox_SelectionMethod_SelectionUIScroll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{key}] @Boombox_UISwitchToolTip.
         /// </summary>
         internal static string Boombox_UISwitchToolTip {
             get {
@@ -101,6 +146,15 @@ namespace FantomLis.BoomboxExtended {
         internal static string Boombox_UseToolTip {
             get {
                 return ResourceManager.GetString("Boombox_UseToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Volume.
+        /// </summary>
+        internal static string Boombox_Volume {
+            get {
+                return ResourceManager.GetString("Boombox_Volume", resourceCulture);
             }
         }
         
@@ -119,15 +173,6 @@ namespace FantomLis.BoomboxExtended {
         internal static string Boombox_VolumeUpToolTip {
             get {
                 return ResourceManager.GetString("Boombox_VolumeUpToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to @Volume.
-        /// </summary>
-        internal static string Volume {
-            get {
-                return ResourceManager.GetString("Volume", resourceCulture);
             }
         }
     }
