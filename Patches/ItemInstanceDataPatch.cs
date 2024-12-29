@@ -1,4 +1,5 @@
 ﻿using System;
+using FantomLis.BoomboxExtended.Entries;
 using HarmonyLib;
 using UnityEngine;
 

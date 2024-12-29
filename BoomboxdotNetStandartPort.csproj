@@ -87,6 +87,9 @@
       <Reference Include="Assembly-CSharp">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Assembly-CSharp.dll</HintPath>
       </Reference>
+      <Reference Include="MyceliumNetworkingForCW">
+        <HintPath>F:\SteamLibrary\steamapps\workshop\content\2881650\3384690922\MyceliumNetworkingForCW.dll</HintPath>
+      </Reference>
       <Reference Include="Photon3Unity3D">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Photon3Unity3D.dll</HintPath>
       </Reference>
@@ -428,32 +431,18 @@
       </Reference>
         
     </ItemGroup>
-      <ItemGroup>
-        <Compile Update="Localization.Designer.cs">
-        <DependentUpon>BoomboxLocalization.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-      </Compile>
-        <Compile Update="BoomboxLocalization.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>BoomboxLocalization.resx</DependentUpon>
-        </Compile>
+    <ItemGroup>
+        <Locales Include="$(OutputPath)\en\**;$(OutputPath)\ru\**;" />
     </ItemGroup>
     <ItemGroup>
-        <Locales Include="$(OutputPath)\en\**"/>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Update="BoomboxLocalization.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>BoomboxLocalization.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png;boombox.assetBundle;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
     </Target>
-    <Target Name="CopyOutputFolderToGame" AfterTargets="Build">
-        <Copy SourceFiles="@(Locales)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\en" />
-    </Target>
+    <!--<Target Name="CopyOutputFolderToGame" AfterTargets="Build">
+        <Copy SourceFiles="@(Locales)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\locales" />
+    </Target>-->
 </Project>
