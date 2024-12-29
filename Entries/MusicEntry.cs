@@ -7,7 +7,7 @@ namespace FantomLis.BoomboxExtended.Entries;
 
 public class MusicEntry(string musicID = "") : ItemDataEntry, IHaveUIData
 {
-    private string MusicName = "No music loaded";
+    private string MusicName = BoomboxLocalization.NoMusicLoaded;
     public string MusicID { private set; get; } = musicID;
     public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);
 
@@ -47,7 +47,7 @@ public class MusicEntry(string musicID = "") : ItemDataEntry, IHaveUIData
         if (MusicLoadManager.clips.Count > 0
             && MusicLoadManager.clips.ContainsKey(MusicID))
             MusicName = GetDisplayName(MusicLoadManager.clips[MusicID].name);
-        else MusicName = "No music loaded";
+        else MusicName = BoomboxLocalization.NoMusicLoaded;
     }
 
     public string GetString() => MusicName;

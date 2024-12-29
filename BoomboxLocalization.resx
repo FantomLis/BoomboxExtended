@@ -18,14 +18,35 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="BatteryCapacitySetting" xml:space="preserve">
+        <value>@BatteryCapacitySetting</value>
+    </data>
     <data name="BoomboxName" xml:space="preserve">
         <value>@BoomboxName</value>
+    </data>
+    <data name="BoomboxPriceSetting" xml:space="preserve">
+        <value>@BoomboxPriceSetting</value>
+    </data>
+    <data name="BoomboxVolume" xml:space="preserve">
+        <value>@BoomboxVolume</value>
     </data>
     <data name="ClickSwitchToolTip" xml:space="preserve">
         <value>[{key}] @ClickSwitchToolTip</value>
     </data>
     <data name="MusicLoadedAlert" xml:space="preserve">
         <value>@MusicLoadedAlert</value>
+    </data>
+    <data name="MusicLoadedAlertDesc" xml:space="preserve">
+        <value>@MusicLoadedAlertDesc {0}</value>
+    </data>
+    <data name="MusicSelectionMethodSetting" xml:space="preserve">
+        <value>@MusicSelectionMethodSetting</value>
+    </data>
+    <data name="NoLocalizationStringError" xml:space="preserve">
+        <value>@NoLocalizationStringError {0}</value>
+    </data>
+    <data name="NoMusicLoaded" xml:space="preserve">
+        <value>@NoMusicLoaded</value>
     </data>
     <data name="ScrollSwitchToolTip" xml:space="preserve">
         <value>[{key}] @ScrollSwitchToolTip</value>
@@ -45,46 +66,31 @@
     <data name="SelectionMethod_SelectionUIScroll" xml:space="preserve">
         <value>@SM_SelectionUI</value>
     </data>
+    <data name="SingleSongLoadedAlert" xml:space="preserve">
+        <value>@SingleSongLoadedAlert</value>
+    </data>
     <data name="UISwitchToolTip" xml:space="preserve">
         <value>[{key}] @UISwitchToolTip</value>
     </data>
     <data name="UseToolTip" xml:space="preserve">
         <value>[{key}] @UseToolTip</value>
     </data>
-    <data name="BoomboxVolume" xml:space="preserve">
-        <value>@BoomboxVolume</value>
-    </data>
-    <data name="VolumeDownToolTip" xml:space="preserve">
-        <value>[{key}] @VolumeDownToolTip</value>
-    </data>
-    <data name="VolumeUpToolTip" xml:space="preserve">
-        <value>[{key}] @VolumeUpToolTip</value>
-    </data>
-    <data name="MusicLoadedAlertDesc" xml:space="preserve">
-        <value>@MusicLoadedAlertDesc {0}</value>
-    </data>
-    <data name="SingleSongLoadedAlert" xml:space="preserve">
-        <value>@SingleSongLoadedAlert</value>
-    </data>
-    <data name="NoLocalizationStringError" xml:space="preserve">
-        <value>@NoLocalizationStringError {0}</value>
-    </data>
-    <data name="BatteryCapacitySetting" xml:space="preserve">
-        <value>@BatteryCapacitySetting</value>
-    </data>
-    <data name="BoomboxPriceSetting" xml:space="preserve">
-        <value>@BoomboxPriceSetting</value>
-    </data>
     <data name="VerboseLoggingSetting" xml:space="preserve">
         <value>@VerboseLoggingSetting</value>
-    </data>
-    <data name="MusicSelectionMethodSetting" xml:space="preserve">
-        <value>@MusicSelectionMethodSetting</value>
     </data>
     <data name="VolumeDownSetting" xml:space="preserve">
         <value>@VolumeDownSetting</value>
     </data>
+    <data name="VolumeDownToolTip" xml:space="preserve">
+        <value>[{key}] @VolumeDownToolTip</value>
+    </data>
     <data name="VolumeUpSetting" xml:space="preserve">
         <value>@VolumeUpSetting</value>
+    </data>
+    <data name="VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] @VolumeUpToolTip</value>
+    </data>
+    <data name="NoMusicHelmetAlert" xml:space="preserve">
+        <value>@NoMusic</value>
     </data>
 </root>

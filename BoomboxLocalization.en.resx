@@ -80,4 +80,10 @@
     <data name="VolumeUpSetting" xml:space="preserve">
         <value>Boombox Volume Up Key</value>
     </data>
+    <data name="NoMusicLoaded" xml:space="preserve">
+        <value>No Music Loaded</value>
+    </data>
+    <data name="NoMusicHelmetAlert" xml:space="preserve">
+        <value>No Music</value>
+    </data>
 </root>

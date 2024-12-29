@@ -141,6 +141,24 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @NoMusic.
+        /// </summary>
+        internal static string NoMusicHelmetAlert {
+            get {
+                return ResourceManager.GetString("NoMusicHelmetAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @NoMusicLoaded.
+        /// </summary>
+        internal static string NoMusicLoaded {
+            get {
+                return ResourceManager.GetString("NoMusicLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{key}] @ScrollSwitchToolTip.
         /// </summary>
         internal static string ScrollSwitchToolTip {

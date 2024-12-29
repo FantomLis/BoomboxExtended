@@ -155,7 +155,7 @@ namespace FantomLis.BoomboxExtended
                         {
                             if (MusicLoadManager.clips.Count <= 0)
                             {
-                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
                             }
                             NextMusic();
@@ -170,7 +170,7 @@ namespace FantomLis.BoomboxExtended
                             if (Input.GetKeyDown(KeyCode.Mouse1)) Click.Play();
                             if (MusicLoadManager.clips.Count <= 0)
                             {
-                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                             }
                         }
                         break;
@@ -184,7 +184,7 @@ namespace FantomLis.BoomboxExtended
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (MusicLoadManager.clips.Count <= 0)
                             {
-                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
                             }
                             if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 >= 1) NextMusic();
@@ -194,12 +194,13 @@ namespace FantomLis.BoomboxExtended
                         break;
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
                         if (Player.localPlayer.HasLockedInput()) break;
-                        if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 != 0  && lastChangeTime + 0.1f <= Time.time)
+                        if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 != 0  && lastChangeTime + 0.1f // <<< - TODO: to config parameter
+                            <= Time.time)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
                             if (MusicLoadManager.clips.Count <= 0)
                             {
-                                HelmetText.Instance.SetHelmetText("No Music", 2f); // TODO: To Alert utils
+                                HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
                             }
                             if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 >= 1) NextMusic();
@@ -213,7 +214,7 @@ namespace FantomLis.BoomboxExtended
                     {
                         if (MusicLoadManager.clips.Count == 0) 
                         {
-                            HelmetText.Instance.SetHelmetText("No Music", 2f);
+                            HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f);
                         }
                         else
                         {

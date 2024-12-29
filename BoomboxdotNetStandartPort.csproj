@@ -232,6 +232,19 @@
         <LocalesEN Include="$(OutputPath)\en\**" />
         <LocalesRU Include="$(OutputPath)\ru\**" />
     </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="BoomboxLocalization.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>BoomboxLocalization.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="BoomboxLocalization.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>BoomboxLocalization.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png;boombox.assetBundle;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
