@@ -10,7 +10,7 @@ namespace FantomLis.BoomboxExtended.Patches;
 [HarmonyPatch(typeof(ItemInstanceData))]
 public class ItemInstanceDataPatch
 {
-    private static byte __current_index = 10; // 
+    private static byte __current_index = 40; // 
     static List<Type> BaseEntries = AppDomain.CurrentDomain.GetAssemblies()
         .SelectMany(assembly => assembly.GetTypes())
         .Where(type => type.IsSubclassOf(typeof(BaseEntry))).ToList();
@@ -28,8 +28,8 @@ public class ItemInstanceDataPatch
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryType))]
     public static Exception GetEntryType(Exception __exception,byte identifier, ref ItemDataEntry __result)
     {
-        if (BaseEntries.Count > identifier-__current_index)
-            __result = (ItemDataEntry) Activator.CreateInstance(BaseEntries[identifier]);
+        if (BaseEntries.Count > (identifier-__current_index) && identifier >= __current_index)
+            __result = (ItemDataEntry) Activator.CreateInstance(BaseEntries[identifier-__current_index]);
         else if (__exception != null) throw __exception;
         return null;
     }
