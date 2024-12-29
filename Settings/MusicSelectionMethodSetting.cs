@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FantomLis.BoomboxExtended.Interfaces;
 using FantomLis.BoomboxExtended.Utils;
+using UnityEngine.Localization.Settings;
 using Zorro.Settings;
 
 namespace FantomLis.BoomboxExtended.Settings;
@@ -32,5 +34,8 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
 
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
-    public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList().Select(x => BoomboxLocalization.ResourceManager.GetString("SelectionMethod_"+x) ?? string.Format(BoomboxLocalization.NoLocalizationStringError, x)).ToList();
+    public override List<string> GetChoices() => Enum.GetNames(
+        typeof(BoomboxMusicSelectionMethod)).ToList()
+        .Select(x => BoomboxLocalization.ResourceManager.GetString("SelectionMethod_"+x, CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID)) 
+                     ?? string.Format(BoomboxLocalization.NoLocalizationStringError, x)).ToList();
 }
