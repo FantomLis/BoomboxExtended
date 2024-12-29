@@ -17,6 +17,7 @@ namespace FantomLis.BoomboxExtended
         private TimeEntry timeEntry;
         private VolumeEntry volumeEntry;
         private MusicEntry musicEntry;
+        private LengthEntry _lengthEntry;
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
@@ -113,6 +114,12 @@ namespace FantomLis.BoomboxExtended
                 };
 
                 data.AddDataEntry(onOffEntry);
+            }
+
+            if (!data.TryGetEntry(out _lengthEntry))
+            {
+                _lengthEntry = new LengthEntry();
+                data.AddDataEntry(_lengthEntry);
             }
 
             if (!data.TryGetEntry(out timeEntry))
@@ -250,6 +257,7 @@ namespace FantomLis.BoomboxExtended
                 if (flag && MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var clip))
                 {
                     Music.clip = clip;
+                    _lengthEntry.UpdateLenght(clip.length);
                     Music.time = timeEntry.currentTime;
                     Music.Play();
                 }
@@ -265,6 +273,7 @@ namespace FantomLis.BoomboxExtended
 
             batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
+            _lengthEntry.UpdateCurrentPosition(timeEntry.currentTime);
             Music.volume = volumeEntry.GetVolume();
 
             #endregion
