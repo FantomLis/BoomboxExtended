@@ -31,7 +31,7 @@ public class ItemInstanceDataPatch
             .Where(type => type.IsSubclassOf(typeof(BaseEntry))).Select(x => (BaseEntry) Activator.CreateInstance(x)).ToList();
         if (BaseEntriesInstance.Exists(x => x.ID() == identifier))
             __result = BaseEntriesInstance.Find(x => x.ID() == identifier);
-        if (__exception != null) throw __exception;
+        else if (__exception != null) throw __exception;
         return null;
     }
 }
