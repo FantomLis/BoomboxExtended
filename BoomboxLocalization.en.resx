@@ -54,7 +54,7 @@
         <value>[{key}] Volume up</value>
     </data>
     <data name="MusicLoadedAlertDesc" xml:space="preserve">
-        <value>Loaded {0} song files</value>
+        <value>Loaded {0} files</value>
     </data>
     <data name="SingleSongLoadedAlert" xml:space="preserve">
         <value>Song loaded</value>
@@ -63,7 +63,7 @@
         <value>Failed to load localization ({0})</value>
     </data>
     <data name="BatteryCapacitySetting" xml:space="preserve">
-        <value>Battery Capacity (-1 to infinite)</value>
+        <value>Boombox Battery Capacity (-1 to infinite)</value>
     </data>
     <data name="BoomboxPriceSetting" xml:space="preserve">
         <value>Boombox Price</value>
@@ -72,7 +72,7 @@
         <value>Boombox Verbose Log</value>
     </data>
     <data name="MusicSelectionMethodSetting" xml:space="preserve">
-        <value>Boombox Song Selection Method</value>
+        <value>Music Selection Method</value>
     </data>
     <data name="VolumeDownSetting" xml:space="preserve">
         <value>Boombox Volume Down Key</value>
@@ -81,7 +81,7 @@
         <value>Boombox Volume Up Key</value>
     </data>
     <data name="NoMusicLoaded" xml:space="preserve">
-        <value>No Music Loaded</value>
+        <value>No Loaded Music </value>
     </data>
     <data name="NoMusicHelmetAlert" xml:space="preserve">
         <value>No Music</value>
