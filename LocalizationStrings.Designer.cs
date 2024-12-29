@@ -69,6 +69,24 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @BatteryCapacity.
+        /// </summary>
+        internal static string Boombox_BatteryCapacitySetting {
+            get {
+                return ResourceManager.GetString("Boombox_BatteryCapacitySetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @BoomboxPrice.
+        /// </summary>
+        internal static string Boombox_BoomboxPriceSetting {
+            get {
+                return ResourceManager.GetString("Boombox_BoomboxPriceSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{key}] @Boombox_ClickSwitchToolTip.
         /// </summary>
         internal static string Boombox_ClickSwitchToolTip {
@@ -92,6 +110,24 @@ namespace FantomLis.BoomboxExtended {
         internal static string Boombox_MusicLoadedAlertDesc {
             get {
                 return ResourceManager.GetString("Boombox_MusicLoadedAlertDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @MusicSelectionMethod.
+        /// </summary>
+        internal static string Boombox_MusicSelectionMethodSetting {
+            get {
+                return ResourceManager.GetString("Boombox_MusicSelectionMethodSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @NoLocalizationString {0}.
+        /// </summary>
+        internal static string Boombox_NoLocalizationStringError {
+            get {
+                return ResourceManager.GetString("Boombox_NoLocalizationStringError", resourceCulture);
             }
         }
         
@@ -177,6 +213,15 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @VerboseLogging.
+        /// </summary>
+        internal static string Boombox_VerboseLoggingSetting {
+            get {
+                return ResourceManager.GetString("Boombox_VerboseLoggingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Volume.
         /// </summary>
         internal static string Boombox_Volume {
@@ -186,11 +231,29 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @VolumeDownSetting.
+        /// </summary>
+        internal static string Boombox_VolumeDownSetting {
+            get {
+                return ResourceManager.GetString("Boombox_VolumeDownSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{key}] @Boombox_VolumeDownToolTip.
         /// </summary>
         internal static string Boombox_VolumeDownToolTip {
             get {
                 return ResourceManager.GetString("Boombox_VolumeDownToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @VolumeUpSetting.
+        /// </summary>
+        internal static string Boombox_VolumeUpSetting {
+            get {
+                return ResourceManager.GetString("Boombox_VolumeUpSetting", resourceCulture);
             }
         }
         

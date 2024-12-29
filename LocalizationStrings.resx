@@ -66,4 +66,25 @@
     <data name="Boombox_SingleSongLoadedAlert" xml:space="preserve">
         <value>@SingleSongLoadedAlert</value>
     </data>
+    <data name="Boombox_NoLocalizationStringError" xml:space="preserve">
+        <value>@NoLocalizationString {0}</value>
+    </data>
+    <data name="Boombox_BatteryCapacitySetting" xml:space="preserve">
+        <value>@BatteryCapacity</value>
+    </data>
+    <data name="Boombox_BoomboxPriceSetting" xml:space="preserve">
+        <value>@BoomboxPrice</value>
+    </data>
+    <data name="Boombox_VerboseLoggingSetting" xml:space="preserve">
+        <value>@VerboseLogging</value>
+    </data>
+    <data name="Boombox_MusicSelectionMethodSetting" xml:space="preserve">
+        <value>@MusicSelectionMethod</value>
+    </data>
+    <data name="Boombox_VolumeDownSetting" xml:space="preserve">
+        <value>@VolumeDownSetting</value>
+    </data>
+    <data name="Boombox_VolumeUpSetting" xml:space="preserve">
+        <value>@VolumeUpSetting</value>
+    </data>
 </root>

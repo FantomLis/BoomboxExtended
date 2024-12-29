@@ -1,15 +1,17 @@
-﻿using FantomLis.BoomboxExtended.Utils;
+﻿using FantomLis.BoomboxExtended.Interfaces;
+using FantomLis.BoomboxExtended.Utils;
 using Zorro.Settings;
 
 namespace FantomLis.BoomboxExtended.Settings;
 
 [ContentWarningSetting]
-public class VerboseLoggingSetting : BoolSetting, IExposedSetting
+public class VerboseLoggingSetting : BoolSetting, IDefaultSetting
 {
-    public override void ApplyValue() => LogUtils.LogDebug($"Parameter {GetDisplayName()} is set to {Value}");
+    public override void ApplyValue() => LogUtils.LogDebug($"Parameter {GetDefaultDisplayName()} is set to {Value}");
     protected override bool GetDefaultValue() => false;
 
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
-    public string GetDisplayName() => "Boombox Verbose Log";
+    public string GetDisplayName() => LocalizationStrings.Boombox_VerboseLoggingSetting;
+    public string GetDefaultDisplayName() => "Boombox Verbose Log";
 }
