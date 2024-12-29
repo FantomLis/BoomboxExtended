@@ -117,12 +117,6 @@ namespace FantomLis.BoomboxExtended
                 data.AddDataEntry(onOffEntry);
             }
 
-            if (!data.TryGetEntry(out _lengthEntry))
-            {
-                _lengthEntry = new LengthEntry();
-                data.AddDataEntry(_lengthEntry);
-            }
-
             if (!data.TryGetEntry(out timeEntry))
             {
                 timeEntry = new TimeEntry()
@@ -137,6 +131,12 @@ namespace FantomLis.BoomboxExtended
             {
                 musicEntry = new MusicEntry();
                 data.AddDataEntry(musicEntry);
+            }
+            
+            if (!data.TryGetEntry(out _lengthEntry))
+            {
+                _lengthEntry = new LengthEntry();
+                data.AddDataEntry(_lengthEntry);
             }
 
             if (!data.TryGetEntry(out volumeEntry))
@@ -273,8 +273,8 @@ namespace FantomLis.BoomboxExtended
 
             batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
-            if (Music.clip) {
-                _lengthEntry.UpdateLenght(Music.clip.length); 
+            if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var _c)) {
+                _lengthEntry.UpdateLenght(_c.length); 
                 _lengthEntry.UpdateCurrentPosition(timeEntry.currentTime);
             }
             Music.volume = volumeEntry.GetVolume();
