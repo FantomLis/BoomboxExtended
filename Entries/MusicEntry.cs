@@ -5,8 +5,9 @@ using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;
 
-public class MusicEntry(string musicID = "") : ItemDataEntry, IHaveUIData
+public class MusicEntry(string musicID = "") : BaseEntry, IHaveUIData
 {
+    public override byte ID() => 12;
     private string MusicName = BoomboxLocalization.NoMusicLoaded;
     public string MusicID { private set; get; } = musicID;
     public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);

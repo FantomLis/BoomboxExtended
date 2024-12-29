@@ -3,8 +3,9 @@ using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;
 
-public class VolumeEntry : ItemDataEntry, IHaveUIData
+public class VolumeEntry : BaseEntry, IHaveUIData
 {
+    public override byte ID() => 11;
     public int Volume { get; private set; }
 
     private string VolumeText;
