@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using FantomLis.BoomboxExtended.Utils;
@@ -11,6 +12,7 @@ namespace FantomLis.BoomboxExtended
     {
         private static MusicLoadManager Instance;
         public static Dictionary<string, AudioClip> clips = new ();
+        private static bool isLoading = false;
 
         /// <summary>
         /// Default Root Path from which music is searching
@@ -48,6 +50,8 @@ namespace FantomLis.BoomboxExtended
         /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
         public static IEnumerator LoadMusic(string path)
         {
+            if (isLoading) yield break;
+            isLoading = true;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -71,20 +75,33 @@ namespace FantomLis.BoomboxExtended
 
                     if (loader.error == null)
                     {
-                        AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
-                        if (clip && clip.loadState == AudioDataLoadState.Loaded)
+                        try
                         {
-                            clip.name = Path.GetFileNameWithoutExtension(file);
-                            clips.Add(clip.name,clip);
+                            AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
+                            if (clip && clip.loadState == AudioDataLoadState.Loaded && clip.length != 0)
+                            {
+                                clip.name = Path.GetFileNameWithoutExtension(file);
+                                if (!clips.TryAdd(clip.name, clip)) yield break;  // unintended behaviour cancellation
 
-                            LogUtils.LogInfo($"Song Loaded: {clip.name}");
-                            AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert, MoneyCellUI.MoneyCellType.Revenue, clip.name);
+                                LogUtils.LogInfo($"Song Loaded: {clip.name}");
+                                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                                    MoneyCellUI.MoneyCellType.Revenue, clip.name);
+                            }
                         }
+                        catch (Exception ex)
+                        {
+                            LogUtils.LogError(ex);
+                        }
+                    }
+                    else
+                    {
+                        LogUtils.LogWarning($"Failed to load file {file}: ({loader.error})");
                     }
                 }
             }
             LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
             AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins, string.Format(BoomboxLocalization.MusicLoadedAlertDesc, clips.Count.ToString()), dropQueuedAlert:true);
+            isLoading = false;
         }
 
         private static AudioType GetAudioType(string path)
