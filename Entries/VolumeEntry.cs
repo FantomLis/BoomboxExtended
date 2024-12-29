@@ -6,7 +6,6 @@ namespace FantomLis.BoomboxExtended.Entries;
 public class VolumeEntry : BaseEntry, IHaveUIData
 {
     public VolumeEntry(){}
-    public override byte ID() => 11;
     public int Volume { get; private set; }
 
     private string VolumeText;

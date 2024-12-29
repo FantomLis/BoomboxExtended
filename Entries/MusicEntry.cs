@@ -8,7 +8,6 @@ namespace FantomLis.BoomboxExtended.Entries;
 public class MusicEntry(string musicID = "") : BaseEntry, IHaveUIData
 {
     public MusicEntry() : this("") {}
-    public override byte ID() => 12;
     private string MusicName = BoomboxLocalization.NoMusicLoaded;
     public string MusicID { private set; get; } = musicID;
     public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);

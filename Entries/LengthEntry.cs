@@ -33,7 +33,5 @@ public class LengthEntry: BaseEntry, IHaveUIData
         CurrentPosition = binaryDeserializer.ReadFloat();
     }
 
-    public override byte ID() => 13;
-
     public string GetString() => $"Test: {GetPercent*100f:0}";
 }
