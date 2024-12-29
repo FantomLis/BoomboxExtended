@@ -1,0 +1,89 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BatteryCapacitySetting" xml:space="preserve">
+        <value>Заряд аккумулятора бумбокса (-1 для бесконечного) </value>
+    </data>
+    <data name="BoomboxName" xml:space="preserve">
+        <value>Бумбокс</value>
+    </data>
+    <data name="BoomboxPriceSetting" xml:space="preserve">
+        <value>Цена бумбокса</value>
+    </data>
+    <data name="BoomboxVolume" xml:space="preserve">
+        <value>Громкость</value>
+    </data>
+    <data name="ClickSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Сменить Музыку</value>
+    </data>
+    <data name="MusicLoadedAlert" xml:space="preserve">
+        <value>Загрузка музыки завершена!</value>
+    </data>
+    <data name="MusicLoadedAlertDesc" xml:space="preserve">
+        <value>Загружено {0} файлов</value>
+    </data>
+    <data name="MusicSelectionMethodSetting" xml:space="preserve">
+        <value>Метод выбора музыки</value>
+    </data>
+    <data name="ScrollSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Листать музыку</value>
+    </data>
+    <data name="SelectionMethod_Default" xml:space="preserve">
+        <value>Стандартное</value>
+    </data>
+    <data name="SelectionMethod_Original" xml:space="preserve">
+        <value>Оригинальное</value>
+    </data>
+    <data name="SelectionMethod_ScrollWheel" xml:space="preserve">
+        <value>Колесо мыши</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIMouse" xml:space="preserve">
+        <value>Интерфейс (мышь)</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIScroll" xml:space="preserve">
+        <value>Интерфейс (колесо мыши)</value>
+    </data>
+    <data name="SingleSongLoadedAlert" xml:space="preserve">
+        <value>Музыка загружена</value>
+    </data>
+    <data name="UISwitchToolTip" xml:space="preserve">
+        <value>[{key}] Открыть интерфейс</value>
+    </data>
+    <data name="UseToolTip" xml:space="preserve">
+        <value>[{key}] Воспроизвести</value>
+    </data>
+    <data name="VerboseLoggingSetting" xml:space="preserve">
+        <value>Подробный лог бумбокса</value>
+    </data>
+    <data name="VolumeDownSetting" xml:space="preserve">
+        <value>Снизить громкость музыки</value>
+    </data>
+    <data name="VolumeUpSetting" xml:space="preserve">
+        <value>Повысить громкость музыки</value>
+    </data>
+    <data name="VolumeDownToolTip" xml:space="preserve">
+        <value>[{key}] Снизить громкость</value>
+    </data>
+    <data name="VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] Повысить громкость</value>
+    </data>
+    <data name="NoMusicLoaded" xml:space="preserve">
+        <value>Нету загруженной музыки</value>
+    </data>
+    <data name="NoMusicHelmetAlert" xml:space="preserve">
+        <value>Нет музыки</value>
+    </data>
+    <data name="NoLocalizationStringError" xml:space="preserve">
+        <value>Failed to load localization ({0})</value>
+    </data>
+</root>
