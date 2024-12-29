@@ -13,7 +13,7 @@ public class ItemInstanceDataPatch
     static List<Type> BaseEntries = AppDomain.CurrentDomain.GetAssemblies()
         .SelectMany(assembly => assembly.GetTypes())
         .Where(type => type.IsSubclassOf(typeof(BaseEntry))).ToList();
-    static List<BaseEntry> BaseEntriesInstance = BaseEntries.Select(x => (BaseEntry) Activator.CreateInstance(x)).ToList();
+    static List<BaseEntry> BaseEntriesInstance = BaseEntries.Select(x => (BaseEntry) Activator.CreateInstance(x, true)).ToList();
 
     [HarmonyFinalizer]
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryIdentifier))]

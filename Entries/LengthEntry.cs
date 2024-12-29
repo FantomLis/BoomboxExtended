@@ -5,6 +5,7 @@ namespace FantomLis.BoomboxExtended.Entries;
 
 public class LengthEntry: BaseEntry, IHaveUIData
 {
+    public LengthEntry() {}
     public float Lenght { get; private set; }
     public float CurrentPosition { get; private set; }
     public float GetPercent => CurrentPosition / Lenght;
