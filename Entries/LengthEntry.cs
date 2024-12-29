@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using FantomLis.BoomboxExtended.Utils;
 using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;
@@ -34,9 +35,6 @@ public class LengthEntry: BaseEntry, IHaveUIData
         CurrentPosition = binaryDeserializer.ReadFloat();
     }
 
-    private string ToMinSecTime(float time)
-    {
-        return $"{(int)time / 60:00}:{(int)time % 60:00}";
-    }
-    public string GetString() => $"{ToMinSecTime(CurrentPosition)}/{ToMinSecTime(Lenght)}";
+    
+    public string GetString() => $"{TimeUtils.ToMinSecTime(CurrentPosition)}/{TimeUtils.ToMinSecTime(Lenght)}";
 }
