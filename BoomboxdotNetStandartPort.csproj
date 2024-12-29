@@ -229,13 +229,15 @@
       </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Locales Include="$(OutputPath)\en\**;$(OutputPath)\ru\**;" />
+        <LocalesEN Include="$(OutputPath)\en\**" />
+        <LocalesRU Include="$(OutputPath)\ru\**" />
     </ItemGroup>
     <!-- Works only on my pc now -->
     <Target Name="CopyOutputFileToGame" AfterTargets="Build">
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll;Resources/preview.png;boombox.assetBundle;" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG" />
     </Target>
-    <!--<Target Name="CopyOutputFolderToGame" AfterTargets="Build">
-        <Copy SourceFiles="@(Locales)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\locales" />
-    </Target>-->
+    <Target Name="CopyOutputFolderToGame" AfterTargets="Build">
+        <Copy SourceFiles="@(LocalesEN)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\en" />
+        <Copy SourceFiles="@(LocalesRU)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\ru" />
+    </Target>
 </Project>
