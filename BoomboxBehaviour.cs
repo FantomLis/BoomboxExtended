@@ -80,6 +80,7 @@ namespace FantomLis.BoomboxExtended
             lastChangeTime = Time.time;
             musicEntry.UpdateMusicName();
             Music.clip = MusicLoadManager.clips[musicEntry.MusicID];
+            _lengthEntry.UpdateLenght(Music.clip.length);
             Music.time = timeEntry.currentTime;
         }
 
@@ -257,7 +258,6 @@ namespace FantomLis.BoomboxExtended
                 if (flag && MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var clip))
                 {
                     Music.clip = clip;
-                    _lengthEntry.UpdateLenght(clip.length);
                     Music.time = timeEntry.currentTime;
                     Music.Play();
                 }
@@ -273,7 +273,10 @@ namespace FantomLis.BoomboxExtended
 
             batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
-            _lengthEntry.UpdateCurrentPosition(timeEntry.currentTime);
+            if (Music.clip) {
+                _lengthEntry.UpdateLenght(Music.clip.length); 
+                _lengthEntry.UpdateCurrentPosition(timeEntry.currentTime);
+            }
             Music.volume = volumeEntry.GetVolume();
 
             #endregion
