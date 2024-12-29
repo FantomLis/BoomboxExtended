@@ -1,7 +1,6 @@
 ﻿using System;
 using FantomLis.BoomboxExtended.Entries;
 using HarmonyLib;
-using UnityEngine;
 
 namespace FantomLis.BoomboxExtended.Patches;
 [HarmonyPatch(typeof(ItemInstanceData))]

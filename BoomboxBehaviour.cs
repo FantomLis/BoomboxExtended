@@ -1,12 +1,9 @@
-﻿using Photon.Pun;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FantomLis.BoomboxExtended.Entries;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
-using Sirenix.Utilities;
+using Photon.Pun;
 using UnityEngine;
-using Zorro.ControllerSupport;
 
 namespace FantomLis.BoomboxExtended
 {

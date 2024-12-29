@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FantomLis.BoomboxExtended.Interfaces;
 using FantomLis.BoomboxExtended.Utils;
-using UnityEngine.UIElements;
 using Zorro.Settings;
 
 namespace FantomLis.BoomboxExtended.Settings;

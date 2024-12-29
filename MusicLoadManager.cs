@@ -1,11 +1,7 @@
-﻿using System;
-using BepInEx;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using FantomLis.BoomboxExtended.Utils;
-using MyceliumNetworking;
-using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
 

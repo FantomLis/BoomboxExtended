@@ -1,26 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Logging;
-using HarmonyLib;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
+using HarmonyLib;
 using MyceliumNetworking;
 using UnityEngine;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
-using UnityEngine.Serialization;
 using Zorro.Core;
-using Zorro.UI.Modal;
-
 
 namespace FantomLis.BoomboxExtended
 {
