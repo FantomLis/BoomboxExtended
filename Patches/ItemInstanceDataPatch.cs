@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using FantomLis.BoomboxExtended.Entries;
 using HarmonyLib;
 
@@ -11,10 +14,10 @@ public class ItemInstanceDataPatch
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryIdentifier))]
     static Exception GetEntryIdentifier(Exception __exception,System.Type type,ref byte __result)
     {
-        if (type == typeof (MusicEntry))
-            __result = 11;
-        else if (type == typeof (VolumeEntry))
-            __result = 12;
+        List<Type> BaseEntries = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type.IsSubclassOf(typeof(BaseEntry))).ToList();
+        if (BaseEntries.Contains(type)) __result = ((BaseEntry)Activator.CreateInstance(type)).ID();
         else if (__exception != null) throw __exception;
         return null;
     }
@@ -23,16 +26,12 @@ public class ItemInstanceDataPatch
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryType))]
     public static Exception GetEntryType(Exception __exception,byte identifier, ref ItemDataEntry __result)
     {
-        switch (identifier)
-        {
-            case 11:
-                __result = (ItemDataEntry) new MusicEntry();break;
-            case 12:
-                __result = (ItemDataEntry) new VolumeEntry();break;
-            default: 
-                if (__exception != null) throw __exception;
-                break;
-        }
+        List<BaseEntry> BaseEntriesInstance = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type.IsSubclassOf(typeof(BaseEntry))).Select(x => (BaseEntry) Activator.CreateInstance(x)).ToList();
+        if (BaseEntriesInstance.Exists(x => x.ID() == identifier))
+            __result = BaseEntriesInstance.Find(x => x.ID() == identifier);
+        if (__exception != null) throw __exception;
         return null;
     }
 }
