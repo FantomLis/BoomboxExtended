@@ -78,7 +78,25 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @Boombox_ScrollSwitchMusicToolTip.
+        ///   Looks up a localized string similar to @MusicLoadedAlert.
+        /// </summary>
+        internal static string Boombox_MusicLoadedAlert {
+            get {
+                return ResourceManager.GetString("Boombox_MusicLoadedAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @MusicLoadedAlertDesc {0}.
+        /// </summary>
+        internal static string Boombox_MusicLoadedAlertDesc {
+            get {
+                return ResourceManager.GetString("Boombox_MusicLoadedAlertDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{key}] @Boombox_ScrollSwitchToolTip.
         /// </summary>
         internal static string Boombox_ScrollSwitchToolTip {
             get {
@@ -128,6 +146,15 @@ namespace FantomLis.BoomboxExtended {
         internal static string Boombox_SelectionMethod_SelectionUIScroll {
             get {
                 return ResourceManager.GetString("Boombox_SelectionMethod_SelectionUIScroll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @SingleSongLoadedAlert.
+        /// </summary>
+        internal static string Boombox_SingleSongLoadedAlert {
+            get {
+                return ResourceManager.GetString("Boombox_SingleSongLoadedAlert", resourceCulture);
             }
         }
         

@@ -24,6 +24,8 @@
     <data name="Boombox_ClickSwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_ClickSwitchToolTip</value>
     </data>
+    <data name="Boombox_MusicLoadedAlert" xml:space="preserve">
+        <value>@MusicLoadedAlert</value>
     </data>
     <data name="Boombox_ScrollSwitchToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_ScrollSwitchToolTip</value>
@@ -57,5 +59,11 @@
     </data>
     <data name="Boombox_VolumeUpToolTip" xml:space="preserve">
         <value>[{key}] @Boombox_VolumeUpToolTip</value>
+    </data>
+    <data name="Boombox_MusicLoadedAlertDesc" xml:space="preserve">
+        <value>@MusicLoadedAlertDesc {0}</value>
+    </data>
+    <data name="Boombox_SingleSongLoadedAlert" xml:space="preserve">
+        <value>@SingleSongLoadedAlert</value>
     </data>
 </root>

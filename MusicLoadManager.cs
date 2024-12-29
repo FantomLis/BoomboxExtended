@@ -57,7 +57,7 @@ namespace FantomLis.BoomboxExtended
                 Directory.CreateDirectory(path);
             }
             clips.Clear();
-            AlertUtils.DropQueuedMoneyCellAlert("Loaded music");
+            AlertUtils.DropQueuedMoneyCellAlert(LocalizationStrings.Boombox_MusicLoadedAlert);
             foreach (string file in Directory.GetFiles(path))
             {
                 if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
@@ -81,14 +81,14 @@ namespace FantomLis.BoomboxExtended
                             clip.name = Path.GetFileNameWithoutExtension(file);
                             clips.Add(clip.name,clip);
 
-                            LogUtils.LogInfo($"Music Loaded: {clip.name}");
-                            AlertUtils.AddMoneyCellAlert("Loaded music", MoneyCellUI.MoneyCellType.Revenue, clip.name);
+                            LogUtils.LogInfo($"Song Loaded: {clip.name}");
+                            AlertUtils.AddMoneyCellAlert(LocalizationStrings.Boombox_SingleSongLoadedAlert, MoneyCellUI.MoneyCellType.Revenue, clip.name);
                         }
                     }
                 }
             }
-            LogUtils.LogInfo($"Music loading finished!");
-            AlertUtils.AddMoneyCellAlert("Loading music finished!", MoneyCellUI.MoneyCellType.MetaCoins, $"Loaded {clips.Count.ToString()} music files", dropQueuedAlert:true);
+            LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
+            AlertUtils.AddMoneyCellAlert(LocalizationStrings.Boombox_MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins, string.Format(LocalizationStrings.Boombox_MusicLoadedAlertDesc, clips.Count.ToString()), dropQueuedAlert:true);
         }
 
         private static AudioType GetAudioType(string path)
