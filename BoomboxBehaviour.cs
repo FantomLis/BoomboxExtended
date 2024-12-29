@@ -74,14 +74,17 @@ namespace FantomLis.BoomboxExtended
 
         private void _updateMusic()
         {
-            timeEntry.currentTime = 0;
-            timeEntry.SetDirty();
-            Click.Play();
-            lastChangeTime = Time.time;
-            musicEntry.UpdateMusicName();
-            Music.clip = MusicLoadManager.clips[musicEntry.MusicID];
-            _lengthEntry.UpdateLenght(Music.clip.length);
-            Music.time = timeEntry.currentTime;
+            if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var c))
+            {
+                timeEntry.currentTime = 0;
+                timeEntry.SetDirty();
+                Click.Play();
+                lastChangeTime = Time.time;
+                musicEntry.UpdateMusicName();
+                Music.clip = c;
+                _lengthEntry.UpdateLenght(c.length);
+                _lengthEntry.UpdateLenght(Music.clip.length);
+            Music.time = timeEntry.currentTime;}
         }
 
         void Awake()
@@ -245,6 +248,12 @@ namespace FantomLis.BoomboxExtended
                         Click.Play();
                     }
                 }
+
+                musicEntry.UpdateMusicName();
+                if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var _c)) {
+                    _lengthEntry.UpdateLenght(_c.length); 
+                    if (_c == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
+                }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
                 onOffEntry.on = false;
@@ -273,10 +282,6 @@ namespace FantomLis.BoomboxExtended
 
             batteryEntry.m_charge -= (flag && Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge >= 0f ? Time.deltaTime : 0);
             timeEntry.currentTime = Music.time;
-            if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var _c)) {
-                _lengthEntry.UpdateLenght(_c.length); 
-                _lengthEntry.UpdateCurrentPosition(timeEntry.currentTime);
-            }
             Music.volume = volumeEntry.GetVolume();
 
             #endregion
