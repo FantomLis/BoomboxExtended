@@ -11,13 +11,13 @@ public class LengthEntry: BaseEntry, IHaveUIData
     public float GetPercent => CurrentPosition / Lenght;
     public void UpdateLenght(float length)
     {
-        if (Lenght <= 0) throw new ArgumentException($"Length should be more than 0.");
+        if (length <= 0) throw new ArgumentException($"Length should be more than 0.");
         Lenght = length;
     }
     
     public void UpdateCurrentPosition(float pos)
     {
-        if (Lenght < 0) throw new ArgumentException($"Position should be more or equals 0.");
+        if (pos < 0) throw new ArgumentException($"Position should be more or equals 0.");
         CurrentPosition = pos;
     }
 
