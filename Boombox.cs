@@ -155,7 +155,7 @@ namespace FantomLis.BoomboxExtended
 
             #endregion
             
-            LogUtils.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {BoomboxMethod}, Boombox Price {CurrentBoomboxPrice}");
+            LogUtils.LogDebug($"Boombox loaded with settings: Battery capacity: {BatteryCapacity.Value}, Music Selection method: {((MusicSelectionMethodSetting.BoomboxMusicSelectionMethod)BoomboxMethod.Value).ToString()}, Boombox Price {CurrentBoomboxPrice}");
         }
 
         private static void LoadBoombox()
