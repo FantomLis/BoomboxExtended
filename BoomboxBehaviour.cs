@@ -295,7 +295,7 @@ namespace FantomLis.BoomboxExtended
 
         public VolumeEntry(int vol = 50)
         {
-            VolumeText = $"{{0}}% {LocalizationStrings.Boombox_Volume}";
+            VolumeText = $"{{0}}% {BoomboxLocalization.BoomboxVolume}";
             Volume = Math.Clamp(vol, 0, 100);
         }
 

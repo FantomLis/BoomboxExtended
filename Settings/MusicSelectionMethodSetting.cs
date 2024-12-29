@@ -27,11 +27,11 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
-    public string GetDisplayName() => LocalizationStrings.Boombox_MusicSelectionMethodSetting;
+    public string GetDisplayName() => BoomboxLocalization.MusicSelectionMethodSetting;
     public string GetDefaultDisplayName() => "Boombox Music Selection Method";
     public override void ApplyValue() => UpdateValueActionList.ForEach(x => x.Invoke(this));
 
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
-    public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList().Select(x => LocalizationStrings.ResourceManager.GetString("Boombox_SelectionMethod"+x) ?? string.Format(LocalizationStrings.Boombox_NoLocalizationStringError, x)).ToList();
+    public override List<string> GetChoices() => Enum.GetNames(typeof(BoomboxMusicSelectionMethod)).ToList().Select(x => BoomboxLocalization.ResourceManager.GetString("SelectionMethod_"+x) ?? string.Format(BoomboxLocalization.NoLocalizationStringError, x)).ToList();
 }

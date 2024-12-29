@@ -13,6 +13,6 @@ public class BatteryCapacitySetting : FloatSetting, IDefaultSetting
     public static float DefaultValue() => 250f;
     protected override float2 GetMinMaxValue() => new float2(-1, 1000);
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
-    public string GetDisplayName() => LocalizationStrings.Boombox_BatteryCapacitySetting;
+    public string GetDisplayName() => BoomboxLocalization.BatteryCapacitySetting;
     public string GetDefaultDisplayName() => "Battery Capacity (-1 to infinite)";
 }

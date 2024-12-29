@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BoomboxName" xml:space="preserve">
+        <value>@BoomboxName</value>
+    </data>
+    <data name="ClickSwitchToolTip" xml:space="preserve">
+        <value>[{key}] @ClickSwitchToolTip</value>
+    </data>
+    <data name="MusicLoadedAlert" xml:space="preserve">
+        <value>@MusicLoadedAlert</value>
+    </data>
+    <data name="ScrollSwitchToolTip" xml:space="preserve">
+        <value>[{key}] @ScrollSwitchToolTip</value>
+    </data>
+    <data name="SelectionMethod_Default" xml:space="preserve">
+        <value>@SM_Default</value>
+    </data>
+    <data name="SelectionMethod_Original" xml:space="preserve">
+        <value>@SM_Original</value>
+    </data>
+    <data name="SelectionMethod_ScrollWheel" xml:space="preserve">
+        <value>@SM_ScrollWheel</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIMouse" xml:space="preserve">
+        <value>@SM_SelectionUINoScroll</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIScroll" xml:space="preserve">
+        <value>@SM_SelectionUI</value>
+    </data>
+    <data name="UISwitchToolTip" xml:space="preserve">
+        <value>[{key}] @UISwitchToolTip</value>
+    </data>
+    <data name="UseToolTip" xml:space="preserve">
+        <value>[{key}] @UseToolTip</value>
+    </data>
+    <data name="BoomboxVolume" xml:space="preserve">
+        <value>@BoomboxVolume</value>
+    </data>
+    <data name="VolumeDownToolTip" xml:space="preserve">
+        <value>[{key}] @VolumeDownToolTip</value>
+    </data>
+    <data name="VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] @VolumeUpToolTip</value>
+    </data>
+    <data name="MusicLoadedAlertDesc" xml:space="preserve">
+        <value>@MusicLoadedAlertDesc {0}</value>
+    </data>
+    <data name="SingleSongLoadedAlert" xml:space="preserve">
+        <value>@SingleSongLoadedAlert</value>
+    </data>
+    <data name="NoLocalizationStringError" xml:space="preserve">
+        <value>@NoLocalizationStringError {0}</value>
+    </data>
+    <data name="BatteryCapacitySetting" xml:space="preserve">
+        <value>@BatteryCapacitySetting</value>
+    </data>
+    <data name="BoomboxPriceSetting" xml:space="preserve">
+        <value>@BoomboxPriceSetting</value>
+    </data>
+    <data name="VerboseLoggingSetting" xml:space="preserve">
+        <value>@VerboseLoggingSetting</value>
+    </data>
+    <data name="MusicSelectionMethodSetting" xml:space="preserve">
+        <value>@MusicSelectionMethodSetting</value>
+    </data>
+    <data name="VolumeDownSetting" xml:space="preserve">
+        <value>@VolumeDownSetting</value>
+    </data>
+    <data name="VolumeUpSetting" xml:space="preserve">
+        <value>@VolumeUpSetting</value>
+    </data>
+</root>

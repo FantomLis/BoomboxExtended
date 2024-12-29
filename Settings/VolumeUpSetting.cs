@@ -16,6 +16,6 @@ public class VolumeUpSetting : KeyCodeSetting, IDefaultSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.MouseKeyboard;
 
-    public string GetDisplayName() => LocalizationStrings.Boombox_VolumeUpSetting;
+    public string GetDisplayName() => BoomboxLocalization.VolumeUpSetting;
     public string GetDefaultDisplayName() => "Boombox Volume Up Key";
 }

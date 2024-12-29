@@ -15,7 +15,7 @@ public class TooltipPatch
     {
         if (__instance.name.ToLower().Trim().Equals(Boombox.ItemName.ToLower()))
         {
-            __result = LocalizationStrings.Boombox;
+            __result = BoomboxLocalization.BoomboxName;
             return;
         }
 
@@ -37,21 +37,21 @@ public class TooltipPatch
                     ControllerGlyphs.GlyphType.ZoomIn]);
             var useText = Boombox.CurrentBoomboxMethod() switch
             {
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll => LocalizationStrings.Boombox_UISwitchToolTip,
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default => LocalizationStrings.Boombox_UISwitchToolTip,
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse => LocalizationStrings.Boombox_UISwitchToolTip, 
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel => LocalizationStrings.Boombox_ScrollSwitchToolTip,
-                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original => LocalizationStrings.Boombox_ClickSwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll => BoomboxLocalization.UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default => BoomboxLocalization.UISwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse => BoomboxLocalization.UISwitchToolTip, 
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel => BoomboxLocalization.ScrollSwitchToolTip,
+                MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Original => BoomboxLocalization.ClickSwitchToolTip,
                 _ => string.Empty
             };
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_UseToolTip, 
+            x.Add(new ItemKeyTooltip(BoomboxLocalization.UseToolTip, 
                 new HardcodedPrompt(ControllerGlyphs.GetSprite(0)), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.UseItem])));
             x.Add(new ItemKeyTooltip(useText, usePrompt, 
                 useGlyphTypes));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeUpToolTip, new HardcodedPrompt("["+((KeyCode)Boombox.VolumeUpKey.Value).ToString()+"]"), 
+            x.Add(new ItemKeyTooltip(BoomboxLocalization.VolumeUpToolTip, new HardcodedPrompt("["+((KeyCode)Boombox.VolumeUpKey.Value).ToString()+"]"), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
-            x.Add(new ItemKeyTooltip(LocalizationStrings.Boombox_VolumeDownToolTip, new HardcodedPrompt(("["+(KeyCode)Boombox.VolumeDownKey.Value).ToString()+"]"), 
+            x.Add(new ItemKeyTooltip(BoomboxLocalization.VolumeDownToolTip, new HardcodedPrompt(("["+(KeyCode)Boombox.VolumeDownKey.Value).ToString()+"]"), 
                 new List<ControllerGlyphs.GlyphType>([ControllerGlyphs.GlyphType.Interact])));
             __result = x;
             return;

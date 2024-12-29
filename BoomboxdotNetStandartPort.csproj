@@ -430,23 +430,23 @@
     </ItemGroup>
       <ItemGroup>
         <Compile Update="Localization.Designer.cs">
-        <DependentUpon>LocalizationStrings.resx</DependentUpon>
+        <DependentUpon>BoomboxLocalization.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
       </Compile>
-        <Compile Update="LocalizationStrings.Designer.cs">
+        <Compile Update="BoomboxLocalization.Designer.cs">
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
-          <DependentUpon>LocalizationStrings.resx</DependentUpon>
+          <DependentUpon>BoomboxLocalization.resx</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
         <Locales Include="$(OutputPath)\en\**"/>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Update="LocalizationStrings.resx">
+      <EmbeddedResource Update="BoomboxLocalization.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
+        <LastGenOutput>BoomboxLocalization.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
     <!-- Works only on my pc now -->

@@ -16,6 +16,6 @@ public class VolumeDownSetting : KeyCodeSetting, IDefaultSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.MouseKeyboard;
 
-    public string GetDisplayName() => LocalizationStrings.Boombox_VolumeDownToolTip;
+    public string GetDisplayName() => BoomboxLocalization.VolumeDownSetting;
     public string GetDefaultDisplayName() => "Boombox Volume Down Key";
 }

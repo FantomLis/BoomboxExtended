@@ -185,7 +185,7 @@ namespace FantomLis.BoomboxExtended
 
         private void LoadLanguages()
         {
-            LocalizationStrings.Culture = CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID);
+            BoomboxLocalization.Culture = CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID);
         }
         
         public static AssetBundle QuickLoadAssetBundle(string name)

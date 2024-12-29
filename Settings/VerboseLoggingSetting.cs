@@ -12,6 +12,6 @@ public class VerboseLoggingSetting : BoolSetting, IDefaultSetting
 
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
-    public string GetDisplayName() => LocalizationStrings.Boombox_VerboseLoggingSetting;
+    public string GetDisplayName() => BoomboxLocalization.VerboseLoggingSetting;
     public string GetDefaultDisplayName() => "Boombox Verbose Log";
 }

@@ -13,6 +13,6 @@ public class BoomboxPriceSetting : IntSetting, IDefaultSetting
 
     public override int GetDefaultValue() => 100;
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
-    public string GetDisplayName() => LocalizationStrings.Boombox_BoomboxPriceSetting;
+    public string GetDisplayName() => BoomboxLocalization.BoomboxPriceSetting;
     public string GetDefaultDisplayName() => "Boombox Price";
 }
