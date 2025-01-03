@@ -55,17 +55,6 @@ public class MusicEntry(string musicID = "") : BaseEntry, IHaveUIData
 
     private string GetDisplayName(string name)
     {
-        int length;
-        if ((length = name.LastIndexOf('.')) != -1)
-        {
-            name = name.Substring(0, length);
-        }
-
-        if (name.Length > 29) {
-            name = name.Substring(0, 29);
-            name = name + "...";
-        }
-
-        return name;
+        return name.Length > 29 ? name.Substring(0, 29)+ "..." : name;
     }
 }
