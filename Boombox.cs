@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
@@ -169,7 +170,12 @@ namespace FantomLis.BoomboxExtended
             }
         }
         
-        public static void RegisterBoomboxAsArtifact() => RoundArtifactSpawner.me.possibleSpawns = RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
+        public static void RegisterBoomboxAsArtifact()
+        {
+            if (RoundArtifactSpawner.me && !RoundArtifactSpawner.me.possibleSpawns.Contains(BoomboxItem))
+                RoundArtifactSpawner.me.possibleSpawns =
+                RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
+        }
 
         private void LoadLanguages()
         {
