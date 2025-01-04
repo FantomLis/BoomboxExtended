@@ -11,4 +11,79 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
+    <data name="BatteryCapacitySetting" xml:space="preserve">
+        <value>Заряд акумулятора бумбокса (-1 для нескінченного) </value>
+    </data>
+    <data name="BoomboxName" xml:space="preserve">
+        <value>Бумбокс</value>
+    </data>
+    <data name="BoomboxPriceSetting" xml:space="preserve">
+        <value>Ціна бумбокса</value>
+    </data>
+    <data name="BoomboxVolume" xml:space="preserve">
+        <value>Громкість</value>
+    </data>
+    <data name="ClickSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Змінити Музику</value>
+    </data>
+    <data name="MusicLoadedAlert" xml:space="preserve">
+        <value>Завантаження музики завершено!</value>
+    </data>
+    <data name="MusicLoadedAlertDesc" xml:space="preserve">
+        <value>Завантажено {0} файлів</value>
+    </data>
+    <data name="MusicSelectionMethodSetting" xml:space="preserve">
+        <value>Метод вибору музики</value>
+    </data>
+    <data name="NoLocalizationStringError" xml:space="preserve">
+        <value>Failed to load localization ({0})</value>
+    </data>
+    <data name="NoMusicHelmetAlert" xml:space="preserve">
+        <value>Немає музики</value>
+    </data>
+    <data name="NoMusicLoaded" xml:space="preserve">
+        <value>Немає завантаженої музики</value>
+    </data>
+    <data name="ScrollSwitchToolTip" xml:space="preserve">
+        <value>[{key}] Гортати музику</value>
+    </data>
+    <data name="SelectionMethod_Default" xml:space="preserve">
+        <value>Стандартне</value>
+    </data>
+    <data name="SelectionMethod_Original" xml:space="preserve">
+        <value>Оригінальне</value>
+    </data>
+    <data name="SelectionMethod_ScrollWheel" xml:space="preserve">
+        <value>Колесо миші</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIMouse" xml:space="preserve">
+        <value>Інтерфейс (миша)</value>
+    </data>
+    <data name="SelectionMethod_SelectionUIScroll" xml:space="preserve">
+        <value>Інтерфейс (колесо миші)</value>
+    </data>
+    <data name="SingleSongLoadedAlert" xml:space="preserve">
+        <value>Музика завантажена</value>
+    </data>
+    <data name="UISwitchToolTip" xml:space="preserve">
+        <value>[{key}] Відкрити інтерфейс</value>
+    </data>
+    <data name="UseToolTip" xml:space="preserve">
+        <value>[{key}] Відтворити</value>
+    </data>
+    <data name="VerboseLoggingSetting" xml:space="preserve">
+        <value>Докладний лог бумбоксу</value>
+    </data>
+    <data name="VolumeDownSetting" xml:space="preserve">
+        <value>Знизити громкість музики</value>
+    </data>
+    <data name="VolumeUpSetting" xml:space="preserve">
+        <value>Підвищити громкість музики</value>
+    </data>
+    <data name="VolumeDownToolTip" xml:space="preserve">
+        <value>[{key}] Знизити громкість</value>
+    </data>
+    <data name="VolumeUpToolTip" xml:space="preserve">
+        <value>[{key}] Підвищити громкість</value>
+    </data>
 </root>
