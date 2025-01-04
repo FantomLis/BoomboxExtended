@@ -3,7 +3,7 @@
 namespace FantomLis.BoomboxExtended.Patches;
 
 [HarmonyPatch(typeof(RoundArtifactSpawner))]
-public static class RoundArtifactSpawnerPatch
+internal static class RoundArtifactSpawnerPatch
 {
     [HarmonyPatch("Awake")]
     [HarmonyPostfix]

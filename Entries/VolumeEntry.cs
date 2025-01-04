@@ -20,7 +20,15 @@ public class VolumeEntry : BaseEntry, IHaveUIData
         SetDirty();
     }
 
+    /// <summary>
+    /// Decrease volume
+    /// </summary>
+    /// <param name="vol">How much decrease volume</param>
     public void MinusVolume(int vol) => UpdateVolume(Volume - vol);
+    /// <summary>
+    /// Increase volume
+    /// </summary>
+    /// <param name="vol">How much increase volume</param>
     public void PlusVolume(int vol) => UpdateVolume(Volume + vol);
 
     public VolumeEntry(int vol = 50)

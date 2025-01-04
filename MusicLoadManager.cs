@@ -10,14 +10,14 @@ namespace FantomLis.BoomboxExtended
 {
     public class MusicLoadManager : MonoBehaviour
     {
-        private static MusicLoadManager Instance;
+        private static MusicLoadManager? Instance;
         public static Dictionary<string, AudioClip> clips = new ();
         private static bool isLoading = false;
 
         /// <summary>
         /// Default Root Path from which music is searching
         /// </summary>
-        public static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
+        internal static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
         private new static Coroutine StartCoroutine(IEnumerator enumerator)
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
@@ -37,18 +37,7 @@ namespace FantomLis.BoomboxExtended
             if (reloadAllSongs) clips.Clear();
             StartCoroutine(LoadMusic(path));
         }
-        
-        /*
-        /// <summary>
-        /// Loads music from folder
-        /// </summary>
-        /// <param name="pathToFolder">Path to folder to load music (default: "Custom Song", if player is host)</param>
-        */
-        /*public static IEnumerator LoadMusic(string pathToFolder = "Custom Song")
-        {
-            string path = Path.Combine(Paths.PluginPath, pathToFolder);*/
-        /*if (BoomboxBehaviour.clips.ContainsKey(file)) continue;*/
-        public static IEnumerator LoadMusic(string path)
+        private static IEnumerator LoadMusic(string path)
         {
             if (isLoading) yield break;
             isLoading = true;
@@ -104,7 +93,7 @@ namespace FantomLis.BoomboxExtended
             isLoading = false;
         }
 
-        private static AudioType GetAudioType(string path)
+        public static AudioType GetAudioType(string path)
         {
             var extension = Path.GetExtension(path).ToLower();
 

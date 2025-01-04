@@ -7,7 +7,8 @@ using UnityEngine;
 namespace FantomLis.BoomboxExtended.Patches;
 
 [HarmonyPatch(typeof(Item))]
-public class TooltipPatch
+// Patch to fix localized display name and tooltips for item
+internal class TooltipPatch
 {
     [HarmonyFinalizer]
     [HarmonyPatch(nameof(Item.GetLocalizedDisplayName))]

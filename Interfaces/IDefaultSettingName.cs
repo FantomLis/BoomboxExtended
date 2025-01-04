@@ -1,6 +1,6 @@
 namespace FantomLis.BoomboxExtended.Interfaces;
 
-public interface IDefaultSetting: IExposedSetting
+internal interface IDefaultSetting: IExposedSetting
 {
-    public string GetDefaultDisplayName();
+    internal string GetDefaultDisplayName();
 }

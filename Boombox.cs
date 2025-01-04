@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using BepInEx;
+using BepInEx.Logging;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
 using HarmonyLib;
@@ -24,8 +26,7 @@ namespace FantomLis.BoomboxExtended
 #endif
     {
         public const string ItemName = "Boombox";
-        public static Boombox Self;
-        
+        internal static Boombox Self;
         /// <summary>
         /// Client-only setting, enables verbose logging
         /// <remarks>Always returns true when BepInEx build</remarks>
@@ -126,7 +127,6 @@ namespace FantomLis.BoomboxExtended
             EventRegister();
             LoadConfig();
             LoadBoombox();
-            LogUtils.LogInfo("Music is ready!");
             LogUtils.LogDebug("Loading finished.");
         }
         
@@ -141,7 +141,6 @@ namespace FantomLis.BoomboxExtended
             BatteryCapacity = GameHandler.Instance.SettingsHandler.GetSetting<BatteryCapacitySetting>();
             BoomboxMethod = GameHandler.Instance.SettingsHandler.GetSetting<MusicSelectionMethodSetting>();
             BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
-            IsDebug = GameHandler.Instance.SettingsHandler.GetSetting<VerboseLoggingSetting>().Value;
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
 
@@ -178,7 +177,7 @@ namespace FantomLis.BoomboxExtended
             }
         }
         
-        public static void RegisterBoomboxAsArtifact()
+        internal static void RegisterBoomboxAsArtifact()
         {
             if (RoundArtifactSpawner.me && !RoundArtifactSpawner.me.possibleSpawns.Contains(BoomboxItem))
                 RoundArtifactSpawner.me.possibleSpawns =
@@ -190,7 +189,7 @@ namespace FantomLis.BoomboxExtended
             BoomboxLocalization.Culture = CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID);
         }
         
-        public static AssetBundle QuickLoadAssetBundle(string name)
+        internal static AssetBundle QuickLoadAssetBundle(string name)
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, name);
             return AssetBundle.LoadFromFile(path);

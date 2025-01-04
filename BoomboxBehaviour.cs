@@ -16,8 +16,8 @@ namespace FantomLis.BoomboxExtended
         private OnOffEntry onOffEntry;
         private TimeEntry timeEntry;
         private VolumeEntry volumeEntry;
-        private MusicEntry musicEntry;
-        private LengthEntry _lengthEntry;
+        private MusicNameEntry musicEntry;
+        private PlayerEntry _lengthEntry;
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
@@ -132,13 +132,13 @@ namespace FantomLis.BoomboxExtended
 
             if (!data.TryGetEntry(out musicEntry))
             {
-                musicEntry = new MusicEntry();
+                musicEntry = new MusicNameEntry();
                 data.AddDataEntry(musicEntry);
             }
             
             if (!data.TryGetEntry(out _lengthEntry))
             {
-                _lengthEntry = new LengthEntry();
+                _lengthEntry = new PlayerEntry();
                 data.AddDataEntry(_lengthEntry);
             }
 

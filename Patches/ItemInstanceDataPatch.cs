@@ -7,10 +7,13 @@ using HarmonyLib;
 using UnityEngine;
 
 namespace FantomLis.BoomboxExtended.Patches;
+/// <summary>
+/// Patch to add custom Item Entry using <see cref="BaseEntry"/> type
+/// </summary>
 [HarmonyPatch(typeof(ItemInstanceData))]
 public class ItemInstanceDataPatch
 {
-    private static byte __current_index = 40; // 
+    private static byte __offset_index = 40; // Entry index offset, used when new entry need to be registered, maybe I should use or make external library to patch GetEntry functions
     static List<Type> BaseEntries = AppDomain.CurrentDomain.GetAssemblies()
         .SelectMany(assembly => assembly.GetTypes())
         .Where(type => type.IsSubclassOf(typeof(BaseEntry))).ToList();
@@ -19,7 +22,7 @@ public class ItemInstanceDataPatch
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryIdentifier))]
     static Exception GetEntryIdentifier(Exception __exception,System.Type type,ref byte __result)
     {
-        if (BaseEntries.Contains(type)) __result = ((byte) (__current_index + BaseEntries.IndexOf(type)));
+        if (BaseEntries.Contains(type)) __result = ((byte) (__offset_index + BaseEntries.IndexOf(type)));
         else if (__exception != null) throw __exception;
         return null;
     }
@@ -28,8 +31,8 @@ public class ItemInstanceDataPatch
     [HarmonyPatch(nameof(ItemInstanceData.GetEntryType))]
     public static Exception GetEntryType(Exception __exception,byte identifier, ref ItemDataEntry __result)
     {
-        if (BaseEntries.Count > (identifier-__current_index) && identifier >= __current_index)
-            __result = (ItemDataEntry) Activator.CreateInstance(BaseEntries[identifier-__current_index]);
+        if (BaseEntries.Count > (identifier-__offset_index) && identifier >= __offset_index)
+            __result = (ItemDataEntry) Activator.CreateInstance(BaseEntries[identifier-__offset_index]);
         else if (__exception != null) throw __exception;
         return null;
     }
