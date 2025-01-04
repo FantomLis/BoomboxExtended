@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Globalization;
+using UnityEngine.Localization.Settings;
+
 namespace FantomLis.BoomboxExtended {
     using System;
     
@@ -24,8 +27,9 @@ namespace FantomLis.BoomboxExtended {
     internal class BoomboxLocalization {
         
         private static global::System.Resources.ResourceManager resourceMan;
-        
-        private static global::System.Globalization.CultureInfo resourceCulture;
+
+        private static global::System.Globalization.CultureInfo resourceCulture =>
+            CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID);
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal BoomboxLocalization() {
@@ -55,7 +59,7 @@ namespace FantomLis.BoomboxExtended {
                 return resourceCulture;
             }
             set {
-                resourceCulture = value;
+                
             }
         }
         

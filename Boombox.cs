@@ -82,7 +82,6 @@ namespace FantomLis.BoomboxExtended
             LogUtils.LogDebug("Patching started...");
             Harmony.PatchAll();
             LogUtils.LogDebug("Patching finished.");
-            LoadLanguages();
             LogUtils.LogDebug("Pre-Loading finished.");
             LogUtils.LogInfo("Pre-game load finished!");
         }
@@ -182,11 +181,6 @@ namespace FantomLis.BoomboxExtended
             if (RoundArtifactSpawner.me && !RoundArtifactSpawner.me.possibleSpawns.Contains(BoomboxItem))
                 RoundArtifactSpawner.me.possibleSpawns =
                 RoundArtifactSpawner.me.possibleSpawns.AddRangeToArray([BoomboxItem]);
-        }
-
-        private void LoadLanguages()
-        {
-            BoomboxLocalization.Culture = CultureInfo.GetCultureInfo(LocalizationSettings.SelectedLocale.Identifier.CultureInfo.LCID);
         }
         
         internal static AssetBundle QuickLoadAssetBundle(string name)
