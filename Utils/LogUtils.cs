@@ -7,7 +7,6 @@ namespace FantomLis.BoomboxExtended.Utils;
 public static class LogUtils
 {
     public static readonly string LogSource = Boombox.ItemName;
-    public static bool IsDebug => Boombox.IsDebug;
 
     public enum LogType
     {
@@ -20,10 +19,32 @@ public static class LogUtils
 
     public static void Log(LogType type, string text)
     {
-        if (type == LogType.Debug && !IsDebug) return;
         StringBuilder b = new();
         b.Append($"[{LogSource}:{type.ToString()}] ");
         b.Append(text);
+#if BepInEx 
+        switch (type)
+        {
+            case LogType.Debug:
+                Boombox.Log.LogDebug(b.ToString());
+                break;
+            case LogType.Info:
+                Boombox.Log.LogInfo(b.ToString());
+                break;
+            case LogType.Warning:
+                Boombox.Log.LogWarning(b.ToString());
+                break;
+            case LogType.Error:
+                Boombox.Log.LogError(b.ToString());
+                break;
+            case LogType.Fatal:
+                Boombox.Log.LogFatal(b.ToString());
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+#else
+        if (type == LogType.Debug && !Boombox.IsDebug) return;
         switch (type)
         {
             case LogType.Debug:
@@ -42,6 +63,7 @@ public static class LogUtils
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
+#endif
     }
 
     public static void LogDebug(string text) => Log(LogType.Debug, text);

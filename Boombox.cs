@@ -28,8 +28,13 @@ namespace FantomLis.BoomboxExtended
         
         /// <summary>
         /// Client-only setting, enables verbose logging
+        /// <remarks>Always returns true when BepInEx build</remarks>
         /// </summary>
-        public static bool IsDebug = true;
+        #if !BepInEx
+        public static bool IsDebug => GameHandler.Instance?.SettingsHandler?.GetSetting<VerboseLoggingSetting>().Value ?? false;
+        #else
+        public static bool IsDebug => true;
+        #endif
         /// <summary>
         /// Global setting, sets battery capacity for Boombox in the shop
         /// </summary>
@@ -58,10 +63,15 @@ namespace FantomLis.BoomboxExtended
         
         private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         private static Item BoomboxItem;
-
+#if BepInEx
+        public static ManualLogSource Log;
+#endif
         static Boombox()
         {
             Self = GameObjectUtils.MakeNewDontDestroyOnLoad($"{ItemName}Loader").AddComponent<Boombox>();
+#if BepInEx
+            Log = Self.Logger;
+#endif      
             Self.Awake();
         }
         
