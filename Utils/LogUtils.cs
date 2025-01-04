@@ -19,32 +19,32 @@ public static class LogUtils
 
     public static void Log(LogType type, string text)
     {
-        StringBuilder b = new();
-        b.Append($"[{LogSource}:{type.ToString()}] ");
-        b.Append(text);
 #if BepInEx 
         switch (type)
         {
             case LogType.Debug:
-                Boombox.Log.LogDebug(b.ToString());
+                Boombox.Log.LogDebug(text);
                 break;
             case LogType.Info:
-                Boombox.Log.LogInfo(b.ToString());
+                Boombox.Log.LogInfo(text);
                 break;
             case LogType.Warning:
-                Boombox.Log.LogWarning(b.ToString());
+                Boombox.Log.LogWarning(text);
                 break;
             case LogType.Error:
-                Boombox.Log.LogError(b.ToString());
+                Boombox.Log.LogError(text);
                 break;
             case LogType.Fatal:
-                Boombox.Log.LogFatal(b.ToString());
+                Boombox.Log.LogFatal(text);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 #else
         if (type == LogType.Debug && !Boombox.IsDebug) return;
+        StringBuilder b = new();
+        b.Append($"[{LogSource}:{type.ToString()}] ");
+        b.Append(text);
         switch (type)
         {
             case LogType.Debug:
