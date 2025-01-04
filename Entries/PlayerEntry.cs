@@ -5,12 +5,12 @@ using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;
 
-public class LengthEntry: BaseEntry, IHaveUIData
+public class PlayerEntry: BaseEntry, IHaveUIData
 {
-    public LengthEntry() {}
+    public PlayerEntry() {}
     public float Lenght { get; private set; }
-    public float CurrentPosition { get; private set; }
-    public float GetPercent => CurrentPosition / Lenght;
+    public float Position { get; private set; }
+    public float GetPercent => Position / Lenght;
     public void UpdateLenght(float length)
     {
         if (length <= 0) throw new ArgumentException($"Length should be more than 0.");
@@ -20,21 +20,21 @@ public class LengthEntry: BaseEntry, IHaveUIData
     public void UpdateCurrentPosition(float pos)
     {
         if (pos < 0) throw new ArgumentException($"Position should be more or equals 0.");
-        CurrentPosition = pos;
+        Position = pos;
     }
 
     public override void Serialize(BinarySerializer binarySerializer)
     {
         binarySerializer.WriteFloat(Lenght);
-        binarySerializer.WriteFloat(CurrentPosition);
+        binarySerializer.WriteFloat(Position);
     }
 
     public override void Deserialize(BinaryDeserializer binaryDeserializer)
     {
         Lenght = binaryDeserializer.ReadFloat();
-        CurrentPosition = binaryDeserializer.ReadFloat();
+        Position = binaryDeserializer.ReadFloat();
     }
 
     
-    public string GetString() => $"{TimeUtils.ToMinSecTime(CurrentPosition)}/{TimeUtils.ToMinSecTime(Lenght)}";
+    public string GetString() => $"{TimeUtils.ToMinSecTime(Position)}/{TimeUtils.ToMinSecTime(Lenght)}";
 }

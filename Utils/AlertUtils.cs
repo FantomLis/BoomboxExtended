@@ -9,7 +9,7 @@ namespace FantomLis.BoomboxExtended.Utils;
 
 public class AlertUtils
 {
-    protected static List<MoneyCellAlertContainer> MoneyCellAlertQueue = new();
+    private static List<MoneyCellAlertContainer> MoneyCellAlertQueue = new();
     public static void DropQueuedMoneyCellAlert(string header) => MoneyCellAlertQueue.RemoveAll(x => x.Header == header);
     public static void AddMoneyCellAlert(string header, MoneyCellUI.MoneyCellType type, string body, bool forceNow = false, bool dropQueuedAlert = false)
     {
@@ -56,7 +56,7 @@ public class AlertUtils
         {
             if (i >= 1 && d.Count - i > 1)
             {
-                b.Append($"... ({d.Count - i} more lines)");
+                b.Append(d[i] +$"...");
                 break;
             }
     
