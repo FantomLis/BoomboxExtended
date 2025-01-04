@@ -90,7 +90,7 @@ namespace FantomLis.BoomboxExtended
         void Awake()
         {
             Click = transform.Find("SFX/Click").GetComponent<SFX_PlayOneShot>();
-            Music = GetComponent<AudioSource>();
+            Music = GetComponentInParent<AudioSource>();
             Music.outputAudioMixerGroup = GameHandler.Instance?.SettingsHandler.GetSetting<SFXVolumeSetting>()?.mixerGroup ?? Music.outputAudioMixerGroup;
         }
 
