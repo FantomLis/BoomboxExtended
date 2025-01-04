@@ -7,6 +7,20 @@
 
 Fork of original mod [Boombox](https://github.com/hyydsz/Boombox) by [hyydsz](https://github.com/hyydsz/) with some additions by FantomLis.
 
+### Translation
+- English ✅
+- Russian ✅
+- Ukrainian (DeepL) ✅
+- German ❌
+- Spanish ❌
+- French ❌
+- Italian ❌
+- Chinese (both Simplified and Traditional) ❌
+- Korean ❌
+- Japanese ❌
+- Swedish ❌
+- Portuguese ❌
+
 ### Difference 
 - Porting mod to .Net Standart 2.1
 - Porting mod to SteamWorkshop
