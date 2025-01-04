@@ -18,79 +18,79 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="BatteryCapacitySetting" xml:space="preserve">
-        <value>@BatteryCapacitySetting</value>
-    </data>
     <data name="BoomboxName" xml:space="preserve">
-        <value>@BoomboxName</value>
-    </data>
-    <data name="BoomboxPriceSetting" xml:space="preserve">
-        <value>@BoomboxPriceSetting</value>
-    </data>
-    <data name="BoomboxVolume" xml:space="preserve">
-        <value>@BoomboxVolume</value>
+        <value>Boombox</value>
     </data>
     <data name="ClickSwitchToolTip" xml:space="preserve">
-        <value>[{key}] @ClickSwitchToolTip</value>
+        <value>[{key}] Switch Song</value>
     </data>
     <data name="MusicLoadedAlert" xml:space="preserve">
-        <value>@MusicLoadedAlert</value>
-    </data>
-    <data name="MusicLoadedAlertDesc" xml:space="preserve">
-        <value>@MusicLoadedAlertDesc {0}</value>
-    </data>
-    <data name="MusicSelectionMethodSetting" xml:space="preserve">
-        <value>@MusicSelectionMethodSetting</value>
-    </data>
-    <data name="NoLocalizationStringError" xml:space="preserve">
-        <value>@NoLocalizationStringError {0}</value>
-    </data>
-    <data name="NoMusicLoaded" xml:space="preserve">
-        <value>@NoMusicLoaded</value>
+        <value>Music loading finished!</value>
     </data>
     <data name="ScrollSwitchToolTip" xml:space="preserve">
-        <value>[{key}] @ScrollSwitchToolTip</value>
+        <value>[{key}] Scroll Songs</value>
     </data>
     <data name="SelectionMethod_Default" xml:space="preserve">
-        <value>@SM_Default</value>
+        <value>Default</value>
     </data>
     <data name="SelectionMethod_Original" xml:space="preserve">
-        <value>@SM_Original</value>
+        <value>Original</value>
     </data>
     <data name="SelectionMethod_ScrollWheel" xml:space="preserve">
-        <value>@SM_ScrollWheel</value>
+        <value>Scroll Wheel</value>
     </data>
     <data name="SelectionMethod_SelectionUIMouse" xml:space="preserve">
-        <value>@SM_SelectionUINoScroll</value>
+        <value>Selection UI (mouse) </value>
     </data>
     <data name="SelectionMethod_SelectionUIScroll" xml:space="preserve">
-        <value>@SM_SelectionUI</value>
-    </data>
-    <data name="SingleSongLoadedAlert" xml:space="preserve">
-        <value>@SingleSongLoadedAlert</value>
+        <value>Selection UI (scroll)</value>
     </data>
     <data name="UISwitchToolTip" xml:space="preserve">
-        <value>[{key}] @UISwitchToolTip</value>
+        <value>[{key}] Open Boombox UI</value>
     </data>
     <data name="UseToolTip" xml:space="preserve">
-        <value>[{key}] @UseToolTip</value>
+        <value>[{key}] Play song</value>
     </data>
-    <data name="VerboseLoggingSetting" xml:space="preserve">
-        <value>@VerboseLoggingSetting</value>
-    </data>
-    <data name="VolumeDownSetting" xml:space="preserve">
-        <value>@VolumeDownSetting</value>
+    <data name="BoomboxVolume" xml:space="preserve">
+        <value>Volume</value>
     </data>
     <data name="VolumeDownToolTip" xml:space="preserve">
-        <value>[{key}] @VolumeDownToolTip</value>
-    </data>
-    <data name="VolumeUpSetting" xml:space="preserve">
-        <value>@VolumeUpSetting</value>
+        <value>[{key}] Volume down</value>
     </data>
     <data name="VolumeUpToolTip" xml:space="preserve">
-        <value>[{key}] @VolumeUpToolTip</value>
+        <value>[{key}] Volume up</value>
+    </data>
+    <data name="MusicLoadedAlertDesc" xml:space="preserve">
+        <value>Loaded {0} files</value>
+    </data>
+    <data name="SingleSongLoadedAlert" xml:space="preserve">
+        <value>Song loaded</value>
+    </data>
+    <data name="NoLocalizationStringError" xml:space="preserve">
+        <value>Failed to load localization ({0})</value>
+    </data>
+    <data name="BatteryCapacitySetting" xml:space="preserve">
+        <value>Boombox Battery Capacity (-1 to infinite)</value>
+    </data>
+    <data name="BoomboxPriceSetting" xml:space="preserve">
+        <value>Boombox Price</value>
+    </data>
+    <data name="VerboseLoggingSetting" xml:space="preserve">
+        <value>Boombox Verbose Log</value>
+    </data>
+    <data name="MusicSelectionMethodSetting" xml:space="preserve">
+        <value>Music Selection Method</value>
+    </data>
+    <data name="VolumeDownSetting" xml:space="preserve">
+        <value>Boombox Volume Down Key</value>
+    </data>
+    <data name="VolumeUpSetting" xml:space="preserve">
+        <value>Boombox Volume Up Key</value>
+    </data>
+    <data name="NoMusicLoaded" xml:space="preserve">
+        <value>No Loaded Music </value>
     </data>
     <data name="NoMusicHelmetAlert" xml:space="preserve">
-        <value>@NoMusic</value>
+        <value>No Music</value>
     </data>
 </root>

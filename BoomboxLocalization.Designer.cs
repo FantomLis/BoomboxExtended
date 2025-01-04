@@ -64,7 +64,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @BatteryCapacitySetting.
+        ///   Looks up a localized string similar to Boombox Battery Capacity (-1 to infinite).
         /// </summary>
         internal static string BatteryCapacitySetting {
             get {
@@ -73,7 +73,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @BoomboxName.
+        ///   Looks up a localized string similar to Boombox.
         /// </summary>
         internal static string BoomboxName {
             get {
@@ -82,7 +82,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @BoomboxPriceSetting.
+        ///   Looks up a localized string similar to Boombox Price.
         /// </summary>
         internal static string BoomboxPriceSetting {
             get {
@@ -91,7 +91,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @BoomboxVolume.
+        ///   Looks up a localized string similar to Volume.
         /// </summary>
         internal static string BoomboxVolume {
             get {
@@ -100,7 +100,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @ClickSwitchToolTip.
+        ///   Looks up a localized string similar to [{key}] Switch Song.
         /// </summary>
         internal static string ClickSwitchToolTip {
             get {
@@ -109,7 +109,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @MusicLoadedAlert.
+        ///   Looks up a localized string similar to Music loading finished!.
         /// </summary>
         internal static string MusicLoadedAlert {
             get {
@@ -118,7 +118,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @MusicLoadedAlertDesc {0}.
+        ///   Looks up a localized string similar to Loaded {0} files.
         /// </summary>
         internal static string MusicLoadedAlertDesc {
             get {
@@ -127,7 +127,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @MusicSelectionMethodSetting.
+        ///   Looks up a localized string similar to Music Selection Method.
         /// </summary>
         internal static string MusicSelectionMethodSetting {
             get {
@@ -136,7 +136,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @NoLocalizationStringError {0}.
+        ///   Looks up a localized string similar to Failed to load localization ({0}).
         /// </summary>
         internal static string NoLocalizationStringError {
             get {
@@ -145,7 +145,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @NoMusic.
+        ///   Looks up a localized string similar to No Music.
         /// </summary>
         internal static string NoMusicHelmetAlert {
             get {
@@ -154,7 +154,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @NoMusicLoaded.
+        ///   Looks up a localized string similar to No Loaded Music .
         /// </summary>
         internal static string NoMusicLoaded {
             get {
@@ -163,7 +163,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @ScrollSwitchToolTip.
+        ///   Looks up a localized string similar to [{key}] Scroll Songs.
         /// </summary>
         internal static string ScrollSwitchToolTip {
             get {
@@ -172,7 +172,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SM_Default.
+        ///   Looks up a localized string similar to Default.
         /// </summary>
         internal static string SelectionMethod_Default {
             get {
@@ -181,7 +181,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SM_Original.
+        ///   Looks up a localized string similar to Original.
         /// </summary>
         internal static string SelectionMethod_Original {
             get {
@@ -190,7 +190,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SM_ScrollWheel.
+        ///   Looks up a localized string similar to Scroll Wheel.
         /// </summary>
         internal static string SelectionMethod_ScrollWheel {
             get {
@@ -199,7 +199,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SM_SelectionUINoScroll.
+        ///   Looks up a localized string similar to Selection UI (mouse) .
         /// </summary>
         internal static string SelectionMethod_SelectionUIMouse {
             get {
@@ -208,7 +208,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SM_SelectionUI.
+        ///   Looks up a localized string similar to Selection UI (scroll).
         /// </summary>
         internal static string SelectionMethod_SelectionUIScroll {
             get {
@@ -217,7 +217,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @SingleSongLoadedAlert.
+        ///   Looks up a localized string similar to Song loaded.
         /// </summary>
         internal static string SingleSongLoadedAlert {
             get {
@@ -226,7 +226,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @UISwitchToolTip.
+        ///   Looks up a localized string similar to [{key}] Open Boombox UI.
         /// </summary>
         internal static string UISwitchToolTip {
             get {
@@ -235,7 +235,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @UseToolTip.
+        ///   Looks up a localized string similar to [{key}] Play song.
         /// </summary>
         internal static string UseToolTip {
             get {
@@ -244,7 +244,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @VerboseLoggingSetting.
+        ///   Looks up a localized string similar to Boombox Verbose Log.
         /// </summary>
         internal static string VerboseLoggingSetting {
             get {
@@ -253,7 +253,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @VolumeDownSetting.
+        ///   Looks up a localized string similar to Boombox Volume Down Key.
         /// </summary>
         internal static string VolumeDownSetting {
             get {
@@ -262,7 +262,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @VolumeDownToolTip.
+        ///   Looks up a localized string similar to [{key}] Volume down.
         /// </summary>
         internal static string VolumeDownToolTip {
             get {
@@ -271,7 +271,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @VolumeUpSetting.
+        ///   Looks up a localized string similar to Boombox Volume Up Key.
         /// </summary>
         internal static string VolumeUpSetting {
             get {
@@ -280,7 +280,7 @@ namespace FantomLis.BoomboxExtended {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [{key}] @VolumeUpToolTip.
+        ///   Looks up a localized string similar to [{key}] Volume up.
         /// </summary>
         internal static string VolumeUpToolTip {
             get {
