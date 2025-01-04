@@ -34,11 +34,18 @@ public class AlertUtils
     
     private static IEnumerator DrawAllPendingMoneyCellAlerts(MoneyCellAlertContainer a)
     {
+        Boombox.Self.StartCoroutine(DecayPendingMCAlert(a));
         yield return new WaitForSeconds(0.25f);
         yield return new WaitUntil(() => Player.localPlayer);
         if (!MoneyCellAlertQueue.Contains(a)) yield break;
         ShowMoneyCellAlert(a);
         MoneyCellAlertQueue.Remove(a);
+    }
+
+    private static IEnumerator DecayPendingMCAlert(MoneyCellAlertContainer a)
+    {
+        yield return new WaitForSeconds(2.5f);
+        if (MoneyCellAlertQueue.Contains(a)) MoneyCellAlertQueue.Remove(a);
     }
     
     private static void ShowMoneyCellAlert(MoneyCellAlertContainer a)
