@@ -231,6 +231,7 @@
     <ItemGroup>
         <LocalesEN Include="$(OutputPath)\en\**" />
         <LocalesRU Include="$(OutputPath)\ru\**" />
+        <LocalesUK Include="$(OutputPath)\uk\**" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="BoomboxLocalization.resx">
@@ -252,5 +253,6 @@
     <Target Name="CopyOutputFolderToGame" AfterTargets="Build">
         <Copy SourceFiles="@(LocalesEN)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\en" />
         <Copy SourceFiles="@(LocalesRU)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\ru" />
+        <Copy SourceFiles="@(LocalesUK)" DestinationFolder="F:\SteamLibrary\steamapps\common\Content Warning\Plugins\!DEBUG\uk" />
     </Target>
 </Project>
