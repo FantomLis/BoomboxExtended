@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FantomLis.BoomboxExtended.Entries;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
 using Photon.Pun;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace FantomLis.BoomboxExtended
 {
-    public class BoomboxBehaviour : ItemInstanceBehaviour
+    public class BoomboxBehaviour : ItemInstanceBehaviour, IArtifactContent
     {
         private static readonly float uiSize = 0.4f;
         private static readonly float SongButtonSize = 25f;
@@ -286,5 +287,8 @@ namespace FantomLis.BoomboxExtended
 
             #endregion
         }
+
+        public bool IsHeld => this.isHeld;
+        public bool IsActive => onOffEntry.on;
     }
 }

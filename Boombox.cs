@@ -163,6 +163,7 @@ namespace FantomLis.BoomboxExtended
                 AssetBundle asset = QuickLoadAssetBundle(boomboxAssetbundle); // Why boombox not using .assetBundle filetype?
                 BoomboxItem = asset.LoadAsset<Item>(ItemName);
                 BoomboxItem.itemObject.AddComponent<BoomboxBehaviour>();
+                PropContentDatabase.Instance.AddRuntimeEntry(BoomboxItem.content); // Register mod prop event
                 BoomboxItem.price = GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>().Value;
 
                 LogUtils.LogDebug($"Resource {boomboxAssetbundle} loaded!");
