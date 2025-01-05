@@ -1,4 +1,5 @@
 using FantomLis.BoomboxExtended.Interfaces;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine;
 using Zorro.Settings;

@@ -1,4 +1,5 @@
 using System;
+using FantomLis.BoomboxExtended.Locales;
 using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;

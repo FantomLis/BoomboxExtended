@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine;
 using UnityEngine.Networking;
