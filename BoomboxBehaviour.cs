@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FantomLis.BoomboxExtended.Entries;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
 using Photon.Pun;

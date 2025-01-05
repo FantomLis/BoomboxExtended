@@ -10,7 +10,7 @@
 using System.Globalization;
 using UnityEngine.Localization.Settings;
 
-namespace FantomLis.BoomboxExtended {
+namespace FantomLis.BoomboxExtended.Locales {
     using System;
     
     
@@ -42,7 +42,7 @@ namespace FantomLis.BoomboxExtended {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FantomLis.BoomboxExtended.BoomboxLocalization", typeof(BoomboxLocalization).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager(typeof(BoomboxLocalization).FullName, typeof(BoomboxLocalization).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

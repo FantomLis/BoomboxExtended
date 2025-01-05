@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using FantomLis.BoomboxExtended.Locales;
 using Zorro.Core.Serizalization;
 
 namespace FantomLis.BoomboxExtended.Entries;

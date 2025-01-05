@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Settings;
 using HarmonyLib;
 using UnityEngine;

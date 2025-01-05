@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FantomLis.BoomboxExtended.Interfaces;
+using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine.Localization.Settings;
 using Zorro.Settings;
