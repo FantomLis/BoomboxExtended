@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using FantomLis.BoomboxExtended.Containers;
 using UnityEngine;
+using Zorro.UI.Modal;
 
 namespace FantomLis.BoomboxExtended.Utils;
 
@@ -71,5 +72,16 @@ public class AlertUtils
         }
         UserInterface.ShowMoneyNotification(a.Header, b.ToString(),
             a.AlertType);
+    }
+
+    public static void DelayedModal(DelayedModalContainer container)
+    {
+        Boombox.Self.StartCoroutine(ShowDelayedModal(container));
+    }
+
+    private static IEnumerator ShowDelayedModal(DelayedModalContainer c)
+    {
+        yield return new WaitForSeconds(c.Time);
+        c.ShowModal();
     }
 }
