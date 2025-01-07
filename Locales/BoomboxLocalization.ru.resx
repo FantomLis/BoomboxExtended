@@ -86,4 +86,7 @@
     <data name="NoLocalizationStringError" xml:space="preserve">
         <value>Failed to load localization ({0})</value>
     </data>
+    <data name="VolumeStepSetting" xml:space="preserve">
+        <value>Шаг изменения громкости</value>
+    </data>
 </root>

@@ -271,6 +271,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @VolumeStepSetting.
+        /// </summary>
+        internal static string VolumeStepSetting {
+            get {
+                return ResourceManager.GetString("VolumeStepSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @VolumeUpSetting.
         /// </summary>
         internal static string VolumeUpSetting {

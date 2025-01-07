@@ -93,4 +93,7 @@
     <data name="NoMusicHelmetAlert" xml:space="preserve">
         <value>@NoMusic</value>
     </data>
+    <data name="VolumeStepSetting" xml:space="preserve">
+        <value>@VolumeStepSetting</value>
+    </data>
 </root>

@@ -54,6 +54,11 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         public static MusicSelectionMethodSetting BoomboxMethod;
 
+        /// <summary>
+        /// Client-only setting, sets volume change step
+        /// </summary>
+        public static VolumeStepSetting VolumeStep;
+        
         public static MusicSelectionMethodSetting.BoomboxMusicSelectionMethod CurrentBoomboxMethod() =>
             (MusicSelectionMethodSetting.BoomboxMusicSelectionMethod) BoomboxMethod.Value;
         public static BoomboxPriceSetting BoomboxPrice;
@@ -143,6 +148,7 @@ namespace FantomLis.BoomboxExtended
             BoomboxPrice =  GameHandler.Instance.SettingsHandler.GetSetting<BoomboxPriceSetting>();
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
+            VolumeStep = GameHandler.Instance.SettingsHandler.GetSetting<VolumeStepSetting>();
 
             #endregion
 
