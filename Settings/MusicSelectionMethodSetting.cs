@@ -5,6 +5,7 @@ using System.Linq;
 using FantomLis.BoomboxExtended.Interfaces;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
+using MyceliumNetworking;
 using UnityEngine.Localization.Settings;
 using Zorro.Settings;
 
@@ -22,17 +23,22 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
         Default
     }
 
-    public List<Action<MusicSelectionMethodSetting>> UpdateValueActionList = new([((a) =>
-    {
-        {LogUtils.LogDebug($"Parameter {a.GetDefaultDisplayName()} is set to {a.Value}");}
-    })]);
-
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
     public string GetDisplayName() => BoomboxLocalization.MusicSelectionMethodSetting;
     public string GetDefaultDisplayName() => "Boombox Music Selection Method";
-    public override void ApplyValue() => UpdateValueActionList.ForEach(x => x.Invoke(this));
 
+    public override void ApplyValue()
+    {
+        LogUtils.LogDebug($"Parameter {GetDefaultDisplayName()} is set to {Value}");
+        if (!MyceliumNetwork.InLobby) return;
+        if (Player.localPlayer.TryGetInventory(out var o))
+        {
+            var x = o.GetItems().Find(x => x.item.Equals(Boombox.BoomboxItem));
+            UserInterface.Instance.equippedUI.SetData(ItemDescriptor.Empty); // Clear Equipped UI before redrawing boombox Tooltips
+            UserInterface.Instance.equippedUI.SetData(x);                    // because of itemDescriptor.data != this.m_lastItemDescriptor.data
+        }
+    }
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
     public override List<string> GetChoices() => Enum.GetNames(

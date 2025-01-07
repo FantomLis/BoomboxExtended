@@ -84,7 +84,7 @@ namespace FantomLis.BoomboxExtended
         static string _boomboxPMID = $"{ItemName}.PauseMusic";
         
         private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-        private static Item BoomboxItem;
+        internal static Item BoomboxItem;
 #if BepInEx
         public static ManualLogSource Log;
 #endif
