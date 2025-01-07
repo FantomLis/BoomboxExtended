@@ -273,7 +273,8 @@ namespace FantomLis.BoomboxExtended
                 }
                 else
                 {
-                    Music.Stop();
+                    if (!Boombox.CurrentPauseMusic) Music.Stop();
+                    else Music.Pause();
                 }
             }
 

@@ -89,4 +89,7 @@
     <data name="VolumeStepSetting" xml:space="preserve">
         <value>Шаг изменения громкости</value>
     </data>
+    <data name="PauseMusicSetting" xml:space="preserve">
+        <value>Приостанавливать музыку вместо остановки</value>
+    </data>
 </root>

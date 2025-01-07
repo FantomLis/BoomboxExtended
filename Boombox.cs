@@ -50,6 +50,10 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         public static int CurrentBoomboxPrice{ protected set; get; }
         /// <summary>
+        /// Current pausing music setting (not from config)
+        /// </summary>
+        public static bool CurrentPauseMusic{ protected set; get; }
+        /// <summary>
         /// Client-only setting, selects how music selection works
         /// </summary>
         public static MusicSelectionMethodSetting BoomboxMethod;
@@ -64,6 +68,11 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         public static BoomboxPriceSetting BoomboxPrice;
 
+        /// <summary>
+        /// Global setting, sets pausing music instead of stopping
+        /// </summary>
+        public static PauseMusicSetting PauseMusicSetting;
+
         public static MusicSelectionMethodSetting.BoomboxMusicSelectionMethod CurrentBoomboxMethod() =>
             (MusicSelectionMethodSetting.BoomboxMusicSelectionMethod) BoomboxMethod.Value;
         
@@ -72,6 +81,7 @@ namespace FantomLis.BoomboxExtended
 
         static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
         static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
+        static string _boomboxPMID = $"{ItemName}.PauseMusic";
         
         private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         private static Item BoomboxItem;
@@ -107,6 +117,7 @@ namespace FantomLis.BoomboxExtended
                     MyceliumNetwork.SetLobbyData(_boomboxBCID,
                         BatteryCapacity.Value);
                     MyceliumNetwork.SetLobbyData(_boomboxBPID, BoomboxPrice.Value);
+                    MyceliumNetwork.SetLobbyData(_boomboxPMID, PauseMusicSetting.Value);
                     MusicLoadManager.StartLoadMusic();
                 }
             };
@@ -116,6 +127,7 @@ namespace FantomLis.BoomboxExtended
                 CurrentBatteryCapacity = BatteryCapacity.Value;
                 CurrentBoomboxPrice = BoomboxPrice.Value;
                 BoomboxItem.price = CurrentBoomboxPrice;
+                CurrentPauseMusic = PauseMusicSetting.Value;
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
             LogUtils.LogDebug("All events registered.");
@@ -126,6 +138,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     CurrentBatteryCapacity = MyceliumNetwork.GetLobbyData<float>(_boomboxBCID);
                     CurrentBoomboxPrice = MyceliumNetwork.GetLobbyData<int>(_boomboxBPID);
+                    CurrentPauseMusic = MyceliumNetwork.GetLobbyData<bool>(_boomboxPMID);
                     BoomboxItem.price = CurrentBoomboxPrice;
                 }
             }
@@ -154,6 +167,8 @@ namespace FantomLis.BoomboxExtended
             CurrentBatteryCapacity = BatteryCapacity.Value;
             CurrentBoomboxPrice = BoomboxPrice.Value;
             VolumeStep = GameHandler.Instance.SettingsHandler.GetSetting<VolumeStepSetting>();
+            PauseMusicSetting = GameHandler.Instance.SettingsHandler.GetSetting<PauseMusicSetting>();
+            CurrentPauseMusic = PauseMusicSetting.Value;
 
             #endregion
 
@@ -161,6 +176,7 @@ namespace FantomLis.BoomboxExtended
 
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBCID);
             MyceliumNetwork.RegisterLobbyDataKey(_boomboxBPID);
+            MyceliumNetwork.RegisterLobbyDataKey(_boomboxPMID);
 
             #endregion
             

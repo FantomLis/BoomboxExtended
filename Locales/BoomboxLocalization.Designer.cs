@@ -163,6 +163,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @PauseMusicSetting.
+        /// </summary>
+        internal static string PauseMusicSetting {
+            get {
+                return ResourceManager.GetString("PauseMusicSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{key}] @ScrollSwitchToolTip.
         /// </summary>
         internal static string ScrollSwitchToolTip {

@@ -96,4 +96,7 @@
     <data name="VolumeStepSetting" xml:space="preserve">
         <value>@VolumeStepSetting</value>
     </data>
+    <data name="PauseMusicSetting" xml:space="preserve">
+        <value>@PauseMusicSetting</value>
+    </data>
 </root>
