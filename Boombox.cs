@@ -12,6 +12,7 @@ using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using Zorro.Core;
+using Zorro.UI.Modal;
 
 namespace FantomLis.BoomboxExtended
 {
@@ -168,6 +169,7 @@ namespace FantomLis.BoomboxExtended
                 LogUtils.LogDebug($"Resource {boomboxAssetbundle} loaded!");
                 
                 SingletonAsset<ItemDatabase>.Instance.AddRuntimeEntry(BoomboxItem);
+                SingletonAsset<PropContentDatabase>.Instance.AddRuntimeEntry(BoomboxItem.content);
                 LogUtils.LogDebug("Loading boombox finished!");
             }
             catch (Exception ex)
