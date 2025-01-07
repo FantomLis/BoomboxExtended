@@ -59,11 +59,16 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         public static VolumeStepSetting VolumeStep;
         
+        /// <summary>
+        /// Global setting, sets price for boombox in shop
+        /// </summary>
+        public static BoomboxPriceSetting BoomboxPrice;
+
         public static MusicSelectionMethodSetting.BoomboxMusicSelectionMethod CurrentBoomboxMethod() =>
             (MusicSelectionMethodSetting.BoomboxMusicSelectionMethod) BoomboxMethod.Value;
-        public static BoomboxPriceSetting BoomboxPrice;
-        public static VolumeUpSetting VolumeUpKey;
-        public static VolumeDownSetting VolumeDownKey;
+        
+        internal static VolumeUpSetting VolumeUpKey;
+        internal static VolumeDownSetting VolumeDownKey;
 
         static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
         static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
