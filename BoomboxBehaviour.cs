@@ -288,5 +288,16 @@ namespace FantomLis.BoomboxExtended
 
             #endregion
         }
+
+        public void UpdateEquippedUI()
+        {
+            if (!isHeldByMe) return;
+            if (Player.localPlayer.TryGetInventory(out var o))
+            {
+                var x = o.GetItems().Find(x => x.item.Equals(this.itemInstance.item));
+                UserInterface.Instance.equippedUI.SetData(ItemDescriptor.Empty); // Clear Equipped UI before redrawing boombox Tooltips
+                UserInterface.Instance.equippedUI.SetData(x);                    // because of itemDescriptor.data != this.m_lastItemDescriptor.data
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using FantomLis.BoomboxExtended.Interfaces;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using MyceliumNetworking;
+using Sirenix.Utilities;
 using UnityEngine.Localization.Settings;
 using Zorro.Settings;
 
@@ -32,12 +33,7 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
     {
         LogUtils.LogDebug($"Parameter {GetDefaultDisplayName()} is set to {Value}");
         if (!MyceliumNetwork.InLobby) return;
-        if (Player.localPlayer.TryGetInventory(out var o))
-        {
-            var x = o.GetItems().Find(x => x.item.Equals(Boombox.BoomboxItem));
-            UserInterface.Instance.equippedUI.SetData(ItemDescriptor.Empty); // Clear Equipped UI before redrawing boombox Tooltips
-            UserInterface.Instance.equippedUI.SetData(x);                    // because of itemDescriptor.data != this.m_lastItemDescriptor.data
-        }
+        Boombox.Self.GetComponents<BoomboxBehaviour>().ForEach(x=>x.UpdateEquippedUI());
     }
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
