@@ -49,5 +49,5 @@ public class VolumeEntry : BaseEntry, IHaveUIData
 
     public float GetVolume() => Volume / 100f;
 
-    public string GetString() => string.Format(VolumeText, Volume);
+    public string GetString() => string.Format(VolumeText, $"{Volume:f0}");
 }
