@@ -92,4 +92,10 @@
     <data name="PauseMusicSetting" xml:space="preserve">
         <value>Pause music instead of stopping</value>
     </data>
+    <data name="ChangesApplyAfterRestartTitle" xml:space="preserve">
+        <value>Changes will apply after lobby recreation</value>
+    </data>
+    <data name="ChangesApplyAfterRestartDesc" xml:space="preserve">
+        <value>Setting "{0}" will be updated only after creating new lobby</value>
+    </data>
 </root>

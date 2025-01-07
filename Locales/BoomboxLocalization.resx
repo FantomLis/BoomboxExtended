@@ -99,4 +99,10 @@
     <data name="PauseMusicSetting" xml:space="preserve">
         <value>@PauseMusicSetting</value>
     </data>
+    <data name="ChangesApplyAfterRestartTitle" xml:space="preserve">
+        <value>@ChangesApplyAfterRestartTitle</value>
+    </data>
+    <data name="ChangesApplyAfterRestartDesc" xml:space="preserve">
+        <value>@ChangesApplyAfterRestartDesc</value>
+    </data>
 </root>

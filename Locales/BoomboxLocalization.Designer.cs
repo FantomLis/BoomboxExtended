@@ -100,6 +100,24 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @ChangesApplyAfterRestartDesc.
+        /// </summary>
+        internal static string ChangesApplyAfterRestartDesc {
+            get {
+                return ResourceManager.GetString("ChangesApplyAfterRestartDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @ChangesApplyAfterRestartTitle.
+        /// </summary>
+        internal static string ChangesApplyAfterRestartTitle {
+            get {
+                return ResourceManager.GetString("ChangesApplyAfterRestartTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [{key}] @ClickSwitchToolTip.
         /// </summary>
         internal static string ClickSwitchToolTip {
