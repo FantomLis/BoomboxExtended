@@ -105,4 +105,7 @@
     <data name="ChangesApplyAfterRestartDesc" xml:space="preserve">
         <value>@ChangesApplyAfterRestartDesc</value>
     </data>
+    <data name="BatteryCapacitySettingTip" xml:space="preserve">
+        <value>@BatteryCapacityTip</value>
+    </data>
 </root>

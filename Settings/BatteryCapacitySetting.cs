@@ -23,7 +23,7 @@ public class BatteryCapacitySetting : FloatSetting, IDefaultSetting
                 isShowed: false
             }) _c.Cancel();
         _c = new DelayedModalContainer(BoomboxLocalization.ChangesApplyAfterRestartTitle, 
-            string.Format(BoomboxLocalization.ChangesApplyAfterRestartDesc, GetDisplayName()),
+            string.Format(BoomboxLocalization.ChangesApplyAfterRestartDesc, GetOnlyDisplayName()),
             0.5f, [new ModalOption("OK")]);
         AlertUtils.DelayedModal(_c);
         lastShown = Time.time;
@@ -33,6 +33,7 @@ public class BatteryCapacitySetting : FloatSetting, IDefaultSetting
     public static float DefaultValue() => 250f;
     protected override float2 GetMinMaxValue() => new float2(-1, 1000);
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
-    public string GetDisplayName() => BoomboxLocalization.BatteryCapacitySetting;
-    public string GetDefaultDisplayName() => "Battery Capacity (-1 to infinite)";
+    public string GetDisplayName() => $"{BoomboxLocalization.BatteryCapacitySetting} {BoomboxLocalization.BatteryCapacitySettingTip}";
+    public string GetOnlyDisplayName() => BoomboxLocalization.BatteryCapacitySetting;
+    public string GetDefaultDisplayName() => "Battery Capacity";
 }

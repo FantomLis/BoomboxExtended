@@ -12,7 +12,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="BatteryCapacitySetting" xml:space="preserve">
-        <value>Заряд аккумулятора бумбокса (-1 для бесконечного) </value>
+        <value>Заряд аккумулятора бумбокса</value>
     </data>
     <data name="BoomboxName" xml:space="preserve">
         <value>Бумбокс</value>
@@ -97,5 +97,8 @@
     </data>
     <data name="ChangesApplyAfterRestartDesc" xml:space="preserve">
         <value>Настройка "{0}" будет обновлена только после создания нового лобби</value>
+    </data>
+    <data name="BatteryCapacitySettingTip" xml:space="preserve">
+        <value>(-1 для бесконечного) </value>
     </data>
 </root>

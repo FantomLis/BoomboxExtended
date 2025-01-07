@@ -73,6 +73,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @BatteryCapacityTip.
+        /// </summary>
+        internal static string BatteryCapacitySettingTip {
+            get {
+                return ResourceManager.GetString("BatteryCapacitySettingTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @BoomboxName.
         /// </summary>
         internal static string BoomboxName {

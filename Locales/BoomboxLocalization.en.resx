@@ -63,7 +63,7 @@
         <value>Failed to load localization ({0})</value>
     </data>
     <data name="BatteryCapacitySetting" xml:space="preserve">
-        <value>Boombox Battery Capacity (-1 to infinite)</value>
+        <value>Boombox Battery Capacity</value>
     </data>
     <data name="BoomboxPriceSetting" xml:space="preserve">
         <value>Boombox Price</value>
@@ -97,5 +97,8 @@
     </data>
     <data name="ChangesApplyAfterRestartDesc" xml:space="preserve">
         <value>Setting "{0}" will be updated only after creating new lobby</value>
+    </data>
+    <data name="BatteryCapacitySettingTip" xml:space="preserve">
+        <value> (-1 to infinite)</value>
     </data>
 </root>
