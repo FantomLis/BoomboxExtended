@@ -239,13 +239,13 @@ namespace FantomLis.BoomboxExtended
 
                     if (GlobalInputHandler.GetKeyUp(Boombox.VolumeUpKey.Keycode()))
                     {
-                        volumeEntry.PlusVolume(10); // TODO: To config parameter
+                        volumeEntry.PlusVolume(Boombox.VolumeStep.Value);
 
                         Click.Play();
                     }
                     if (GlobalInputHandler.GetKeyUp(Boombox.VolumeDownKey.Keycode()))
                     {
-                        volumeEntry.MinusVolume(10); // TODO: To config parameter
+                        volumeEntry.MinusVolume(Boombox.VolumeStep.Value);
                         Click.Play();
                     }
                 }
