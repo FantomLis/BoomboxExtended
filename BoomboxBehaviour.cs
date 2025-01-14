@@ -34,10 +34,10 @@ namespace FantomLis.BoomboxExtended
             if (openUI)
             {
                 GUI.BeginGroup(windowRect);
-                float h = MusicLoadManager.clips.Count * SongButtonSize * Screen.height / 1080f;
+                float h = MusicLoadManager.Music.Count * SongButtonSize * Screen.height / 1080f;
                 selectionScroll = GUI.BeginScrollView(new Rect(0,0, windowRect.width-40, windowRect.height-40), selectionScroll, 
                     new Rect(0,0,windowRect.width-80,h));
-                var x = GUI.SelectionGrid(new Rect(0,0,windowRect.width-40, h), musicEntry.MusicIndex, MusicLoadManager.clips.Keys.ToArray(), 1);
+                var x = GUI.SelectionGrid(new Rect(0,0,windowRect.width-40, h), musicEntry.MusicIndex, MusicLoadManager.Music.Keys.ToArray(), 1);
                 if (x != musicEntry.MusicIndex) if (!TryUpdateMusic(x)) LogUtils.LogError($"Failed to change music to index {x}.");
                 GUI.EndScrollView();
                 GUI.EndGroup();
@@ -78,15 +78,15 @@ namespace FantomLis.BoomboxExtended
 
         private void _updateMusic()
         {
-            if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var c))
+            if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var c))
             {
                 timeEntry.currentTime = 0;
                 timeEntry.SetDirty();
                 Click.Play();
                 lastChangeTime = Time.time;
                 musicEntry.UpdateMusicName();
-                Music.clip = c;
-                _lengthEntry.UpdateLenght(c.length);
+                Music.clip = c.Clip;
+                _lengthEntry.UpdateLenght(c.Clip.length);
                 _lengthEntry.UpdateLenght(Music.clip.length);
             Music.time = timeEntry.currentTime;}
         }
@@ -168,7 +168,7 @@ namespace FantomLis.BoomboxExtended
                         if (Player.localPlayer.HasLockedInput()) break;
                         if (Player.localPlayer.input.aimWasPressed)
                         {
-                            if (MusicLoadManager.clips.Count <= 0)
+                            if (MusicLoadManager.Music.Count <= 0)
                             {
                                 HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
@@ -178,12 +178,12 @@ namespace FantomLis.BoomboxExtended
                         break;
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIMouse:
                         openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) &&
-                                 MusicLoadManager.clips.Count > 0;
+                                 MusicLoadManager.Music.Count > 0;
                         Player.localPlayer.data.isInTitleCardTerminal = openUI;
                         if (openUI)
                         {
                             if (Input.GetKeyDown(KeyCode.Mouse1)) Click.Play();
-                            if (MusicLoadManager.clips.Count <= 0)
+                            if (MusicLoadManager.Music.Count <= 0)
                             {
                                 HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                             }
@@ -192,12 +192,12 @@ namespace FantomLis.BoomboxExtended
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.SelectionUIScroll:
                         case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.Default:
                         openUI = (Input.GetKey(KeyCode.Mouse1) || Player.localPlayer.input.aimIsPressed) &&
-                                 MusicLoadManager.clips.Count > 0;
+                                 MusicLoadManager.Music.Count > 0;
                         if (Player.localPlayer.HasLockedInput()) break;
                         if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 != 0  && lastChangeTime + 0.1f <= Time.time && openUI)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (MusicLoadManager.clips.Count <= 0)
+                            if (MusicLoadManager.Music.Count <= 0)
                             {
                                 HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
@@ -205,7 +205,7 @@ namespace FantomLis.BoomboxExtended
                             if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 >= 1) NextMusic();
                             else if (Input.GetAxis("Mouse ScrollWheel") * 10 * -1 <= -1) PreviousMusic();
                         }
-                        selectionScroll = Vector2.up * ((musicEntry.MusicIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.clips.Count * SongButtonSize * Screen.height/1080f/2f));
+                        selectionScroll = Vector2.up * ((musicEntry.MusicIndex * SongButtonSize * (Screen.height / 1080f))-(MusicLoadManager.Music.Count * SongButtonSize * Screen.height/1080f/2f));
                         break;
                     case MusicSelectionMethodSetting.BoomboxMusicSelectionMethod.ScrollWheel:
                         if (Player.localPlayer.HasLockedInput()) break;
@@ -213,7 +213,7 @@ namespace FantomLis.BoomboxExtended
                             <= Time.time)
                         {
                             if (Player.localPlayer.input.aimWasPressed) Click.Play();
-                            if (MusicLoadManager.clips.Count <= 0)
+                            if (MusicLoadManager.Music.Count <= 0)
                             {
                                 HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f); 
                                 break;
@@ -227,7 +227,7 @@ namespace FantomLis.BoomboxExtended
                 {
                     if (Player.localPlayer.input.clickWasPressed)
                     {
-                        if (MusicLoadManager.clips.Count == 0) 
+                        if (MusicLoadManager.Music.Count == 0) 
                         {
                             HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f);
                         }
@@ -254,9 +254,9 @@ namespace FantomLis.BoomboxExtended
                 }
 
                 musicEntry.UpdateMusicName();
-                if (MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var _c)) {
-                    _lengthEntry.UpdateLenght(_c.length); 
-                    if (_c == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
+                if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var _c)) {
+                    _lengthEntry.UpdateLenght(_c.Clip.length); 
+                    if (_c.Clip == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
                 }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
@@ -268,9 +268,9 @@ namespace FantomLis.BoomboxExtended
             bool flag = onOffEntry.on;
             if (flag != Music.isPlaying)
             {
-                if (flag && MusicLoadManager.clips.TryGetValue(musicEntry.MusicID, out var clip))
+                if (flag && MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var clip))
                 {
-                    Music.clip = clip;
+                    Music.clip = clip.Clip;
                     Music.time = timeEntry.currentTime;
                     Music.Play();
                 }

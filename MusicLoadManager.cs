@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace FantomLis.BoomboxExtended
     public class MusicLoadManager : MonoBehaviour
     {
         private static MusicLoadManager? Instance;
-        public static Dictionary<string, AudioClip> clips = new ();
+        public static Dictionary<string, Music> Music = new ();
         private static bool isLoading = false;
         private static List<Task> __awaiting_tasks = new();
         /// <summary>
@@ -36,7 +37,7 @@ namespace FantomLis.BoomboxExtended
         {
             rootPath ??= RootPath;
             string path = System.IO.Path.Combine(rootPath, musicPath);
-            if (reloadAllSongs) clips.Clear();
+            if (reloadAllSongs) Music.Clear();
             StartCoroutine(LoadMusic(path));
         }
         private static IEnumerator LoadMusic(string path)
@@ -47,60 +48,32 @@ namespace FantomLis.BoomboxExtended
             {
                 Directory.CreateDirectory(path);
             }
-            clips.Clear();
+            Music.Clear();
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
             foreach (string file in Directory.GetFiles(path))
             {
-                if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
-                AudioType type = GetAudioType(file);
-                if (type != AudioType.UNKNOWN)
+                string name = Path.GetFileNameWithoutExtension(file);
+                if (Music.ContainsKey(name)) continue;
+                var m_load = new Music(file);
+                var m_load_task = m_load.LoadMusic();
+                __awaiting_tasks.Add(m_load_task);
+                Task.Run(async () =>
                 {
-                    UnityWebRequest loader = UnityWebRequestMultimedia.GetAudioClip(file, type);
-                    DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)loader.downloadHandler;
-                    handler.streamAudio = false;
-
-                    loader.SendWebRequest();
-                    
-                    yield return new WaitUntil(() => handler.isDone);
-                    if (loader.error == null)
-                    {
-                        try
-                        {
-                            Task? finishingLoadingTask = null;
-                            finishingLoadingTask = Task.Run(() =>
-                            {
-                                AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
-                                if (clip && clip.loadState == AudioDataLoadState.Loaded && clip.length != 0)
-                                {
-                                    clip.name = Path.GetFileNameWithoutExtension(file);
-                                    if (!clips.TryAdd(clip.name, clip)) return; 
-
-                                    LogUtils.LogInfo($"Song Loaded: {clip.name}");
-                                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
-                                        MoneyCellUI.MoneyCellType.Revenue, clip.name);
-                                    __awaiting_tasks.Remove(finishingLoadingTask);
-                                }
-                            });
-                            __awaiting_tasks.Add(finishingLoadingTask);
-                        }
-                        catch (Exception ex)
-                        {
-                            LogUtils.LogError(ex);
-                        }
-                    }
-                    else
-                    {
-                        LogUtils.LogWarning($"Failed to load file {file}: ({loader.error})");
-                    }
-                }
+                    await m_load_task;
+                    Music.Add(name, m_load);
+                    LogUtils.LogInfo($"Song Loaded: {name}");
+                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                        MoneyCellUI.MoneyCellType.Revenue, name);
+                    __awaiting_tasks.Remove(m_load_task);
+                });
             }
-
+            
             Task.Run(() =>
             {
                 Task.WaitAll(__awaiting_tasks.ToArray());
-                LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
+                LogUtils.LogInfo($"Loading music finished! ({Music.Count} loaded)");
                 AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins,
-                    string.Format(BoomboxLocalization.MusicLoadedAlertDesc, clips.Count.ToString()),
+                    string.Format(BoomboxLocalization.MusicLoadedAlertDesc, Music.Count.ToString()),
                     dropQueuedAlert: true);
                 isLoading = false;
             });
