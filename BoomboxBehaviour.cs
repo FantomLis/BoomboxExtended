@@ -1,17 +1,20 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using FantomLis.BoomboxExtended.Entries;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Settings;
 using FantomLis.BoomboxExtended.Utils;
 using Photon.Pun;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace FantomLis.BoomboxExtended
 {
     public class BoomboxBehaviour : ItemInstanceBehaviour
     {
-        private static readonly float uiSize = 0.4f;
-        private static readonly float SongButtonSize = 25f;
+        private const float uiSize = 0.4f;
+        private const float SongButtonSize = 25f;
 
         private BatteryEntry batteryEntry;
         private OnOffEntry onOffEntry;

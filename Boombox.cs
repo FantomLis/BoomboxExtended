@@ -79,9 +79,9 @@ namespace FantomLis.BoomboxExtended
         internal static VolumeUpSetting VolumeUpKey;
         internal static VolumeDownSetting VolumeDownKey;
 
-        static string _boomboxBCID = $"{ItemName}.BatteryCapacity";
-        static string _boomboxBPID = $"{ItemName}.BoomboxPrice";
-        static string _boomboxPMID = $"{ItemName}.PauseMusic";
+        const string _boomboxBCID = $"{ItemName}.BatteryCapacity";
+        const string _boomboxBPID = $"{ItemName}.BoomboxPrice";
+        const string _boomboxPMID = $"{ItemName}.PauseMusic";
         
         private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         internal static Item BoomboxItem;
