@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace FantomLis.BoomboxExtended
         private static MusicLoadManager? Instance;
         public static Dictionary<string, AudioClip> clips = new ();
         private static bool isLoading = false;
-
+        private static List<Task> __awaiting_tasks = new();
         /// <summary>
         /// Default Root Path from which music is searching
         /// </summary>
@@ -55,28 +56,32 @@ namespace FantomLis.BoomboxExtended
                 if (type != AudioType.UNKNOWN)
                 {
                     UnityWebRequest loader = UnityWebRequestMultimedia.GetAudioClip(file, type);
-
                     DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)loader.downloadHandler;
                     handler.streamAudio = false;
 
                     loader.SendWebRequest();
-
-                    yield return new WaitUntil(() => loader.isDone);
-
+                    
+                    yield return new WaitUntil(() => handler.isDone);
                     if (loader.error == null)
                     {
                         try
                         {
-                            AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
-                            if (clip && clip.loadState == AudioDataLoadState.Loaded && clip.length != 0)
+                            Task? finishingLoadingTask = null;
+                            finishingLoadingTask = Task.Run(() =>
                             {
-                                clip.name = Path.GetFileNameWithoutExtension(file);
-                                if (!clips.TryAdd(clip.name, clip)) yield break;  // unintended behaviour cancellation
+                                AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
+                                if (clip && clip.loadState == AudioDataLoadState.Loaded && clip.length != 0)
+                                {
+                                    clip.name = Path.GetFileNameWithoutExtension(file);
+                                    if (!clips.TryAdd(clip.name, clip)) return; 
 
-                                LogUtils.LogInfo($"Song Loaded: {clip.name}");
-                                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
-                                    MoneyCellUI.MoneyCellType.Revenue, clip.name);
-                            }
+                                    LogUtils.LogInfo($"Song Loaded: {clip.name}");
+                                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                                        MoneyCellUI.MoneyCellType.Revenue, clip.name);
+                                    __awaiting_tasks.Remove(finishingLoadingTask);
+                                }
+                            });
+                            __awaiting_tasks.Add(finishingLoadingTask);
                         }
                         catch (Exception ex)
                         {
@@ -89,9 +94,16 @@ namespace FantomLis.BoomboxExtended
                     }
                 }
             }
-            LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
-            AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins, string.Format(BoomboxLocalization.MusicLoadedAlertDesc, clips.Count.ToString()), dropQueuedAlert:true);
-            isLoading = false;
+
+            Task.Run(() =>
+            {
+                Task.WaitAll(__awaiting_tasks.ToArray());
+                LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins,
+                    string.Format(BoomboxLocalization.MusicLoadedAlertDesc, clips.Count.ToString()),
+                    dropQueuedAlert: true);
+                isLoading = false;
+            });
         }
 
         public static AudioType GetAudioType(string path)
