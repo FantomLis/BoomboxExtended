@@ -78,17 +78,23 @@ namespace FantomLis.BoomboxExtended
 
         private void _updateMusic()
         {
-            if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var c))
+            if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var m))
             {
                 timeEntry.currentTime = 0;
                 timeEntry.SetDirty();
                 Click.Play();
                 lastChangeTime = Time.time;
                 musicEntry.UpdateMusicName();
-                Music.clip = c.Clip;
-                _lengthEntry.UpdateLenght(c.Clip.length);
-                _lengthEntry.UpdateLenght(Music.clip.length);
-            Music.time = timeEntry.currentTime;}
+                if (m.isLoaded)
+                {
+                    Music.clip = m.Clip;
+                    _lengthEntry.UpdateLenght(m.Clip.length);
+                    _lengthEntry.UpdateLenght(Music.clip.length);
+                    Music.time = timeEntry.currentTime;
+                    return;
+                }
+                HelmetText.Instance.SetHelmetText("##Clip is not loaded",2);
+            }
         }
 
         void Awake()
@@ -254,9 +260,9 @@ namespace FantomLis.BoomboxExtended
                 }
 
                 musicEntry.UpdateMusicName();
-                if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var _c)) {
-                    _lengthEntry.UpdateLenght(_c.Clip.length); 
-                    if (_c.Clip == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
+                if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var m) && m.isLoaded) {
+                    _lengthEntry.UpdateLenght(m.Clip.length); 
+                    if (m.Clip == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
                 }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
@@ -268,11 +274,14 @@ namespace FantomLis.BoomboxExtended
             bool flag = onOffEntry.on;
             if (flag != Music.isPlaying)
             {
-                if (flag && MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var clip))
+                if (flag)
                 {
-                    Music.clip = clip.Clip;
-                    Music.time = timeEntry.currentTime;
-                    Music.Play();
+                    if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var m) && m.isLoaded)
+                    {
+                        Music.clip = m.Clip;
+                        Music.time = timeEntry.currentTime;
+                        Music.Play();
+                    }
                 }
                 else
                 {
