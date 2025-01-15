@@ -108,4 +108,7 @@
     <data name="BatteryCapacitySettingTip" xml:space="preserve">
         <value>@BatteryCapacityTip</value>
     </data>
+    <data name="MusicNotLoaded" xml:space="preserve">
+        <value>@MusicNotLoaded</value>
+    </data>
 </root>

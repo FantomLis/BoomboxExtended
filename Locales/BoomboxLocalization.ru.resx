@@ -101,4 +101,7 @@
     <data name="BatteryCapacitySettingTip" xml:space="preserve">
         <value>(-1 для бесконечного) </value>
     </data>
+    <data name="MusicNotLoaded" xml:space="preserve">
+        <value>Текущий трек не загружен</value>
+    </data>
 </root>

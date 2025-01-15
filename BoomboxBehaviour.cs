@@ -93,7 +93,7 @@ namespace FantomLis.BoomboxExtended
                     Music.time = timeEntry.currentTime;
                     return;
                 }
-                HelmetText.Instance.SetHelmetText("##Clip is not loaded",2);
+                HelmetText.Instance.SetHelmetText(BoomboxLocalization.MusicNotLoaded,2);
             }
         }
 

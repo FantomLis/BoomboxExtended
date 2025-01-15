@@ -154,6 +154,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @MusicNotLoaded.
+        /// </summary>
+        internal static string MusicNotLoaded {
+            get {
+                return ResourceManager.GetString("MusicNotLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @MusicSelectionMethodSetting.
         /// </summary>
         internal static string MusicSelectionMethodSetting {
