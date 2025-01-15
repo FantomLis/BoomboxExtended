@@ -13,7 +13,7 @@ public class Music
 {
     public string FilePath;
     public string Name => Path.GetFileNameWithoutExtension(FilePath);
-    public bool isLoaded => Clip != null;
+    public bool isLoaded => Clip != null && Clip.loadState == AudioDataLoadState.Loaded;
     public AudioClip Clip;
 
     public Music(string path, AudioClip clip)
@@ -35,10 +35,10 @@ public class Music
             handler.streamAudio = false;
 
             loader.SendWebRequest();
-            await Task.Run((() =>
+            await Task.Run(() =>
             {
                 while (!handler.isDone) ;
-            }));
+            });
             if (loader.error == null)
             {
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);

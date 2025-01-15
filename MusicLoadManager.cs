@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Locales;
@@ -35,32 +36,31 @@ namespace FantomLis.BoomboxExtended
         /// <param name="reloadAllSongs">Fully reload all songs</param>
         public static void StartLoadMusic(string? rootPath = null, string musicPath = "Custom Songs", bool reloadAllSongs = true)
         {
+            if (isLoading) return;  
+            isLoading = true;
             rootPath ??= RootPath;
             string path = System.IO.Path.Combine(rootPath, musicPath);
             if (reloadAllSongs) Music.Clear();
-            StartCoroutine(LoadMusic(path));
+            LoadMusic(path);
         }
-        private static IEnumerator LoadMusic(string path)
+        private static void LoadMusic(string path)
         {
-            if (isLoading) yield break;
-            isLoading = true;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            Music.Clear();
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
             foreach (string file in Directory.GetFiles(path))
             {
                 string name = Path.GetFileNameWithoutExtension(file);
                 if (Music.ContainsKey(name)) continue;
-                var m_load = new Music(file);
-                var m_load_task = m_load.LoadMusic();
+                var music = new Music(file);
+                var m_load_task = music.LoadMusic();
                 __awaiting_tasks.Add(m_load_task);
+                Music.Add(name, music);
                 Task.Run(async () =>
                 {
                     await m_load_task;
-                    Music.Add(name, m_load);
                     LogUtils.LogInfo($"Song Loaded: {name}");
                     AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
                         MoneyCellUI.MoneyCellType.Revenue, name);
@@ -70,7 +70,7 @@ namespace FantomLis.BoomboxExtended
             
             Task.Run(() =>
             {
-                Task.WaitAll(__awaiting_tasks.ToArray());
+                Task.WaitAll(Task.Run(() => { while (__awaiting_tasks.Count > 0) {Thread.Sleep(100); } }));
                 LogUtils.LogInfo($"Loading music finished! ({Music.Count} loaded)");
                 AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins,
                     string.Format(BoomboxLocalization.MusicLoadedAlertDesc, Music.Count.ToString()),
