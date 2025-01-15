@@ -27,6 +27,7 @@ namespace FantomLis.BoomboxExtended
         private AudioSource Music;
         private float lastChangeTime;
         private bool openUI;
+        private bool _curState = false;
         private Vector2 selectionScroll = new Vector2();
         Rect windowRect = new ((Screen.width - Screen.width * uiSize)/2f , (Screen.height - Screen.height * uiSize)/2f , Screen.width*uiSize, Screen.height*uiSize);
         private void OnGUI()
@@ -289,7 +290,9 @@ namespace FantomLis.BoomboxExtended
                     else Music.Pause();
                 }
             }
-
+            if (_curState != flag && (!MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var _m) || !_m.isLoaded))
+                HelmetText.Instance.SetHelmetText(BoomboxLocalization.MusicNotLoaded,2);
+            _curState = flag;
             #endregion
 
             #region Update boombox
