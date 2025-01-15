@@ -52,20 +52,7 @@ namespace FantomLis.BoomboxExtended
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
             foreach (string file in Directory.GetFiles(path))
             {
-                string name = Path.GetFileNameWithoutExtension(file);
-                if (Music.ContainsKey(name)) continue;
-                var music = new Music(file);
-                var m_load_task = music.LoadMusic();
-                __awaiting_tasks.Add(m_load_task);
-                Music.Add(name, music);
-                Task.Run(async () =>
-                {
-                    await m_load_task;
-                    LogUtils.LogInfo($"Song Loaded: {name}");
-                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
-                        MoneyCellUI.MoneyCellType.Revenue, name);
-                    __awaiting_tasks.Remove(m_load_task);
-                });
+                LoadThisMusic(file);
             }
             
             Task.Run(() =>
@@ -76,6 +63,31 @@ namespace FantomLis.BoomboxExtended
                     string.Format(BoomboxLocalization.MusicLoadedAlertDesc, Music.Count.ToString()),
                     dropQueuedAlert: true);
                 isLoading = false;
+            });
+        }
+
+        private static void LoadThisMusic(string file)
+        {
+            string name = Path.GetFileNameWithoutExtension(file);
+            if (Music.ContainsKey(name)) return;
+            var music = new Music(file);
+            var m_load_task = music.LoadMusic();
+            __awaiting_tasks.Add(m_load_task);
+            Music.Add(name, music);
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var state = await m_load_task;
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.LogWarning($"Failed to load file {file}: ({ex.ToString()})");
+                }
+                LogUtils.LogInfo($"Song Loaded: {name}");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                    MoneyCellUI.MoneyCellType.Revenue, name);
+                __awaiting_tasks.Remove(m_load_task);
             });
         }
 

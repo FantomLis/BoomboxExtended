@@ -50,15 +50,14 @@ public class Music
             }
             else
             {
-                LogUtils.LogWarning($"Failed to load file {FilePath}: ({loader.error})");
+                throw new FileLoadException(loader.error);
             }
 
             return true;
         }
         catch (Exception ex)
         {
-            LogUtils.LogError(ex);
-            return false;
+            throw;
         }
     }
 }
