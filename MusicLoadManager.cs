@@ -18,6 +18,7 @@ namespace FantomLis.BoomboxExtended
         public static Dictionary<string, Music> Music = new ();
         private static bool isLoading = false;
         private static List<Task> __awaiting_tasks = new();
+        static FileSystemWatcher _watcher = new FileSystemWatcher();
         /// <summary>
         /// Default Root Path from which music is searching
         /// </summary>
@@ -50,6 +51,35 @@ namespace FantomLis.BoomboxExtended
                 Directory.CreateDirectory(path);
             }
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
+            _watcher.Path = path;
+            _watcher.Changed += (sender, args) =>
+            {
+                Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
+                AlertUtils.AddMoneyCellAlert($"Song(s) changed", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                LoadThisMusic(args.FullPath);
+            };
+            _watcher.Created += (sender, args) =>
+            {
+                AlertUtils.AddMoneyCellAlert($"Found new song(s)", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                LoadThisMusic(args.FullPath);
+            };
+            _watcher.Deleted += (sender, args) =>
+            {
+                Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
+                AlertUtils.AddMoneyCellAlert($"Removed song(s)", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+            };
+            _watcher.Renamed += (sender, args) =>
+            {
+                Music.Remove(Path.GetFileNameWithoutExtension(args.OldName));
+                AlertUtils.AddMoneyCellAlert($"Song(s) renamed", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                LoadThisMusic(args.FullPath);
+            };
+            _watcher.Error += (sender, args) =>
+            {
+                LogUtils.LogError($"Unable to continue to monitor folder {path}: {args.GetException().ToString()}");
+                AlertUtils.AddMoneyCellAlert($"Music hot-loader failed", MoneyCellUI.MoneyCellType.HospitalBill, "", true);
+            };
+            _watcher.EnableRaisingEvents = true;
             foreach (string file in Directory.GetFiles(path))
             {
                 LoadThisMusic(file);
