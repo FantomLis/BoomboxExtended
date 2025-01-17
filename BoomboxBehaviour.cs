@@ -21,7 +21,7 @@ namespace FantomLis.BoomboxExtended
         private TimeEntry timeEntry;
         private VolumeEntry volumeEntry;
         private MusicNameEntry musicEntry;
-        private PlayerEntry _lengthEntry;
+        private PlayerEntry _playerEntry;
 
         private SFX_PlayOneShot Click;
         private AudioSource Music;
@@ -89,8 +89,8 @@ namespace FantomLis.BoomboxExtended
                 if (m.isLoaded)
                 {
                     Music.clip = m.Clip;
-                    _lengthEntry.UpdateLenght(m.Clip.length);
-                    _lengthEntry.UpdateLenght(Music.clip.length);
+                    _playerEntry.UpdateLenght(m.Clip.length);
+                    _playerEntry.UpdateLenght(Music.clip.length);
                     Music.time = timeEntry.currentTime;
                     return;
                 }
@@ -147,10 +147,10 @@ namespace FantomLis.BoomboxExtended
                 data.AddDataEntry(musicEntry);
             }
             
-            if (!data.TryGetEntry(out _lengthEntry))
+            if (!data.TryGetEntry(out _playerEntry))
             {
-                _lengthEntry = new PlayerEntry();
-                data.AddDataEntry(_lengthEntry);
+                _playerEntry = new PlayerEntry();
+                data.AddDataEntry(_playerEntry);
             }
 
             if (!data.TryGetEntry(out volumeEntry))
@@ -262,8 +262,8 @@ namespace FantomLis.BoomboxExtended
 
                 musicEntry.UpdateMusicName();
                 if (MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var m) && m.isLoaded) {
-                    _lengthEntry.UpdateLenght(m.Clip.length); 
-                    if (m.Clip == Music.clip) _lengthEntry.UpdateCurrentPosition(Music.time);
+                    _playerEntry.UpdateLenght(m.Clip.length); 
+                    if (m.Clip == Music.clip) _playerEntry.UpdateCurrentPosition(Music.time);
                 }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
