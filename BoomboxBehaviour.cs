@@ -265,6 +265,12 @@ namespace FantomLis.BoomboxExtended
                     _playerEntry.UpdateLenght(m.Clip.length); 
                     if (m.Clip == Music.clip) _playerEntry.UpdateCurrentPosition(Music.time);
                 }
+                else if (MusicLoadManager.Music.Count > 0)
+                {
+                    onOffEntry.on = false;
+                    Music.clip = null;
+                    NextMusic();
+                }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {
                 onOffEntry.on = false;

@@ -11,10 +11,13 @@ public class MusicNameEntry(string musicID = "") : BaseEntry, IHaveUIData
     public MusicNameEntry() : this("") {}
     private string MusicName = BoomboxLocalization.NoMusicLoaded;
     public string MusicID { private set; get; } = musicID;
+    private bool _isInitialized = false;
     public int MusicIndex => MusicLoadManager.Music.Keys.ToList().IndexOf(MusicID);
 
     public void InitializeEntry()
-    {if (string.IsNullOrWhiteSpace(MusicID) || MusicIndex == -1) TryUpdateMusicEntry(MusicLoadManager.Music.Keys.FirstOrDefault() ?? ""); } 
+    {if (!_isInitialized) TryUpdateMusicEntry(MusicLoadManager.Music.Keys.FirstOrDefault() ?? "");
+        _isInitialized = true;
+    } 
 
     public override void Deserialize(BinaryDeserializer binaryDeserializer)
     {
