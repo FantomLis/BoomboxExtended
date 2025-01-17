@@ -103,20 +103,28 @@ namespace FantomLis.BoomboxExtended
             var music = new Music(file);
             var m_load_task = music.LoadMusic();
             __awaiting_tasks.Add(m_load_task);
-            Music.Add(name, music);
             Task.Run(async () =>
             {
                 try
                 {
-                    var state = await m_load_task;
+                    if (await m_load_task is false)
+                    {
+                        LogUtils.LogWarning($"Failed to load file {file}: File is not a supported audio file.");
+                        AlertUtils.AddMoneyCellAlert("##Failed to load file",
+                            MoneyCellUI.MoneyCellType.HospitalBill, name);
+                    }
+                    else
+                    {
+                        Music.Add(name, music);
+                        LogUtils.LogInfo($"Song Loaded: {name}");
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                            MoneyCellUI.MoneyCellType.Revenue, name);
+                    }
                 }
                 catch (Exception ex)
                 {
                     LogUtils.LogWarning($"Failed to load file {file}: ({ex.ToString()})");
                 }
-                LogUtils.LogInfo($"Song Loaded: {name}");
-                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
-                    MoneyCellUI.MoneyCellType.Revenue, name);
                 __awaiting_tasks.Remove(m_load_task);
             });
         }
