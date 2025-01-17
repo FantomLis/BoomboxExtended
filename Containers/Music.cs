@@ -27,7 +27,6 @@ public record Music
     private string __FilePath;
     public string Name => Path.GetFileNameWithoutExtension(FilePath);
     public bool isLoaded => Clip != null && Clip.loadState == AudioDataLoadState.Loaded;
-    public bool isRemoved { get; private set; }
     public AudioClip? Clip;
 
     public Music(string path, AudioClip clip)
@@ -37,13 +36,6 @@ public record Music
     }
 
     public Music(string path) => FilePath = path;
-
-    public void RemoveMusic()
-    {
-        Clip?.UnloadAudioData();
-        Clip = null;
-        isRemoved = true;
-    }
 
     public async Task<bool> LoadMusic()
     {
@@ -67,6 +59,7 @@ public record Music
                 {
                     clip.name = Path.GetFileNameWithoutExtension(FilePath);
                     Clip = clip;
+                    if (!isLoaded) throw new InvalidOperationException("File loading failed with unknown reason");
                 }
             }
             else

@@ -129,4 +129,7 @@
     <data name="FileChangedAlert" xml:space="preserve">
         <value>@FileChangedAlert</value>
     </data>
+    <data name="FileInvalidAlert" xml:space="preserve">
+        <value>@FileInvalidAlert</value>
+    </data>
 </root>

@@ -154,6 +154,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @FileInvalidAlert.
+        /// </summary>
+        internal static string FileInvalidAlert {
+            get {
+                return ResourceManager.GetString("FileInvalidAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @FileLoadFailAlert.
         /// </summary>
         internal static string FileLoadFailAlert {

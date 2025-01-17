@@ -122,4 +122,7 @@
     <data name="FileChangedAlert" xml:space="preserve">
         <value>Файл(ы) изменен(ы)</value>
     </data>
+    <data name="FileInvalidAlert" xml:space="preserve">
+        <value>Файл не валиден</value>
+    </data>
 </root>

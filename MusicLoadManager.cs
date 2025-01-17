@@ -107,6 +107,12 @@ namespace FantomLis.BoomboxExtended
                         AlertUtils.AddMoneyCellAlert(BoomboxLocalization.UnsupportedAudioFileAlert,
                             MoneyCellUI.MoneyCellType.HospitalBill, name);
                     }
+                    else if (!music.Clip)    
+                    {
+                        LogUtils.LogError($"Failed to load file {file}: Audio is invalid.");
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileInvalidAlert,
+                            MoneyCellUI.MoneyCellType.HospitalBill, name);
+                    }
                     else
                     {
                         Music.Add(name, music);

@@ -265,7 +265,7 @@ namespace FantomLis.BoomboxExtended
                     _playerEntry.UpdateLenght(m.Clip.length); 
                     if (m.Clip == Music.clip) _playerEntry.UpdateCurrentPosition(Music.time);
                 }
-                else if (MusicLoadManager.Music.Count > 0)
+                else if (MusicLoadManager.Music.Count > 0 || !MusicLoadManager.Music.ContainsKey(musicEntry.MusicID))
                 {
                     onOffEntry.on = false;
                     Music.clip = null;
