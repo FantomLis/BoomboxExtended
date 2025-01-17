@@ -55,29 +55,23 @@ namespace FantomLis.BoomboxExtended
             _watcher.Changed += (sender, args) =>
             {
                 Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
-                AlertUtils.AddMoneyCellAlert($"Song(s) changed", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileChangedAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
                 LoadThisMusic(args.FullPath);
             };
             _watcher.Created += (sender, args) =>
             {
-                AlertUtils.AddMoneyCellAlert($"Found new song(s)", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileFoundAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
                 LoadThisMusic(args.FullPath);
             };
             _watcher.Deleted += (sender, args) =>
             {
-                Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
-                AlertUtils.AddMoneyCellAlert($"Removed song(s)", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
-            };
-            _watcher.Renamed += (sender, args) =>
-            {
-                Music.Remove(Path.GetFileNameWithoutExtension(args.OldName));
-                AlertUtils.AddMoneyCellAlert($"Song(s) renamed", MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
-                LoadThisMusic(args.FullPath);
+                var rm = Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
+                if (rm) AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicUnloadedAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
             };
             _watcher.Error += (sender, args) =>
             {
                 LogUtils.LogError($"Unable to continue to monitor folder {path}: {args.GetException().ToString()}");
-                AlertUtils.AddMoneyCellAlert($"Music hot-loader failed", MoneyCellUI.MoneyCellType.HospitalBill, "", true);
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicHotLoaderFailedAlert, MoneyCellUI.MoneyCellType.HospitalBill, "", true);
             };
             _watcher.EnableRaisingEvents = true;
             foreach (string file in Directory.GetFiles(path))
@@ -110,7 +104,7 @@ namespace FantomLis.BoomboxExtended
                     if (await m_load_task is false)
                     {
                         LogUtils.LogWarning($"Failed to load file {file}: File is not a supported audio file.");
-                        AlertUtils.AddMoneyCellAlert("##Failed to load file",
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.UnsupportedAudioFileAlert,
                             MoneyCellUI.MoneyCellType.HospitalBill, name);
                     }
                     else
@@ -124,6 +118,8 @@ namespace FantomLis.BoomboxExtended
                 catch (Exception ex)
                 {
                     LogUtils.LogWarning($"Failed to load file {file}: ({ex.ToString()})");
+                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileLoadFailAlert,
+                        MoneyCellUI.MoneyCellType.HospitalBill, ex.Message);
                 }
                 __awaiting_tasks.Remove(m_load_task);
             });

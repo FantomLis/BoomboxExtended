@@ -136,6 +136,42 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @FileChangedAlert.
+        /// </summary>
+        internal static string FileChangedAlert {
+            get {
+                return ResourceManager.GetString("FileChangedAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @FileFoundAlert.
+        /// </summary>
+        internal static string FileFoundAlert {
+            get {
+                return ResourceManager.GetString("FileFoundAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @FileLoadFailAlert.
+        /// </summary>
+        internal static string FileLoadFailAlert {
+            get {
+                return ResourceManager.GetString("FileLoadFailAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @MusicHotLoaderFailedAlert.
+        /// </summary>
+        internal static string MusicHotLoaderFailedAlert {
+            get {
+                return ResourceManager.GetString("MusicHotLoaderFailedAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @MusicLoadedAlert.
         /// </summary>
         internal static string MusicLoadedAlert {
@@ -168,6 +204,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         internal static string MusicSelectionMethodSetting {
             get {
                 return ResourceManager.GetString("MusicSelectionMethodSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @MusicUnloadedAlert.
+        /// </summary>
+        internal static string MusicUnloadedAlert {
+            get {
+                return ResourceManager.GetString("MusicUnloadedAlert", resourceCulture);
             }
         }
         
@@ -276,6 +321,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         internal static string UISwitchToolTip {
             get {
                 return ResourceManager.GetString("UISwitchToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @UnsupportedAudioFileAlert.
+        /// </summary>
+        internal static string UnsupportedAudioFileAlert {
+            get {
+                return ResourceManager.GetString("UnsupportedAudioFileAlert", resourceCulture);
             }
         }
         
