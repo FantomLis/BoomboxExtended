@@ -9,12 +9,26 @@ using UnityEngine.Networking;
 
 namespace FantomLis.BoomboxExtended.Containers;
 
-public class Music
+public record Music
 {
-    public string FilePath;
+    public string FilePath
+    {
+        get => __FilePath;
+        set
+        {
+            if (__FilePath != value) {
+            {
+                Clip?.UnloadAudioData();
+                Clip = null;
+                __FilePath = value;
+            }} 
+        } }
+
+    private string __FilePath;
     public string Name => Path.GetFileNameWithoutExtension(FilePath);
     public bool isLoaded => Clip != null && Clip.loadState == AudioDataLoadState.Loaded;
-    public AudioClip Clip;
+    public bool isRemoved { get; private set; }
+    public AudioClip? Clip;
 
     public Music(string path, AudioClip clip)
     {
@@ -23,6 +37,13 @@ public class Music
     }
 
     public Music(string path) => FilePath = path;
+
+    public void RemoveMusic()
+    {
+        Clip?.UnloadAudioData();
+        Clip = null;
+        isRemoved = true;
+    }
 
     public async Task<bool> LoadMusic()
     {
