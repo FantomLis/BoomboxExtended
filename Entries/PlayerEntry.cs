@@ -13,14 +13,16 @@ public class PlayerEntry: BaseEntry, IHaveUIData
     public float GetPercent => Position / Lenght;
     public void UpdateLenght(float length)
     {
-        if (length <= 0) throw new ArgumentException($"Length should be more than 0.");
+        if (length < 0) throw new ArgumentException($"Length should be more or equals 0.");
         Lenght = length;
+        SetDirty();
     }
     
     public void UpdateCurrentPosition(float pos)
     {
         if (pos < 0) throw new ArgumentException($"Position should be more or equals 0.");
         Position = pos;
+        SetDirty();
     }
 
     public override void Serialize(BinarySerializer binarySerializer)

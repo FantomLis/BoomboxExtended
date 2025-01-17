@@ -101,4 +101,28 @@
     <data name="BatteryCapacitySettingTip" xml:space="preserve">
         <value> (-1 to infinite)</value>
     </data>
+    <data name="MusicNotLoaded" xml:space="preserve">
+        <value>Current music is not loaded</value>
+    </data>
+    <data name="UnsupportedAudioFileAlert" xml:space="preserve">
+        <value>File is not a supported audio file</value>
+    </data>
+    <data name="FileLoadFailAlert" xml:space="preserve">
+        <value>File failed to load</value>
+    </data>
+    <data name="MusicHotLoaderFailedAlert" xml:space="preserve">
+        <value>Music Hot-Loading crashed</value>
+    </data>
+    <data name="FileFoundAlert" xml:space="preserve">
+        <value>File(s) found</value>
+    </data>
+    <data name="MusicUnloadedAlert" xml:space="preserve">
+        <value>Music removed</value>
+    </data>
+    <data name="FileChangedAlert" xml:space="preserve">
+        <value>File(s) changed</value>
+    </data>
+    <data name="FileInvalidAlert" xml:space="preserve">
+        <value>File(s) invalid</value>
+    </data>
 </root>

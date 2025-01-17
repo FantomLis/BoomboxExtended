@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
 using UnityEngine;
@@ -13,14 +15,43 @@ namespace FantomLis.BoomboxExtended
     public class MusicLoadManager : MonoBehaviour
     {
         private static MusicLoadManager? Instance;
-        public static Dictionary<string, AudioClip> clips = new ();
+        public static Dictionary<string, Music> Music = new ();
         private static bool isLoading = false;
         private static List<Task> __awaiting_tasks = new();
+        static FileSystemWatcher _watcher;
+
+        private static void _makeWatcher(string path)
+        {
+            _watcher = new FileSystemWatcher();
+            _watcher.Path = path;
+            _watcher.Changed += (sender, args) =>
+            {
+                Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileChangedAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                LoadThisMusic(args.FullPath);
+            };
+            _watcher.Created += (sender, args) =>
+            {
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileFoundAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+                LoadThisMusic(args.FullPath);
+            };
+            _watcher.Deleted += (sender, args) =>
+            {
+                var rm = Music.Remove(Path.GetFileNameWithoutExtension(args.Name));
+                if (rm) AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicUnloadedAlert, MoneyCellUI.MoneyCellType.Revenue, $"{Path.GetFileNameWithoutExtension(args.Name)}");
+            };
+            _watcher.Error += (sender, args) =>
+            {
+                LogUtils.LogError($"Unable to continue to monitor folder {path}: {args.GetException().ToString()}");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicHotLoaderFailedAlert, MoneyCellUI.MoneyCellType.HospitalBill, "", true);
+            };
+            _watcher.EnableRaisingEvents = true;
+        }
         /// <summary>
         /// Default Root Path from which music is searching
         /// </summary>
         internal static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
-        private new static Coroutine StartCoroutine(IEnumerator enumerator)
+        private new static Coroutine _StartCoroutine(IEnumerator enumerator)
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
@@ -34,75 +65,75 @@ namespace FantomLis.BoomboxExtended
         /// <param name="reloadAllSongs">Fully reload all songs</param>
         public static void StartLoadMusic(string? rootPath = null, string musicPath = "Custom Songs", bool reloadAllSongs = true)
         {
+            if (isLoading) return;  
+            isLoading = true;
             rootPath ??= RootPath;
             string path = System.IO.Path.Combine(rootPath, musicPath);
-            if (reloadAllSongs) clips.Clear();
-            StartCoroutine(LoadMusic(path));
+            if (reloadAllSongs) Music.Clear();
+            LoadMusic(path);
         }
-        private static IEnumerator LoadMusic(string path)
+        private static void LoadMusic(string path)
         {
-            if (isLoading) yield break;
-            isLoading = true;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            clips.Clear();
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
+            if (MyceliumNetworking.MyceliumNetwork.IsHost) _makeWatcher(path);
             foreach (string file in Directory.GetFiles(path))
             {
-                if (clips.ContainsKey(Path.GetFileNameWithoutExtension(file))) continue;
-                AudioType type = GetAudioType(file);
-                if (type != AudioType.UNKNOWN)
+                LoadThisMusic(file);
+            }
+            
+            Task.Run(() =>
+            {
+                Task.WaitAll(Task.Run(() => { while (__awaiting_tasks.Count > 0) {Thread.Sleep(100); } }));
+                LogUtils.LogInfo($"Loading music finished! ({Music.Count} loaded)");
+                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins,
+                    string.Format(BoomboxLocalization.MusicLoadedAlertDesc, Music.Count.ToString()),
+                    dropQueuedAlert: true);
+                isLoading = false;
+            });
+        }
+
+        private static void LoadThisMusic(string file)
+        {
+            string name = Path.GetFileNameWithoutExtension(file);
+            if (Music.ContainsKey(name)) return;
+            var music = new Music(file);
+            var m_load_task = music.LoadMusic();
+            __awaiting_tasks.Add(m_load_task);
+            Task.Run(async () =>
+            {
+                try
                 {
-                    UnityWebRequest loader = UnityWebRequestMultimedia.GetAudioClip(file, type);
-                    DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)loader.downloadHandler;
-                    handler.streamAudio = false;
-
-                    loader.SendWebRequest();
-                    
-                    yield return new WaitUntil(() => handler.isDone);
-                    if (loader.error == null)
+                    if (await m_load_task is false)
                     {
-                        try
-                        {
-                            Task? finishingLoadingTask = null;
-                            finishingLoadingTask = Task.Run(() =>
-                            {
-                                AudioClip clip = DownloadHandlerAudioClip.GetContent(loader);
-                                if (clip && clip.loadState == AudioDataLoadState.Loaded && clip.length != 0)
-                                {
-                                    clip.name = Path.GetFileNameWithoutExtension(file);
-                                    if (!clips.TryAdd(clip.name, clip)) return; 
-
-                                    LogUtils.LogInfo($"Song Loaded: {clip.name}");
-                                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
-                                        MoneyCellUI.MoneyCellType.Revenue, clip.name);
-                                    __awaiting_tasks.Remove(finishingLoadingTask);
-                                }
-                            });
-                            __awaiting_tasks.Add(finishingLoadingTask);
-                        }
-                        catch (Exception ex)
-                        {
-                            LogUtils.LogError(ex);
-                        }
+                        LogUtils.LogWarning($"Failed to load file {file}: File is not a supported audio file.");
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.UnsupportedAudioFileAlert,
+                            MoneyCellUI.MoneyCellType.HospitalBill, name);
+                    }
+                    else if (!music.Clip)    
+                    {
+                        LogUtils.LogError($"Failed to load file {file}: Audio is invalid.");
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileInvalidAlert,
+                            MoneyCellUI.MoneyCellType.HospitalBill, name);
                     }
                     else
                     {
-                        LogUtils.LogWarning($"Failed to load file {file}: ({loader.error})");
+                        Music.Add(name, music);
+                        LogUtils.LogInfo($"Song Loaded: {name}");
+                        AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
+                            MoneyCellUI.MoneyCellType.Revenue, name);
                     }
                 }
-            }
-
-            Task.Run(() =>
-            {
-                Task.WaitAll(__awaiting_tasks.ToArray());
-                LogUtils.LogInfo($"Loading music finished! ({clips.Count} loaded)");
-                AlertUtils.AddMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert, MoneyCellUI.MoneyCellType.MetaCoins,
-                    string.Format(BoomboxLocalization.MusicLoadedAlertDesc, clips.Count.ToString()),
-                    dropQueuedAlert: true);
-                isLoading = false;
+                catch (Exception ex)
+                {
+                    LogUtils.LogWarning($"Failed to load file {file}: ({ex.ToString()})");
+                    AlertUtils.AddMoneyCellAlert(BoomboxLocalization.FileLoadFailAlert,
+                        MoneyCellUI.MoneyCellType.HospitalBill, ex.Message);
+                }
+                __awaiting_tasks.Remove(m_load_task);
             });
         }
 
@@ -118,6 +149,19 @@ namespace FantomLis.BoomboxExtended
                 return AudioType.MPEG;
 
             return AudioType.UNKNOWN;
+        }
+
+        public static void UnloadMusic()
+        {
+            _StartCoroutine(_unloadMusic());
+        }
+
+        private static IEnumerator _unloadMusic()
+        {
+            yield return new WaitUntil(() => !isLoading);
+            Music.Clear();
+            _watcher.EnableRaisingEvents = false;
+            _watcher = null;
         }
     }
 }
