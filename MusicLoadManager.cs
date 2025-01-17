@@ -51,7 +51,7 @@ namespace FantomLis.BoomboxExtended
         /// Default Root Path from which music is searching
         /// </summary>
         internal static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
-        private new static Coroutine StartCoroutine(IEnumerator enumerator)
+        private new static Coroutine _StartCoroutine(IEnumerator enumerator)
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
