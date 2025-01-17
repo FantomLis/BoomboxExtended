@@ -128,6 +128,7 @@ namespace FantomLis.BoomboxExtended
                 CurrentBoomboxPrice = BoomboxPrice.Value;
                 BoomboxItem.price = CurrentBoomboxPrice;
                 CurrentPauseMusic = PauseMusicSetting.Value;
+                MusicLoadManager.UnloadMusic();
             };
             MyceliumNetwork.LobbyDataUpdated += (a) => x();  
             LogUtils.LogDebug("All events registered.");

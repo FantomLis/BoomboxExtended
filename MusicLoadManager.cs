@@ -150,5 +150,18 @@ namespace FantomLis.BoomboxExtended
 
             return AudioType.UNKNOWN;
         }
+
+        public static void UnloadMusic()
+        {
+            _StartCoroutine(_unloadMusic());
+        }
+
+        private static IEnumerator _unloadMusic()
+        {
+            yield return new WaitUntil(() => !isLoading);
+            Music.Clear();
+            _watcher.EnableRaisingEvents = false;
+            _watcher = null;
+        }
     }
 }
