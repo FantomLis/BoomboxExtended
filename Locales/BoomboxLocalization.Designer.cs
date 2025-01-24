@@ -253,6 +253,15 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @OpenMusicFolderButton.
+        /// </summary>
+        internal static string OpenMusicFolderButton {
+            get {
+                return ResourceManager.GetString("OpenMusicFolderButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @PauseMusicSetting.
         /// </summary>
         internal static string PauseMusicSetting {

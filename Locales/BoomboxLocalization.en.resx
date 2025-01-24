@@ -125,4 +125,7 @@
     <data name="FileInvalidAlert" xml:space="preserve">
         <value>File(s) invalid</value>
     </data>
+    <data name="OpenMusicFolderButton" xml:space="preserve">
+        <value>Open music folder</value>
+    </data>
 </root>

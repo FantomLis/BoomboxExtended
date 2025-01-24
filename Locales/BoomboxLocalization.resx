@@ -132,4 +132,7 @@
     <data name="FileInvalidAlert" xml:space="preserve">
         <value>@FileInvalidAlert</value>
     </data>
+    <data name="OpenMusicFolderButton" xml:space="preserve">
+        <value>@OpenMusicFolderButton</value>
+    </data>
 </root>
