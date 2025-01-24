@@ -79,7 +79,7 @@ public static class LogUtils
                 Debug.Log(b.ToString());
                 break;
             case LogType.Warning:
-                Debug.LogWarning(b.ToString());
+                Debug.LogError(b.ToString()); // LogWarning for some reason not shown in console
                 break;
             case LogType.Error:
                 Debug.LogError(b.ToString());
