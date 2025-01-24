@@ -11,10 +11,13 @@ public class MusicNameEntry(string musicID = "") : BaseEntry, IHaveUIData
     public MusicNameEntry() : this("") {}
     private string MusicName = BoomboxLocalization.NoMusicLoaded;
     public string MusicID { private set; get; } = musicID;
-    public int MusicIndex => MusicLoadManager.clips.Keys.ToList().IndexOf(MusicID);
+    private bool _isInitialized = false;
+    public int MusicIndex => MusicLoadManager.Music.Keys.ToList().IndexOf(MusicID);
 
     public void InitializeEntry()
-    {if (string.IsNullOrWhiteSpace(MusicID) || MusicIndex == -1) TryUpdateMusicEntry(MusicLoadManager.clips.Keys.FirstOrDefault() ?? ""); } 
+    {if (!_isInitialized) TryUpdateMusicEntry(MusicLoadManager.Music.Keys.FirstOrDefault() ?? "");
+        _isInitialized = true;
+    } 
 
     public override void Deserialize(BinaryDeserializer binaryDeserializer)
     {
@@ -25,7 +28,7 @@ public class MusicNameEntry(string musicID = "") : BaseEntry, IHaveUIData
     {
         try
         {
-            if (MusicLoadManager.clips.Count <= 0) return false;
+            if (MusicLoadManager.Music.Count <= 0) return false;
             this.MusicID = musicID;
             SetDirty();
             UpdateMusicName();
@@ -34,10 +37,10 @@ public class MusicNameEntry(string musicID = "") : BaseEntry, IHaveUIData
         catch (IndexOutOfRangeException ex) { return false;}
     }
     /// <remarks>Unsafe, can cause wrong music selected when clip dictionary is updated</remarks>
-    public bool TryUpdateMusicEntry(int musicIndex) => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[((musicIndex) % MusicLoadManager.clips.Count)]);
+    public bool TryUpdateMusicEntry(int musicIndex) => TryUpdateMusicEntry(MusicLoadManager.Music.Keys.ToArray()[((musicIndex) % MusicLoadManager.Music.Count)]);
     public void UpdateMusicEntry(string musicID) => TryUpdateMusicEntry(musicID);
-    public void NextMusic() => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[(MusicIndex + 1 + MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count]);
-    public void PreviousMusic() => TryUpdateMusicEntry(MusicLoadManager.clips.Keys.ToArray()[(MusicIndex - 1 + MusicLoadManager.clips.Count) % MusicLoadManager.clips.Count]);
+    public void NextMusic() => TryUpdateMusicEntry(MusicLoadManager.Music.Keys.ToArray()[(MusicIndex + 1 + MusicLoadManager.Music.Count) % MusicLoadManager.Music.Count]);
+    public void PreviousMusic() => TryUpdateMusicEntry(MusicLoadManager.Music.Keys.ToArray()[(MusicIndex - 1 + MusicLoadManager.Music.Count) % MusicLoadManager.Music.Count]);
 
     public override void Serialize(BinarySerializer binarySerializer)
     {
@@ -46,9 +49,9 @@ public class MusicNameEntry(string musicID = "") : BaseEntry, IHaveUIData
 
     public void UpdateMusicName()
     {
-        if (MusicLoadManager.clips.Count > 0
-            && MusicLoadManager.clips.ContainsKey(MusicID))
-            MusicName = GetDisplayName(MusicLoadManager.clips[MusicID].name);
+        if (MusicLoadManager.Music.Count > 0
+            && MusicLoadManager.Music.ContainsKey(MusicID))
+            MusicName = GetDisplayName(MusicLoadManager.Music[MusicID].Name);
         else MusicName = BoomboxLocalization.NoMusicLoaded;
     }
 

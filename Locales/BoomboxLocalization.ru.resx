@@ -101,4 +101,31 @@
     <data name="BatteryCapacitySettingTip" xml:space="preserve">
         <value>(-1 для бесконечного) </value>
     </data>
+    <data name="MusicNotLoaded" xml:space="preserve">
+        <value>Текущий трек не загружен</value>
+    </data>
+    <data name="UnsupportedAudioFileAlert" xml:space="preserve">
+        <value>Файл не является поддерживаемым аудио</value>
+    </data>
+    <data name="FileLoadFailAlert" xml:space="preserve">
+        <value>Файл не загружен</value>
+    </data>
+    <data name="MusicHotLoaderFailedAlert" xml:space="preserve">
+        <value>Быстрая загрузка музыки вызвала ошибку</value>
+    </data>
+    <data name="FileFoundAlert" xml:space="preserve">
+        <value>Найдены файл(ы)</value>
+    </data>
+    <data name="MusicUnloadedAlert" xml:space="preserve">
+        <value>Музыка удалена</value>
+    </data>
+    <data name="FileChangedAlert" xml:space="preserve">
+        <value>Файл(ы) изменен(ы)</value>
+    </data>
+    <data name="FileInvalidAlert" xml:space="preserve">
+        <value>Файл не валиден</value>
+    </data>
+    <data name="OpenMusicFolderButton" xml:space="preserve">
+        <value>Открыть папку с музыкой</value>
+    </data>
 </root>

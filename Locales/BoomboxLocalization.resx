@@ -108,4 +108,31 @@
     <data name="BatteryCapacitySettingTip" xml:space="preserve">
         <value>@BatteryCapacityTip</value>
     </data>
+    <data name="MusicNotLoaded" xml:space="preserve">
+        <value>@MusicNotLoaded</value>
+    </data>
+    <data name="UnsupportedAudioFileAlert" xml:space="preserve">
+        <value>@UnsupportedAudioFileAlert</value>
+    </data>
+    <data name="FileLoadFailAlert" xml:space="preserve">
+        <value>@FileLoadFailAlert</value>
+    </data>
+    <data name="MusicHotLoaderFailedAlert" xml:space="preserve">
+        <value>@MusicHotLoaderFailedAlert</value>
+    </data>
+    <data name="FileFoundAlert" xml:space="preserve">
+        <value>@FileFoundAlert</value>
+    </data>
+    <data name="MusicUnloadedAlert" xml:space="preserve">
+        <value>@MusicUnloadedAlert</value>
+    </data>
+    <data name="FileChangedAlert" xml:space="preserve">
+        <value>@FileChangedAlert</value>
+    </data>
+    <data name="FileInvalidAlert" xml:space="preserve">
+        <value>@FileInvalidAlert</value>
+    </data>
+    <data name="OpenMusicFolderButton" xml:space="preserve">
+        <value>@OpenMusicFolderButton</value>
+    </data>
 </root>

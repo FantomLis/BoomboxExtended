@@ -23,6 +23,9 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
         Original,
         Default
     }
+    internal delegate void _MusicSelectionMethodUpdated();
+
+    internal event _MusicSelectionMethodUpdated MusicSelectionMethod_Updated;
 
     public SettingCategory GetSettingCategory() => SettingCategory.Mods;
 
@@ -33,7 +36,7 @@ public class MusicSelectionMethodSetting : EnumSetting, IDefaultSetting
     {
         LogUtils.LogDebug($"Parameter {GetDefaultDisplayName()} is set to {Value}");
         if (!MyceliumNetwork.InLobby) return;
-        Boombox.Self.GetComponents<BoomboxBehaviour>().ForEach(x=>x.UpdateEquippedUI());
+        MusicSelectionMethod_Updated?.Invoke();
     }
     public override int GetDefaultValue() => (int) BoomboxMusicSelectionMethod.Default;
 
