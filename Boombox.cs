@@ -173,7 +173,7 @@ namespace FantomLis.BoomboxExtended
                     {
                         isSomethingWasThere = true;
                         filename = Path.GetFileName(_f_path);
-                        if (File.Exists(Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.DefaultFolder, filename)))
+                        if (File.Exists(Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.HostFolder, filename)))
                         {
                             LogUtils.LogWarning($"Found file ({filename}) with same name in destination folder. Skipping...");
                             continue;
@@ -183,7 +183,7 @@ namespace FantomLis.BoomboxExtended
                             LogUtils.LogWarning($"Unknown audio file {filename}, skipping...");
                             continue;
                         }
-                        File.Move(_f_path, Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.DefaultFolder, filename));
+                        File.Move(_f_path, Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.HostFolder, filename));
                         LogUtils.LogInfo($"Migrated {filename} to new folder.");
                     }
 

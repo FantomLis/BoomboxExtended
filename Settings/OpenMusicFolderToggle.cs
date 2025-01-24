@@ -15,7 +15,7 @@ public class OpenMusicFolderToggle : BoolSetting, IDefaultSetting
         if (Value == true)
         {
             Process.Start(
-                Path.Combine(Application.dataPath,MusicLoadManager.RootPath, MusicLoadManager.DefaultFolder));
+                Path.Combine(Application.dataPath,MusicLoadManager.RootPath, MusicLoadManager.HostFolder));
             Value = false;
         }
     }

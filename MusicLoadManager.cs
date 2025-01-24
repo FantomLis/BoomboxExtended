@@ -52,8 +52,8 @@ namespace FantomLis.BoomboxExtended
         /// </summary>
         internal static string RootPath = Path.Combine(Application.dataPath, "Mod Resources", "Boombox");
 
-        internal static string DefaultFolder = "Custom Songs";
-        private new static Coroutine _StartCoroutine(IEnumerator enumerator)
+        internal static string HostFolder = "Custom Songs";
+        private static Coroutine _StartCoroutine(IEnumerator enumerator)
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
@@ -62,16 +62,11 @@ namespace FantomLis.BoomboxExtended
         /// <summary>
         /// Loads music from folder
         /// </summary>
-        /// <param name="rootPath">Root path from which music is searching (null = <see cref="MusicLoadManager.RootPath"/>)</param>
-        /// <param name="musicPath">Path to music folder in Root</param>
-        /// <param name="reloadAllSongs">Fully reload all songs</param>
-        public static void StartLoadMusic(string? rootPath = null, string musicPath = null, bool reloadAllSongs = true)
+        public static void StartLoadMusic(bool reloadAllSongs = true)
         {
             if (isLoading) return;  
             isLoading = true;
-            rootPath ??= RootPath;
-            musicPath ??= DefaultFolder;
-            string path = System.IO.Path.Combine(rootPath, musicPath);
+            string path = System.IO.Path.Combine(RootPath, HostFolder);
             if (reloadAllSongs) Music.Clear();
             LoadMusic(path);
         }

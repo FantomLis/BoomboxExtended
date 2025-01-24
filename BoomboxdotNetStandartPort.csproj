@@ -85,6 +85,9 @@
       <Reference Include="Assembly-CSharp">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Assembly-CSharp.dll</HintPath>  
       </Reference>
+      <Reference Include="com.rlabrecque.steamworks.net">
+        <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
+      </Reference>
       <Reference Include="ModalAssembly">
         <HintPath>F:\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\ModalAssembly.dll</HintPath>
       </Reference>
