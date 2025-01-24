@@ -4,11 +4,10 @@
         <AssemblyName>FantomLis.BoomboxExtended</AssemblyName>
         <Product>BoomboxExtended</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>0.1</Version>
-        <Description>Test desc pls work</Description>
-        <Authors>FantomLis</Authors>
-        <Company>FantomLis</Company>
-        <AssemblyVersion>0.1</AssemblyVersion>
+        <Version>0.2</Version>
+        <Authors>FantomLis, hyydsz</Authors>
+        <Company>FantomLis, hyydsz</Company>
+        <AssemblyVersion>0.2</AssemblyVersion>
         <Title>BoomboxExtended</Title>
         <Configurations>Debug;Release;BepInEx;SteamWorkshop</Configurations>
         <Platforms>AnyCPU</Platforms>
