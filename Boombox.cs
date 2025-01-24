@@ -147,11 +147,61 @@ namespace FantomLis.BoomboxExtended
 
         void Start()
         {
+            FindUnmigratedMusic();
             LogUtils.LogDebug("Loading started...");
             EventRegister();
             LoadConfig();
             LoadBoombox();
             LogUtils.LogDebug("Loading finished.");
+        }
+
+        private static void FindUnmigratedMusic()
+        {
+            LogUtils.LogDebug("Searching for old music folders to migrate...");
+            _migrate_folder(Path.Combine(Application.dataPath, "..", "BepInEx", "plugins", "Custom Songs"));
+            _migrate_folder(Path.Combine(Application.dataPath, "..", "Plugins", "Custom Songs"));
+            LogUtils.LogDebug("Searching done...");
+            void _migrate_folder(string path)
+            {
+                if (Directory.Exists(path))
+                {
+                    LogUtils.LogInfo($"Found {path} music folder. Migrating...");
+                    string filename;
+                    bool isSomethingWasThere = false;
+                    string[] files = Directory.GetFiles(path);
+                    foreach (var _f_path in files)
+                    {
+                        isSomethingWasThere = true;
+                        filename = Path.GetFileName(_f_path);
+                        if (File.Exists(Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.DefaultFolder, filename)))
+                        {
+                            LogUtils.LogWarning($"Found file ({filename}) with same name in destination folder. Skipping...");
+                            continue;
+                        }
+                        if (!MusicLoadManager.SupportedFormats.Contains(Path.GetExtension(filename).TrimStart('.')))
+                        {
+                            LogUtils.LogWarning($"Unknown audio file {filename}, skipping...");
+                            continue;
+                        }
+                        File.Move(_f_path, Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.DefaultFolder, filename));
+                        LogUtils.LogInfo($"Migrated {filename} to new folder.");
+                    }
+
+                    if (Directory.GetFiles(path).Length > 0 && Directory.GetDirectories(path).Length > 0)
+                    {
+                        LogUtils.LogWarning($"Not all files (or folders) was migrated to new folder. Please remove {path} manually.");
+                    }
+                    else if (isSomethingWasThere)
+                    {
+                        LogUtils.LogInfo($"Folder {path} migrated. Removing folder...");
+                        Directory.Delete(path);
+                    }
+                    else
+                    {
+                        LogUtils.LogWarning($"Folder {path} empty, skipping");
+                    }
+                }
+            }
         }
         
         private static void LoadConfig()
