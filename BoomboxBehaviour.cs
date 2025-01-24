@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FantomLis.BoomboxExtended.Entries;
@@ -103,6 +104,12 @@ namespace FantomLis.BoomboxExtended
             Click = transform.Find("SFX/Click").GetComponent<SFX_PlayOneShot>();
             Music = GetComponentInParent<AudioSource>();
             Music.outputAudioMixerGroup = GameHandler.Instance?.SettingsHandler.GetSetting<SFXVolumeSetting>()?.mixerGroup ?? Music.outputAudioMixerGroup;
+            Boombox.BoomboxMethod.MusicSelectionMethod_Updated += UpdateEquippedUI;
+        }
+
+        private void OnDestroy()
+        {
+            Boombox.BoomboxMethod.MusicSelectionMethod_Updated -= UpdateEquippedUI;
         }
 
         public override void ConfigItem(ItemInstanceData data, PhotonView playerView)
@@ -310,7 +317,7 @@ namespace FantomLis.BoomboxExtended
             #endregion
         }
 
-        public void UpdateEquippedUI()
+        private void UpdateEquippedUI()
         {
             if (!isHeldByMe) return;
             if (Player.localPlayer.TryGetInventory(out var o))
