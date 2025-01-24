@@ -154,6 +154,7 @@ namespace FantomLis.BoomboxExtended
             return AudioType.UNKNOWN;
         }
 
+        public static readonly string[] SupportedFormats = ["mp3", "ogg", "wav"];
         public static void UnloadMusic()
         {
             _StartCoroutine(_unloadMusic());
