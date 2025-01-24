@@ -278,7 +278,6 @@ namespace FantomLis.BoomboxExtended
                 {
                     onOffEntry.on = false;
                     Music.clip = null;
-                    NextMusic();
                 }
             }
             if (Boombox.BatteryCapacity.Value >= 0 && batteryEntry.m_charge < 0f) {

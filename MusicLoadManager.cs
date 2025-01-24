@@ -105,6 +105,7 @@ namespace FantomLis.BoomboxExtended
             __awaiting_tasks.Add(m_load_task);
             Task.Run(async () =>
             {
+                Music.Add(name, music);
                 try
                 {
                     if (await m_load_task is false)
@@ -121,7 +122,6 @@ namespace FantomLis.BoomboxExtended
                     }
                     else
                     {
-                        Music.Add(name, music);
                         LogUtils.LogInfo($"Song Loaded: {name}");
                         AlertUtils.AddMoneyCellAlert(BoomboxLocalization.SingleSongLoadedAlert,
                             MoneyCellUI.MoneyCellType.Revenue, name);
