@@ -245,6 +245,8 @@ namespace FantomLis.BoomboxExtended
                         {
                             HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f);
                         }
+                        else if (!MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var __m_try_play) || !__m_try_play.isLoaded)
+                            HelmetText.Instance.SetHelmetText(BoomboxLocalization.MusicNotLoaded,2);
                         else
                         {
                             onOffEntry.on = !onOffEntry.on;
