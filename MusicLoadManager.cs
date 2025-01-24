@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FantomLis.BoomboxExtended.Containers;
 using FantomLis.BoomboxExtended.Locales;
 using FantomLis.BoomboxExtended.Utils;
+using MyceliumNetworking;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -18,8 +20,9 @@ namespace FantomLis.BoomboxExtended
         public static Dictionary<string, Music> Music = new ();
         private static bool isLoading = false;
         private static List<Task> __awaiting_tasks = new();
-        static FileSystemWatcher _watcher;
 
+        #region Watcher
+        static FileSystemWatcher _watcher;
         private static void _makeWatcher(string path)
         {
             _watcher = new FileSystemWatcher();
@@ -47,6 +50,9 @@ namespace FantomLis.BoomboxExtended
             };
             _watcher.EnableRaisingEvents = true;
         }
+
+        #endregion
+        
         /// <summary>
         /// Default Root Path from which music is searching
         /// </summary>
@@ -57,6 +63,44 @@ namespace FantomLis.BoomboxExtended
         {
             Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
+        }
+
+        internal static void LoadHostMusic()
+        {
+            AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
+            MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_RequestHostMusicList), MyceliumNetwork.LobbyHost, ReliableType.Reliable);
+        }
+
+        [CustomRPC]
+        private static void _RequestHostMusicList(RPCInfo info)
+        {
+            MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_ReceiveHostMusicList), info.SenderSteamID, ReliableType.Reliable, [Music.Values.ToArray().Select(x => Path.GetFileName(x.FilePath))]);
+        }
+        
+        [CustomRPC]
+        private static void _ReceiveHostMusicList(RPCInfo info, string[] musicNames)
+        {
+            string path = System.IO.Path.Combine(RootPath, MyceliumNetwork.LobbyHost.m_SteamID.ToString());
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string[] files = Directory.GetFiles(path).Select(Path.GetFileName).ToArray();
+            foreach (var m in musicNames)
+            {
+                string fullFilePath = Path.Combine(RootPath, MyceliumNetwork.LobbyHost.ToString(), m);
+                if (files.Contains(m)) LoadThisMusic(fullFilePath);
+                else
+                {
+                    _DownloadMusicFile(path);
+                }
+            }
+        }
+
+        private static void _DownloadMusicFile(string path)
+        {
+            PreLoadMusic(path);
         }
 
         /// <summary>
@@ -92,6 +136,14 @@ namespace FantomLis.BoomboxExtended
                     dropQueuedAlert: true);
                 isLoading = false;
             });
+        }
+
+        private static void PreLoadMusic(string file)
+        {
+            string name = Path.GetFileNameWithoutExtension(file);
+            if (Music.ContainsKey(name)) return;
+            var music = new Music(file);
+            Music.Add(name, music);
         }
 
         private static void LoadThisMusic(string file)

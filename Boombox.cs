@@ -82,6 +82,7 @@ namespace FantomLis.BoomboxExtended
         const string _boomboxBCID = $"{ItemName}.BatteryCapacity";
         const string _boomboxBPID = $"{ItemName}.BoomboxPrice";
         const string _boomboxPMID = $"{ItemName}.PauseMusic";
+        public const uint modID = 580234;
         
         private static readonly Harmony Harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         internal static Item BoomboxItem;
@@ -141,6 +142,7 @@ namespace FantomLis.BoomboxExtended
                     CurrentBoomboxPrice = MyceliumNetwork.GetLobbyData<int>(_boomboxBPID);
                     CurrentPauseMusic = MyceliumNetwork.GetLobbyData<bool>(_boomboxPMID);
                     BoomboxItem.price = CurrentBoomboxPrice;
+                    MusicLoadManager.LoadHostMusic();
                 }
             }
         }
