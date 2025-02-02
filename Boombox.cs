@@ -186,11 +186,12 @@ namespace FantomLis.BoomboxExtended
                             LogUtils.LogWarning($"Unknown audio file {filename}, skipping...");
                             continue;
                         }
+                        Directory.CreateDirectory(Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.HostFolder));
                         File.Move(_f_path, Path.Combine(MusicLoadManager.RootPath, MusicLoadManager.HostFolder, filename));
                         LogUtils.LogInfo($"Migrated {filename} to new folder.");
                     }
 
-                    if (Directory.GetFiles(path).Length > 0 && Directory.GetDirectories(path).Length > 0)
+                    if (Directory.GetFiles(path).Length > 0 || Directory.GetDirectories(path).Length > 0)
                     {
                         LogUtils.LogWarning($"Not all files (or folders) was migrated to new folder. Please remove {path} manually.");
                     }
