@@ -73,27 +73,25 @@ namespace FantomLis.BoomboxExtended
         [CustomRPC]
         private void _RequestHostMusicList(RPCInfo info)
         {
-            MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_ReceiveHostMusicList), info.SenderSteamID, ReliableType.Reliable, [Music.Values.ToArray().Select(x => Path.GetFileName(x.FilePath)).ToArray()]);
+            foreach (var m in Music.Values)
+            {
+                MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_PushMusic), info.SenderSteamID, ReliableType.Reliable, Path.GetFileName(m.FilePath));
+            }
         }
-        
+
         [CustomRPC]
-        private void _ReceiveHostMusicList(RPCInfo info, string[] musicNames)
+        private void _PushMusic(string musicName)
         {
             string path = System.IO.Path.Combine(RootPath, MyceliumNetwork.LobbyHost.m_SteamID.ToString());
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-
-            string[] files = Directory.GetFiles(path).Select(Path.GetFileName).ToArray();
-            foreach (var m in musicNames)
+            string fullFilePath = Path.Combine(RootPath, MyceliumNetwork.LobbyHost.ToString(), (string) musicName);
+            if (File.Exists(Path.Combine(path, musicName))) LoadThisMusic(fullFilePath);
+            else
             {
-                string fullFilePath = Path.Combine(RootPath, MyceliumNetwork.LobbyHost.ToString(), m);
-                if (files.Contains(m)) LoadThisMusic(fullFilePath);
-                else
-                {
-                    _DownloadMusicFile(path);
-                }
+                _DownloadMusicFile(musicName);
             }
         }
 
