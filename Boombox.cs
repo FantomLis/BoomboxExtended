@@ -111,6 +111,7 @@ namespace FantomLis.BoomboxExtended
         private void EventRegister()
         {
             MyceliumNetwork.Initialize();
+            MyceliumNetwork.RegisterNetworkObject(MusicLoadManager.Instance, modID);
             MyceliumNetwork.LobbyCreated += () =>
             {
                 if (MyceliumNetwork.IsHost)
@@ -142,7 +143,7 @@ namespace FantomLis.BoomboxExtended
                     CurrentBoomboxPrice = MyceliumNetwork.GetLobbyData<int>(_boomboxBPID);
                     CurrentPauseMusic = MyceliumNetwork.GetLobbyData<bool>(_boomboxPMID);
                     BoomboxItem.price = CurrentBoomboxPrice;
-                    MusicLoadManager.LoadHostMusic();
+                    MusicLoadManager.Instance.LoadHostMusic();
                 }
             }
         }

@@ -16,7 +16,7 @@ namespace FantomLis.BoomboxExtended
 {
     public class MusicLoadManager : MonoBehaviour
     {
-        private static MusicLoadManager? Instance;
+        internal static MusicLoadManager Instance = GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
         public static Dictionary<string, Music> Music = new ();
         private static bool isLoading = false;
         private static List<Task> __awaiting_tasks = new();
@@ -61,24 +61,23 @@ namespace FantomLis.BoomboxExtended
         internal static string HostFolder = "Custom Songs";
         private static Coroutine _StartCoroutine(IEnumerator enumerator)
         {
-            Instance ??= GameObjectUtils.MakeNewDontDestroyOnLoad("MusicLoader").AddComponent<MusicLoadManager>();
             return ((MonoBehaviour)Instance).StartCoroutine(enumerator);
         }
 
-        internal static void LoadHostMusic()
+        internal void LoadHostMusic()
         {
             AlertUtils.DropQueuedMoneyCellAlert(BoomboxLocalization.MusicLoadedAlert);
             MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_RequestHostMusicList), MyceliumNetwork.LobbyHost, ReliableType.Reliable);
         }
 
         [CustomRPC]
-        private static void _RequestHostMusicList(RPCInfo info)
+        private void _RequestHostMusicList(RPCInfo info)
         {
-            MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_ReceiveHostMusicList), info.SenderSteamID, ReliableType.Reliable, [Music.Values.ToArray().Select(x => Path.GetFileName(x.FilePath))]);
+            MyceliumNetwork.RPCTarget(Boombox.modID, nameof(_ReceiveHostMusicList), info.SenderSteamID, ReliableType.Reliable, [Music.Values.ToArray().Select(x => Path.GetFileName(x.FilePath)).ToArray()]);
         }
         
         [CustomRPC]
-        private static void _ReceiveHostMusicList(RPCInfo info, string[] musicNames)
+        private void _ReceiveHostMusicList(RPCInfo info, string[] musicNames)
         {
             string path = System.IO.Path.Combine(RootPath, MyceliumNetwork.LobbyHost.m_SteamID.ToString());
             if (!Directory.Exists(path))
@@ -98,9 +97,9 @@ namespace FantomLis.BoomboxExtended
             }
         }
 
-        private static void _DownloadMusicFile(string path)
+        private void _DownloadMusicFile(string path)
         {
-            PreLoadMusic(path);
+            PreLoadMusic(path); 
         }
 
         /// <summary>
