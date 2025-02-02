@@ -109,7 +109,7 @@
         <value>@BatteryCapacityTip</value>
     </data>
     <data name="MusicNotLoaded" xml:space="preserve">
-        <value>@MusicNotLoaded</value>
+        <value>@MusicNotLoaded {0}</value>
     </data>
     <data name="UnsupportedAudioFileAlert" xml:space="preserve">
         <value>@UnsupportedAudioFileAlert</value>

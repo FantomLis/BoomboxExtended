@@ -246,7 +246,7 @@ namespace FantomLis.BoomboxExtended
                             HelmetText.Instance.SetHelmetText(BoomboxLocalization.NoMusicLoaded, 2f);
                         }
                         else if (!MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var __m_try_play) || !__m_try_play.isLoaded)
-                            HelmetText.Instance.SetHelmetText(BoomboxLocalization.MusicNotLoaded,2);
+                            HelmetText.Instance.SetHelmetText(string.Format(BoomboxLocalization.MusicNotLoaded, __m_try_play.Name),2);
                         else
                         {
                             onOffEntry.on = !onOffEntry.on;
@@ -304,8 +304,8 @@ namespace FantomLis.BoomboxExtended
                     else Music.Pause();
                 }
             }
-            if (_curState != flag && (!MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var _m) || !_m.isLoaded))
-                HelmetText.Instance.SetHelmetText(BoomboxLocalization.MusicNotLoaded,2);
+            if ((_curState != flag && (!MusicLoadManager.Music.TryGetValue(musicEntry.MusicID, out var _m) || !_m.isLoaded)))
+                HelmetText.Instance.SetHelmetText(string.Format(BoomboxLocalization.MusicNotLoaded, _m.Name),2);
             _curState = flag;
             #endregion
 

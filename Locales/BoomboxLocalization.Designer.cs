@@ -199,7 +199,7 @@ namespace FantomLis.BoomboxExtended.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @MusicNotLoaded.
+        ///   Looks up a localized string similar to @MusicNotLoaded {0}.
         /// </summary>
         internal static string MusicNotLoaded {
             get {
