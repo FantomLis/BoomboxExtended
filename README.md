@@ -1,5 +1,9 @@
 # Boombox Extended (WIP)
 > [!WARNING]
+> **Mod is no longer in development**, if you want to continue to developing mod by yourself, you can fork this repo</br></br>
+> _Maybe somewhere in the future I continue working on mod, but for now it's dead_
+
+> [!WARNING]
 > *This README is WIP, i'll update it later*<br/>
 -----
 <br/>
